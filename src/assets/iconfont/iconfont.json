@@ -1,0 +1,16 @@
+{
+  "id": "2701288",
+  "name": "PeterAlbus-icon",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "16034362",
+      "name": "bilibili-line",
+      "font_class": "bilibili-line",
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    }
+  ]
+}
