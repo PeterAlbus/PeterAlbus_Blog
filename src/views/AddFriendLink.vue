@@ -1,27 +1,32 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
   <div class="banner">
     <div class="banner-container">
       <div>
-        <h1>博客详情</h1>
+        <h1>添加友情链接</h1>
       </div>
     </div>
   </div>
   <div class="main-container">
     <el-row>
       <el-col :lg="{span:11,offset:3}" :sm="15">
-        <div class="blog-header">
-          <h1>{{blog.blogTitle}}</h1>
-          <p><i class="fa fa-user"></i> {{blog.blogAuthor}}&emsp;<i class="fa fa-calendar"></i> 发布于{{blog.blogTime}} <i class="fa fa-eye"></i> {{blog.blogViews}}次访问</p>
-        </div>
-        <div class="blog-content">
-          <v-md-editor v-model="blog.blogContent" mode="preview"></v-md-editor>
+        <div style="width: 90%">
+          <el-form>
+            <el-form-item label="友情链接名称">
+              <el-input v-model="friendLink.linkName"></el-input>
+            </el-form-item>
+            <el-form-item label="友情链接地址">
+              <el-input v-model="friendLink.linkSrc"></el-input>
+            </el-form-item>
+            <el-button v-on:click="submitLink" type="success" round>添加</el-button>
+          </el-form>
         </div>
       </el-col>
       <el-col :lg="{span:6}" :sm="9">
         <div class="module">
-          <div class="content paragraph">
+          <div class="content">
             <el-avatar :size="50" :src="require('../assets/2.png')"></el-avatar>
             <h4>PeterAlbus</h4>
+            <p>若有侵权，深表歉意。可联系删除</p>
             <el-tooltip class="item" effect="dark" content="发送电子邮件" placement="top">
               <a href="mailto:wuhongdb@163.com">
                 <i class="fa fa-fw fa-envelope" style="font-size:20px"></i>
@@ -41,7 +46,7 @@
         </div>
         <div class="module">
           <h2 class="title">友情链接</h2>
-          <div class="content paragraph">
+          <div class="content">
             <p v-for="item in friendLinkList"><a :href="item.linkUrl" target="_blank">{{ item.linkName }}</a></p>
           </div>
         </div>
@@ -52,22 +57,12 @@
 
 <script>
 export default {
-  name: "Blog",
-  data() {
+  name: "addFriendLink",
+  data(){
     return {
-      blog:{
-        blogId:this.$route.query.id,
-        blogTitle:'稍等，数据正在请求中',
-        blogImg:'https://file.peteralbus.com/assets/blog/imgs/cover/cover1.jpg',
-        blogType:1,
-        blogDescription:'这里显示的是默认数据',
-        blogAuthor:'PeterAlbus',
-        blogContent:'# 提示\n' +
-            '如果很长时间都依旧显示本文字，检查你的互联网是否突然中断，或联系PeterAlbus，他可能忘记开服务器后端了',
-        blogTime:'2021-7-19',
-        blogLike:18,
-        blogViews:200,
-        isTop:1
+        friendLink:{
+        linkName:'',
+        linkUrl:'#'
       },
       friendLinkList:[
         {
@@ -76,32 +71,35 @@ export default {
           linkUrl:'#'
         }
       ]
-    };
+    }
   },
   created() {
-    this.getBlog()
     this.getFriendLinkList()
   },
   methods:{
-    getBlog:function (){
-      let that=this;
-      if(that.blog.blogId!==undefined)
-      {
-        that.$axios.get('queryById?id='+that.blog.blogId)
-            .then(res=>{
-              that.blog=res.data;
-              that.blog.blogViews+=1;
-              that.$axios.post('/update',that.$qs.stringify(that.blog));
-            })
-      }
-    },
     getFriendLinkList: function (){
-      let that=this;
+      let that=this
       that.$axios.get('friendLink/getFriendLinkList')
           .then(res=>{
             that.friendLinkList=res.data;
           })
+    },
+    submitLink: function (){
+      let that=this
+      that.$axios.post('friendLink/addFriendLink',that.$qs.stringify(this.friendLink))
+          .then(res=>{
+            if(res.data!=='fail')
+            {
+              that.getFriendLinkList()
+              that.$message.success('添加成功')
+            }
+          })
+          .catch(err=>{
+            that.$message.error('添加失败')
+          })
     }
+  },
+  computed:{
   }
 }
 </script>
@@ -126,18 +124,40 @@ export default {
   color: #eee;
 }
 
-.blog-content{
-  text-align: left;
-}
-
-.blog-header{
-  margin-bottom: 1px;
-  padding: 8px 20px 12px;
+.title {
+  position: relative;
+  margin: 0;
+  padding: 6px 20px;
+  height: 20px;
+  border-bottom: 1px solid #eaeaea;
+  border-radius: 5px 5px 0 0;
   background-color: #f7f7f7;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 20px;
+  text-align: left;
+
 }
 
-.blog-header p{
-  font-size: 14px;
-  color: #4B6186;
+.content {
+  position: relative;
+  margin-bottom: 1px;
+  padding: 6px 20px;
+  background-color: #fff;
+  border-radius: 0 0 5px 5px;
+}
+.module{
+  position: relative;
+  margin: 0 auto;
+  width: 90%;
+  padding: 8px;
+}
+
+.photo
+{
+  padding: 5px;
+  background-color: white;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 </style>

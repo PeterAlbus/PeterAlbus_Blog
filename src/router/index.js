@@ -5,8 +5,9 @@ const Photo=()=>import('../views/Photo')
 const Types=()=>import('../views/Types')
 const About=()=>import('../views/About')
 const Document=()=>import('../views/Document')
-const NewBlog=()=>import('../views/NewBlog')
+const EditBlog=()=>import('../views/EditBlog')
 const UploadPhoto=()=>import('../views/UploadPhoto')
+const AddFriendLink=()=>import('../views/AddFriendLink')
 
 const routes = [
   {
@@ -40,14 +41,19 @@ const routes = [
     component: Types
   },
   {
-    path: '/newblog',
-    name: 'NewBlog',
-    component: NewBlog
+    path: '/editBlog',
+    name: 'EditBlog',
+    component: EditBlog
   },
   {
-    path: '/upPhoto',
+    path: '/uploadPhoto',
     name: 'UploadPhoto',
     component: UploadPhoto
+  },
+  {
+    path: '/addFriendLink',
+    name: 'AddFriendLink',
+    component: AddFriendLink
   }
 ]
 

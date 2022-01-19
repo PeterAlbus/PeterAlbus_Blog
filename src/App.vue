@@ -47,6 +47,7 @@ html,body,div,span,h1,h2,h3,h4,h5,h6,ul,ol,li,p{
   padding-bottom: 20px;
   margin: 0;
   background-color: #eeeeee;
+  min-height: 60vh;
 }
 
 .main-container a{
@@ -61,5 +62,56 @@ html,body,div,span,h1,h2,h3,h4,h5,h6,ul,ol,li,p{
   position: relative;
   margin: 0 auto;
   width: 90%;
+}
+
+.paragraph{
+  padding: 10px;
+}
+
+//用于博客列表
+.blog-cover{
+  height: 170px;
+  width: 100%;
+}
+
+.title {
+  position: relative;
+  margin: 0;
+  padding: 6px 20px;
+  height: 20px;
+  border-bottom: 1px solid #eaeaea;
+  border-radius: 5px 5px 5px 5px;
+  background-color: #f7f7f7;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 20px;
+  text-align: left;
+}
+
+.content {
+  position: relative;
+  background-color: #fff;
+  border-radius: 5px 5px 5px 5px;
+}
+
+.module{
+  position: relative;
+  margin: 0 auto;
+  width: 90%;
+  padding: 8px;
+}
+
+.blog-description{
+  text-align: left;
+  height: 150px;
+  padding: 10px;
+}
+
+.info{
+  height: 20px;
+}
+
+.info span{
+  font-size: smaller;
 }
 </style>

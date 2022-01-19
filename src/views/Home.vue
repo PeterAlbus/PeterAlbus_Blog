@@ -25,13 +25,12 @@
   </div>
   <el-row class="main-container">
     <el-col :lg="{span:11,offset:3}" :sm="15">
-      <br/>
       <div class="module">
         <h2 class="title">置顶博文</h2>
-        <div class="content" v-for="(item,index) in topBlogs">
-          <el-row style="height: 150px">
+        <el-card class="content" v-for="(item,index) in topBlogs" shadow="hover" :body-style="{ padding: '0px' }">
+          <el-row style="height: 170px">
             <el-col :span="8">
-              <el-image :src="item.blogImg" fit="cover" style="height: 140px;max-width: 150px;padding: 5px"></el-image>
+              <el-image :src="item.blogImg" fit="cover" class="blog-cover"></el-image>
             </el-col>
             <el-col :span="16">
               <div class="blog-description">
@@ -47,22 +46,22 @@
               </div>
             </el-col>
           </el-row>
-        </div>
+        </el-card>
       </div>
-      <br/>
+
       <div class="module">
         <h2 class="title">最新发布</h2>
-        <div class="content" v-for="(item,index) in recentBlogs">
-          <el-row style="height: 150px">
+        <el-card class="content" v-for="item in recentBlogs" shadow="hover" :body-style="{ padding: '0px' }">
+          <el-row style="height: 170px">
             <el-col :span="8">
-              <el-image :src="item.blogImg" fit="cover" style="height: 140px;max-width: 150px;padding: 5px"></el-image>
+              <el-image :src="item.blogImg" fit="cover" class="blog-cover"></el-image>
             </el-col>
             <el-col :span="16">
               <div class="blog-description">
                 <router-link :to="{ path: '/blog',query:{id:item.blogId}}">
-                  <h4>{{item.blogTitle}}&emsp;<el-tag size="mini">{{getType(item.blogType)}}</el-tag></h4>
+                  <h4 style="height: 40px"><span style="white-space: nowrap">{{item.blogTitle}}&emsp;</span><el-tag size="mini">{{getType(item.blogType)}}</el-tag></h4>
                 </router-link>
-                <p style="height: 110px">{{item.blogDescription}}</p>
+                <p style="height: 90px;overflow: hidden">{{item.blogDescription}}</p>
                 <p class="info">
                   <span type="info"><i class="el-icon-user-solid"></i>{{item.blogAuthor}}</span>
                   <span type="info"><i class="el-icon-alarm-clock"></i>{{item.blogTime}}</span>
@@ -71,13 +70,12 @@
               </div>
             </el-col>
           </el-row>
-        </div>
+        </el-card>
       </div>
     </el-col>
     <el-col :lg="{span:6}" :sm="9">
-      <br/>
       <div class="module">
-        <div class="content">
+        <div class="content paragraph">
           <el-avatar :size="50" :src="require('../assets/2.png')"></el-avatar>
           <h4>PeterAlbus</h4>
           <el-tooltip class="item" effect="dark" content="发送电子邮件" placement="top">
@@ -97,11 +95,11 @@
           </el-tooltip>
         </div>
       </div>
-      <br/>
+
       <div class="module">
         <h2 class="title">友情链接</h2>
-        <div class="content">
-          <a href="http://www.peteralbus.com:8088/" target="_blank">疫迹</a>
+        <div class="content paragraph">
+          <p v-for="item in friendLinkList"><a :href="item.linkUrl" target="_blank">{{ item.linkName }}</a></p>
         </div>
       </div>
     </el-col>
@@ -116,31 +114,45 @@ export default {
       blogList:[
         {
           blogId:1,
-          blogTitle:'本站介绍',
+          blogTitle:'稍等，数据请求中',
           blogImg:'https://www.peteralbus.com:8440/assets/blog/imgs/cover/cover1.jpg',
           blogType:1,
-          blogDescription:'本站是如何建立的？',
+          blogDescription:'如果长时间仍显示本文字，请检查网络或联系PeterAlbus',
           blogAuthor:'PeterAlbus',
           blogContent:'',
           blogTime:'2021-7-19',
-          blogLike:18,
-          blogViews:200,
+          blogLike:999,
+          blogViews:999,
           isTop:1
         }
       ],
+      friendLinkList:[
+        {
+          linkId:1,
+          linkName:'loading',
+          linkUrl:'#'
+        }
+      ]
     }
   },
   created() {
-    this.getBlogList();
+    this.getBlogList()
+    this.getFriendLinkList()
   },
   methods:{
     getBlogList: function (){
       let that=this;
       that.$axios.get('queryAll')
       .then(res=>{
-        console.log(res);
         that.blogList=res.data;
       })
+    },
+    getFriendLinkList: function (){
+      let that=this;
+      that.$axios.get('friendLink/getFriendLinkList')
+          .then(res=>{
+            that.friendLinkList=res.data;
+          })
     }
   },
   computed:{
@@ -212,46 +224,5 @@ export default {
     filter: none;
     transform: translateY(0);
   }
-}
-
-.title {
-  position: relative;
-  margin: 0;
-  padding: 6px 20px;
-  height: 20px;
-  border-bottom: 1px solid #eaeaea;
-  border-radius: 5px 5px 0 0;
-  background-color: #f7f7f7;
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 20px;
-  text-align: left;
-
-}
-
-.content {
-  position: relative;
-  margin-bottom: 1px;
-  padding: 6px 20px;
-  background-color: #fff;
-  border-radius: 0 0 5px 5px;
-}
-
-.module{
-  position: relative;
-  margin: 0 auto;
-  width: 90%;
-}
-
-.blog-description{
-  text-align: left;
-}
-
-.info{
-  height: 20px;
-}
-
-.info span{
-  font-size: smaller;
 }
 </style>

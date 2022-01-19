@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
     <el-menu active-text-color="#4B6186" text-color="#FFFFFF" id="navid" class="nav" mode="horizontal" :router="true">
-      <div class="title">PeterAlbus的博客</div>
+      <div class="nav-title">PeterAlbus的博客</div>
       <!--大屏幕导航栏-->
       <el-menu-item
           v-if="screenWidth>=600"
@@ -145,7 +145,7 @@ export default {
   background: rgba(0, 0, 0, 0) !important;
 }
 
-.title{
+.nav-title{
   float: left;
   height: 100%;
   left: 30px;

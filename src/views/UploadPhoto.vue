@@ -6,7 +6,7 @@
       </div>
     </div>
   </div>
-  <el-row>
+  <el-row class="main-container">
     <el-col :span="16" :offset="4">
       <el-form>
         <el-form-item label="图片名称">
@@ -40,8 +40,18 @@ export default {
   data() {
     return {
       imgName:'',
-      imageUrl: ''
+      imageUrl: '',
+      friendLinkList:[
+        {
+          linkId:1,
+          linkName:'loading',
+          linkUrl:'#'
+        }
+      ]
     }
+  },
+  created() {
+    this.getFriendLinkList()
   },
   methods: {
     submitUpload() {
@@ -61,6 +71,13 @@ export default {
       //   this.$message.error('上传头像图片大小不能超过 2MB!');
       // }
       return true;
+    },
+    getFriendLinkList: function (){
+      let that=this;
+      that.$axios.get('friendLink/getFriendLinkList')
+          .then(res=>{
+            that.friendLinkList=res.data;
+          })
     }
   },
   computed:{

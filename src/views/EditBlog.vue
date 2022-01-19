@@ -96,11 +96,19 @@ export default {
         blogContent: [
           {required: true, message: '内容不可为空', trigger: 'blur'}
         ]
-      }
+      },
+      friendLinkList:[
+        {
+          linkId:1,
+          linkName:'loading',
+          linkUrl:'#'
+        }
+      ]
     };
   },
   created() {
-    this.getBlog();
+    this.getBlog()
+    this.getFriendLinkList()
   },
   methods:{
     handleAvatarSuccess(res, file) {
@@ -109,6 +117,13 @@ export default {
         this.blog.blogImg = res;
         this.$message.success("上传成功");
       } else this.$message.error("上传失败!");
+    },
+    getFriendLinkList: function (){
+      let that=this;
+      that.$axios.get('friendLink/getFriendLinkList')
+          .then(res=>{
+            that.friendLinkList=res.data;
+          })
     },
     beforeAvatarUpload(file) {
       console.log(file.type);
