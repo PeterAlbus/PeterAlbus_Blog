@@ -21,9 +21,31 @@
       </el-col>
       <el-col :lg="{span:6}" :sm="9">
         <div class="module">
+          <div class="content paragraph">
+            <el-avatar :size="50" :src="require('../assets/2.png')"></el-avatar>
+            <h4>PeterAlbus</h4>
+            <el-tooltip class="item" effect="dark" content="发送电子邮件" placement="top">
+              <a href="mailto:wuhongdb@163.com">
+                <i class="fa fa-fw fa-envelope" style="font-size:20px"></i>
+              </a>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="github" placement="top">
+              <a href="https://github.com/PeterAlbus" target="_blank">
+                <i class="fa fa-fw fa-github" style="font-size:20px"></i>
+              </a>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="bilibili" placement="top">
+              <a href="https://space.bilibili.com/2003822" target="_blank">
+                <i class="iconfont icon-bilibili-line" style="font-size:20px"></i>
+              </a>
+            </el-tooltip>
+          </div>
+        </div>
+
+        <div class="module">
           <h2 class="title">友情链接</h2>
-          <div class="content">
-            <a href="http://www.peteralbus.com:8088/" target="_blank">疫迹</a>
+          <div class="content paragraph">
+            <p v-for="item in friendLinkList"><a :href="item.linkUrl" target="_blank">{{ item.linkName }}</a></p>
           </div>
         </div>
       </el-col>
@@ -42,7 +64,26 @@ export default {
           '我对于计算机相关内容都比较感兴趣。小站初建成，还十分简陋，会一步步添加新的功能。\n' +
           '\n' +
           '<br>'+
-          '欢迎通过电子邮箱:wuhongdb@163.com或 QQ:2997592724与我联系。'
+          '欢迎通过电子邮箱:wuhongdb@163.com或 QQ:2997592724与我联系。',
+      friendLinkList:[
+        {
+          linkId:1,
+          linkName:'loading',
+          linkUrl:'#'
+        }
+      ]
+    }
+  },
+  created() {
+    this.getFriendLinkList()
+  },
+  methods:{
+    getFriendLinkList: function (){
+      let that=this;
+      that.$axios.get('friendLink/getFriendLinkList')
+          .then(res=>{
+            that.friendLinkList=res.data;
+          })
     }
   }
 }
@@ -68,20 +109,6 @@ export default {
   color: #eee;
 }
 
-.content {
-  position: relative;
-  margin-bottom: 1px;
-  padding: 6px 20px;
-  background-color: #fff;
-  border-radius: 0 0 5px 5px;
-}
-
-.module{
-  position: relative;
-  margin: 0 auto;
-  width: 90%;
-}
-
 .blog-content{
   text-align: left;
 }
@@ -95,20 +122,5 @@ export default {
 .blog-header p{
   font-size: 14px;
   color: #4B6186;
-}
-
-.title {
-  position: relative;
-  margin: 0;
-  padding: 6px 20px;
-  height: 20px;
-  border-bottom: 1px solid #eaeaea;
-  border-radius: 5px 5px 0 0;
-  background-color: #f7f7f7;
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 20px;
-  text-align: left;
-
 }
 </style>

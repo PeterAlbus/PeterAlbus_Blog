@@ -6,37 +6,32 @@
       <el-menu-item
           v-if="screenWidth>=600"
           class="nav-item"
-          style="float: right"
-          route="/photo"
-          index="5"
-      ><i class="el-icon-picture-outline"></i>照片墙</el-menu-item>
+          route="/"
+          index="1"
+      ><i class="el-icon-s-home"></i>主页</el-menu-item>
       <el-menu-item
           v-if="screenWidth>=600"
           class="nav-item"
-          style="float: right"
-          route="/about"
-          index="4"
-      ><i class="el-icon-user"></i>关于我</el-menu-item>
-      <el-menu-item
-          v-if="screenWidth>=600"
-          class="nav-item"
-          style="float: right"
           route="/types"
           index="2"
       ><i class="el-icon-menu"></i>分类</el-menu-item>
       <el-menu-item
           v-if="screenWidth>=600"
           class="nav-item"
-          style="float: right"
-          route="/"
-          index="1"
-      ><i class="el-icon-s-home"></i>主页</el-menu-item>
+          route="/about"
+          index="4"
+      ><i class="el-icon-user"></i>关于我</el-menu-item>
+      <el-menu-item
+          v-if="screenWidth>=600"
+          class="nav-item"
+          route="/photo"
+          index="5"
+      ><i class="el-icon-picture-outline"></i>照片墙</el-menu-item>
       <!--小屏幕导航栏-->
-      <el-submenu
+      <el-sub-menu
           class="nav-item"
           v-if="screenWidth<600"
           index="10"
-          style="float: right"
           popper-class="submenu"
       >
         <template #title>
@@ -44,14 +39,9 @@
         </template>
         <el-menu-item
             class="nav-menu"
-            route="/photo"
-            index="5"
-        ><i class="el-icon-picture-outline"></i>照片墙</el-menu-item>
-        <el-menu-item
-            class="nav-menu"
-            route="/about"
-            index="4"
-        ><i class="el-icon-user"></i>关于我</el-menu-item>
+            route="/"
+            index="1"
+        ><i class="el-icon-s-home"></i>主页</el-menu-item>
         <el-menu-item
             class="nav-menu"
             route="/types"
@@ -59,10 +49,15 @@
         ><i class="el-icon-menu"></i>分类</el-menu-item>
         <el-menu-item
             class="nav-menu"
-            route="/"
-            index="1"
-        ><i class="el-icon-s-home"></i>主页</el-menu-item>
-      </el-submenu>
+            route="/about"
+            index="4"
+        ><i class="el-icon-user"></i>关于我</el-menu-item>
+        <el-menu-item
+            class="nav-menu"
+            route="/photo"
+            index="5"
+        ><i class="el-icon-picture-outline"></i>照片墙</el-menu-item>
+      </el-sub-menu>
     </el-menu>
   </div>
 </template>
@@ -125,12 +120,12 @@ export default {
   z-index:99; /* 层叠顺序，数值越大就越高。页面滚动的时候就不会被其他内容所遮挡。 */
 }
 .nav{
+  justify-content: right;
   background: rgba(0, 0, 0, 0.5) !important;
   box-shadow: 3px 3px 6px 3px rgba(0, 0, 0, .3);
 }
 
 .nav-item{
-  float: right;
   height: 100%;
   line-height: 50px;
   margin-right: 20px;

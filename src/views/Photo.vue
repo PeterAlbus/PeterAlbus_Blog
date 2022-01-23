@@ -12,7 +12,7 @@
       <el-col :lg="{span:11,offset:3}" :sm="15">
         <el-row>
           <el-col :span="7">
-            <div class="photo" v-for="item in photoLeft">
+            <el-card class="photo" v-for="item in photoLeft" shadow="hover" :body-style="{ padding: '0px' }">
               <a :href="item.imgSrc" target="_blank">
                 <el-image :src="item.imgThumb" style="width: 100%" fit="cover" lazy>
                   <template #placeholder>
@@ -21,12 +21,12 @@
                     </div>
                   </template>
                 </el-image>
-                <span>{{item.imgName}}</span>
+                <span class="paragraph">{{item.imgName}}</span>
               </a>
-            </div>
+            </el-card>
           </el-col>
           <el-col :span="7" :offset="1">
-            <div class="photo" v-for="item in photoMid">
+            <el-card class="photo" v-for="item in photoMid" shadow="hover" :body-style="{ padding: '0px' }">
               <a :href="item.imgSrc" target="_blank">
                 <el-image :src="item.imgThumb" style="width: 100%" fit="cover" lazy>
                   <template #placeholder>
@@ -35,12 +35,12 @@
                     </div>
                   </template>
                 </el-image>
-                <span>{{item.imgName}}</span>
+                <span class="paragraph">{{item.imgName}}</span>
               </a>
-            </div>
+            </el-card>
           </el-col>
           <el-col :span="7" :offset="1">
-            <div class="photo" v-for="item in photoRight">
+            <el-card class="photo" v-for="item in photoRight" shadow="hover" :body-style="{ padding: '0px' }">
               <a :href="item.imgSrc" target="_blank">
                 <el-image :src="item.imgThumb" style="width: 100%" fit="cover" lazy>
                   <template #placeholder>
@@ -49,15 +49,15 @@
                     </div>
                   </template>
                 </el-image>
-                <span>{{item.imgName}}</span>
+                <span class="paragraph">{{item.imgName}}</span>
               </a>
-            </div>
+            </el-card>
           </el-col>
         </el-row>
       </el-col>
       <el-col :lg="{span:6}" :sm="9">
         <div class="module">
-          <div class="content">
+          <div class="content paragraph">
             <el-avatar :size="50" :src="require('../assets/2.png')"></el-avatar>
             <h4>PeterAlbus</h4>
             <p>若有侵权，深表歉意。可联系删除</p>
@@ -78,14 +78,18 @@
             </el-tooltip>
           </div>
         </div>
+        <div class="module">
+          <h2 class="title">友情链接</h2>
+          <div class="content paragraph">
+            <p v-for="item in friendLinkList"><a :href="item.linkUrl" target="_blank">{{ item.linkName }}</a></p>
+          </div>
+        </div>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   name: "Photo",
   data(){
@@ -93,27 +97,35 @@ export default {
       photoList:[
         {
           imgId:1,
-          imgSrc:'https://www.peteralbus.com:8440/assets/blog/imgs/cover/cover1.jpg',
-          imgThumb:'https://www.peteralbus.com:8440/assets/blog/imgs/cover/cover1.jpg',
-          imgName:'test'
+          imgSrc:'https://file.peteralbus.com/assets/blog/imgs/cover/cover1.jpg',
+          imgThumb:'https://file.peteralbus.com/assets/blog/imgs/cover/cover1.jpg',
+          imgName:'loading'
         },
         {
           imgId:2,
-          imgSrc:'https://www.peteralbus.com:8440/assets/blog/imgs/cover/8a0be7eaef3c44469200443affd26d33',
-          imgThumb:'https://www.peteralbus.com:8440/assets/blog/imgs/cover/cover1.jpg',
-          imgName:'test'
+          imgSrc:'https://file.peteralbus.com/assets/blog/imgs/cover/8a0be7eaef3c44469200443affd26d33',
+          imgThumb:'https://file.peteralbus.com/assets/blog/imgs/cover/cover1.jpg',
+          imgName:'loading'
         },
         {
           imgId:3,
-          imgSrc:'https://www.peteralbus.com:8440/assets/blog/imgs/cover/79f797340075430abcdc9b80fc908f66',
-          imgThumb:'https://www.peteralbus.com:8440/assets/blog/imgs/cover/cover1.jpg',
-          imgName:'test'
+          imgSrc:'https://file.peteralbus.com/assets/blog/imgs/cover/79f797340075430abcdc9b80fc908f66',
+          imgThumb:'https://file.peteralbus.com/assets/blog/imgs/cover/cover1.jpg',
+          imgName:'loading'
         },
+      ],
+      friendLinkList:[
+        {
+          linkId:1,
+          linkName:'loading',
+          linkUrl:'#'
+        }
       ]
     }
   },
   created() {
-    this.getPhotoList();
+    this.getPhotoList()
+    this.getFriendLinkList()
   },
   methods:{
     getPhotoList:function (){
@@ -122,6 +134,13 @@ export default {
       .then(res=>{
         that.photoList=res.data;
       })
+    },
+    getFriendLinkList: function (){
+      let that=this;
+      that.$axios.get('friendLink/getFriendLinkList')
+          .then(res=>{
+            that.friendLinkList=res.data;
+          })
     }
   },
   computed:{
@@ -188,19 +207,8 @@ export default {
   color: #eee;
 }
 
-
-.content {
-  position: relative;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  padding: 6px 20px;
-  background-color: #fff;
-  border-radius: 5px;
-}
-
-.photo
-{
-  padding: 5px;
+.photo {
+  padding: 0 0 5px 0;
   background-color: white;
   margin-top: 5px;
   margin-bottom: 5px;

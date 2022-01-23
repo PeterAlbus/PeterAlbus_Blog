@@ -45,6 +45,20 @@
             <p v-for="item in friendLinkList"><a :href="item.linkUrl" target="_blank">{{ item.linkName }}</a></p>
           </div>
         </div>
+        <div class="module">
+          <h2 class="title">分享本页面</h2>
+          <div class="content paragraph">
+            <Share
+                :url="'https://www.peteralbus.com/%23/blog?id%3D'+blog.blogId"
+                :title="blog.blogTitle"
+                source="PeterAlbus的博客"
+                :description="blog.blogDescription"
+                :image="blog.blogImg"
+                :twitter="true"
+                :google="true"
+            ></Share>
+          </div>
+        </div>
       </el-col>
     </el-row>
   </div>
