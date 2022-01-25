@@ -111,7 +111,7 @@ export default {
   left: 0;
   right: 0;
   height: 30vh;
-  background: url("../assets/background.jpg") no-repeat fixed center center;
+  background: url("../assets/background.jpg") fixed center center;
   text-align: center;
   color: #fff !important;
 }

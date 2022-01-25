@@ -1,64 +1,68 @@
 <template>
-  <div class="navbar">
-    <el-menu active-text-color="#4B6186" text-color="#FFFFFF" id="navid" class="nav" mode="horizontal" :router="true">
-      <div class="nav-title">PeterAlbus的博客</div>
-      <!--大屏幕导航栏-->
+  <div class="navbar" >
+    <el-menu active-text-color="#326139" text-color="#FFFFFF" id="navid" class="nav" mode="horizontal" :router="true">
       <el-menu-item
           v-if="screenWidth>=600"
-          class="nav-item"
+          class="nav-title"
+          style="font-size: large"
+          index="0"
           route="/"
-          index="1"
-      ><i class="el-icon-s-home"></i>主页</el-menu-item>
-      <el-menu-item
-          v-if="screenWidth>=600"
-          class="nav-item"
-          route="/types"
-          index="2"
-      ><i class="el-icon-menu"></i>分类</el-menu-item>
-      <el-menu-item
-          v-if="screenWidth>=600"
-          class="nav-item"
-          route="/about"
-          index="4"
-      ><i class="el-icon-user"></i>关于我</el-menu-item>
-      <el-menu-item
-          v-if="screenWidth>=600"
-          class="nav-item"
-          route="/photo"
-          index="5"
-      ><i class="el-icon-picture-outline"></i>照片墙</el-menu-item>
-      <!--小屏幕导航栏-->
-      <el-sub-menu
-          class="nav-item"
-          v-if="screenWidth<600"
-          index="10"
-          popper-class="submenu"
-      >
-        <template #title>
-          <i class="el-icon-s-fold" style="font-size:28px;color:#ffffff;"></i>
-        </template>
+      >PeterAlbus的博客</el-menu-item>
+      <div style="display: flex;justify-content: right">
         <el-menu-item
-            class="nav-menu"
+            v-if="screenWidth>=600"
+            class="nav-item"
             route="/"
             index="1"
         ><i class="el-icon-s-home"></i>主页</el-menu-item>
         <el-menu-item
-            class="nav-menu"
+            v-if="screenWidth>=600"
+            class="nav-item"
             route="/types"
             index="2"
         ><i class="el-icon-menu"></i>分类</el-menu-item>
         <el-menu-item
-            class="nav-menu"
+            v-if="screenWidth>=600"
+            class="nav-item"
             route="/about"
             index="4"
         ><i class="el-icon-user"></i>关于我</el-menu-item>
         <el-menu-item
-            class="nav-menu"
+            v-if="screenWidth>=600"
+            class="nav-item"
             route="/photo"
             index="5"
         ><i class="el-icon-picture-outline"></i>照片墙</el-menu-item>
-      </el-sub-menu>
+      </div>
     </el-menu>
+  </div>
+  <div class="navbar-bottom" v-if="screenWidth<600">
+    <el-row class="navbar-bottom-list">
+      <el-col :span="6" class="navbar-bottom-item">
+        <router-link to="/" active-class="active-item">
+          <p><i class="el-icon-s-home navbar-bottom-icon"></i></p>
+          <span class="navbar-bottom-text">主页</span>
+        </router-link>
+      </el-col>
+      <el-col :span="6" class="navbar-bottom-item">
+        <router-link to="/types" active-class="active-item">
+          <p><i class="el-icon-menu navbar-bottom-icon"></i></p>
+          <span class="navbar-bottom-text">分类</span>
+        </router-link>
+      </el-col>
+      <el-col :span="6" class="navbar-bottom-item">
+        <router-link to="/about" active-class="active-item">
+          <p><i class="el-icon-user navbar-bottom-icon"></i></p>
+          <span class="navbar-bottom-text">关于我</span>
+        </router-link>
+      </el-col>
+      <el-col :span="6" class="navbar-bottom-item">
+        <router-link to="/photo" active-class="active-item">
+          <p><i class="el-icon-picture-outline navbar-bottom-icon"></i></p>
+          <span class="navbar-bottom-text">照片墙</span>
+        </router-link>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -68,8 +72,8 @@ export default {
   created () {
   },
   mounted () {
-    window.addEventListener('scroll', this.scroll)
-    window.onresize = () => {this.screenWidth = document.body.clientWidth}
+    // window.addEventListener('scroll', this.scroll)
+    window.addEventListener('resize',this.resize)
   },
   data () {
     return {
@@ -83,29 +87,12 @@ export default {
     }
   },
   methods: {
-    scroll () {
-      const that = this
-      // const scrollTop =
-      //     window.pageYOffset ||
-      //     document.documentElement.scrollTop ||
-      //     document.body.scrollTop
-      that.scrollTop = window.pageYOffset ||
-          document.documentElement.scrollTop ||
-          document.body.scrollTop
-      if (that.scrollTop > 60) {
-        that.navClass = 'nav-fixed'
-      } else {
-        that.navClass = 'nav'
-      }
-    },
+    resize(){
+      this.screenWidth = document.body.clientWidth
+    }
   },
   computed:{
-    leftNavItems: function() {
-      return this.screenWidth >= 600 ? this.navItems : {};
-    },
-    rightNavItems: function() {
-      return this.screenWidth < 600 ? this.navItems : {};
-    }
+
   }
 }
 </script>
@@ -119,15 +106,57 @@ export default {
   height:10px; /* 高度 */
   z-index:99; /* 层叠顺序，数值越大就越高。页面滚动的时候就不会被其他内容所遮挡。 */
 }
+
+.navbar-bottom{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index:99; /* 层叠顺序，数值越大就越高。页面滚动的时候就不会被其他内容所遮挡。 */
+
+  background-color: #ffffff;
+  box-shadow: 0 -1px 12px hsla(174, 63%, 15%, 0.15);
+  width: 100%;
+  height: 4rem;
+  padding: 0;
+  display: grid;
+  align-content: center;
+
+  transition: .4s;;
+}
+
+.navbar-bottom-list a{
+  color: #326139;
+}
+
+.navbar-bottom-item{
+  display: inline-block;
+  text-align: center;
+}
+
+.navbar-bottom-icon{
+  font-size: large;
+}
+
+.navbar-bottom-text{
+  font-size: small;
+}
+
+.active-item{
+  position: relative;
+  color: #60638E !important;
+  transition: .3s;
+}
+
 .nav{
-  justify-content: right;
+  justify-content: space-between;
   background: rgba(0, 0, 0, 0.5) !important;
   box-shadow: 3px 3px 6px 3px rgba(0, 0, 0, .3);
 }
 
 .nav-item{
   height: 100%;
-  line-height: 50px;
+  line-height: 60px;
   margin-right: 20px;
   background: rgba(0, 0, 0, 0) !important;
 }
@@ -141,13 +170,13 @@ export default {
 }
 
 .nav-title{
-  float: left;
   height: 100%;
-  left: 30px;
-  position: absolute;
-  margin: auto;
+  margin: 0;
   color:white;
   line-height: 60px;
+  z-index: 100;
+  font-size: large;
+  background: rgba(0, 0, 0, 0) !important;
 }
 </style>
 

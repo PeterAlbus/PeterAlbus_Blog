@@ -106,6 +106,8 @@ export default {
               that.blog=res.data;
               that.blog.blogViews+=1;
               that.$axios.post('/update',that.$qs.stringify(that.blog));
+              document.title = that.blog.blogTitle+'——PeterAlbus的博客'
+              document.querySelector('meta[name="description"]').setAttribute('content',that.blog.blogDescription)
             })
       }
     },
@@ -127,7 +129,7 @@ export default {
   left: 0;
   right: 0;
   height: 30vh;
-  background: url("../assets/background.jpg") no-repeat fixed center center;
+  background: url("../assets/background.jpg") fixed center center;
   text-align: center;
   color: #fff !important;
 }

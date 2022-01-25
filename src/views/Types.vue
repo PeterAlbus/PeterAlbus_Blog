@@ -44,12 +44,19 @@
           </el-row>
         </el-card>
         <div style="background-color: white">
-          <el-pagination
+          <el-pagination v-if="screenWidth>=600"
               layout="total, sizes, prev, pager, next, jumper"
               :page-sizes="[5,10,20]"
               v-model:current-page="currentPage"
               v-model:page-size="pageSize"
               :total="selectedBlogs.length">
+          </el-pagination>
+          <el-pagination v-if="screenWidth<600"
+                         layout="prev, pager, next"
+                         :page-sizes="[5,10,20]"
+                         v-model:current-page="currentPage"
+                         v-model:page-size="pageSize"
+                         :total="selectedBlogs.length">
           </el-pagination>
         </div>
       </div>
@@ -91,6 +98,7 @@ export default {
   name: "Types",
   data(){
     return {
+      screenWidth: document.body.clientWidth,
       selectType:1,
       currentPage:1,
       pageSize:10,
@@ -121,8 +129,12 @@ export default {
   created() {
     this.getBlogList()
     this.getFriendLinkList()
+    window.addEventListener('resize',this.resize)
   },
   methods:{
+    resize(){
+      this.screenWidth = document.body.clientWidth
+    },
     getBlogList: function (){
       let that=this;
       that.$axios.get('queryAll')
@@ -171,7 +183,7 @@ export default {
   left: 0;
   right: 0;
   height: 30vh;
-  background: url("../assets/background.jpg") no-repeat fixed center center;
+  background: url("../assets/background.jpg") fixed center center;
   text-align: center;
   color: #fff !important;
 }

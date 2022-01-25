@@ -8,12 +8,26 @@
               </a>
             </div>
     </div>
+    <div style="height: 61px" v-if="screenWidth<600"></div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Footer"
+  name: "Footer",
+  mounted() {
+    window.addEventListener('resize',this.resize)
+  },
+  data () {
+    return {
+      screenWidth: document.body.clientWidth
+    }
+  },
+  methods: {
+    resize(){
+      this.screenWidth = document.body.clientWidth
+    }
+  }
 }
 </script>
 
