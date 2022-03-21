@@ -12,23 +12,17 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "Footer",
-  mounted() {
-    window.addEventListener('resize',this.resize)
-  },
-  data () {
-    return {
-      screenWidth: document.body.clientWidth
-    }
-  },
-  methods: {
-    resize(){
-      this.screenWidth = document.body.clientWidth
-    }
-  }
+<script setup lang="ts">
+import {onMounted, ref} from "vue";
+
+let screenWidth = ref(document.body.clientWidth)
+const resize = function (){
+  screenWidth.value = document.body.clientWidth
 }
+
+onMounted(()=>{
+  window.addEventListener('resize',resize)
+})
 </script>
 
 <style scoped>

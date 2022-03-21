@@ -17,6 +17,8 @@ import Prism from 'prismjs';
 import PeterAlbusVue from 'vue3-social-share';
 import 'vue3-social-share/lib/index.css'
 
+import 'element-plus/dist/index.css'
+
 axios.defaults.withCredentials=false;
 axios.defaults.baseURL='https://www.peteralbus.com:8089/'
 

@@ -1,10 +1,17 @@
 <template>
-  <div class="home-banner">
+  <div class="home-banner" :style="{background:'url('+backgrounds[randomIndex]+') fixed center center'}">
     <div class="banner-container">
       <div>
         <el-avatar :size="150" src="/assets/2.png"></el-avatar>
         <h2>欢迎来到PeterAlbus的个人博客</h2>
-        <br>
+        <div @mouseout="showFrom=false" @mouseover="showFrom=true" style="height: 30px;color:#ccccd6;font-size: 0.5em;">
+          <p
+              @click="copyQuotes"
+              @contextmenu.prevent="getQuotes"
+              style='cursor: pointer'>「{{famousQuotes.hitokoto}}」</p>
+          <span v-show="showFrom">——{{famousQuotes.from}}</span>
+          <br>
+        </div>
         <el-tooltip class="item" effect="dark" content="发送电子邮件" placement="top">
           <a href="mailto:wuhongdb@163.com">
             <i class="fa fa-fw fa-envelope" style="font-size:37px"></i>
@@ -35,13 +42,14 @@
             <el-col :span="16">
               <div class="blog-description">
                 <router-link :to="{ path: '/blog',query:{id:item.blogId}}">
-                  <h4>{{item.blogTitle}}&emsp;<el-tag size="small">{{getType(item.blogType)}}</el-tag></h4>
+                  <h4>{{ item.blogTitle }}&emsp;<el-tag size="small">{{ getType(item.blogType) }}</el-tag>
+                  </h4>
                 </router-link>
-                <p style="height: 110px">{{item.blogDescription}}</p>
+                <p style="height: 110px">{{ item.blogDescription }}</p>
                 <p class="info">
-                  <span type="info"><i class="el-icon-user-solid"></i>{{item.blogAuthor}}</span>
-                  <span type="info"><i class="el-icon-alarm-clock"></i>{{item.blogTime}}</span>
-                  <span type="info"><i class="el-icon-star-on"></i>{{item.blogLike}}</span>
+                  <span type="info"><el-icon style="vertical-align: -10%"><avatar /></el-icon>{{ item.blogAuthor }}</span>
+                  <span type="info"><el-icon style="vertical-align: -10%"><clock /></el-icon>{{ item.blogTime }}</span>
+                  <span type="info"><el-icon style="vertical-align: -10%"><star-filled /></el-icon>{{ item.blogLike }}</span>
                 </p>
               </div>
             </el-col>
@@ -59,13 +67,15 @@
             <el-col :span="16">
               <div class="blog-description">
                 <router-link :to="{ path: '/blog',query:{id:item.blogId}}">
-                  <h4 style="height: 40px"><span style="white-space: nowrap">{{item.blogTitle}}&emsp;</span><el-tag size="small">{{getType(item.blogType)}}</el-tag></h4>
+                  <h4 style="height: 40px"><span style="white-space: nowrap">{{ item.blogTitle }}&emsp;</span>
+                    <el-tag size="small">{{ getType(item.blogType) }}</el-tag>
+                  </h4>
                 </router-link>
-                <p style="height: 90px;overflow: hidden">{{item.blogDescription}}</p>
+                <p style="height: 90px;overflow: hidden">{{ item.blogDescription }}</p>
                 <p class="info">
-                  <span type="info"><i class="el-icon-user-solid"></i>{{item.blogAuthor}}</span>
-                  <span type="info"><i class="el-icon-alarm-clock"></i>{{item.blogTime}}</span>
-                  <span type="info"><i class="el-icon-star-on"></i>{{item.blogLike}}</span>
+                  <span type="info"><el-icon style="vertical-align: -10%"><avatar /></el-icon>{{ item.blogAuthor }}</span>
+                  <span type="info"><el-icon style="vertical-align: -10%"><clock /></el-icon>{{ item.blogTime }}</span>
+                  <span type="info"><el-icon style="vertical-align: -10%"><star-filled /></el-icon>{{ item.blogLike }}</span>
                 </p>
               </div>
             </el-col>
@@ -106,79 +116,120 @@
   </el-row>
 </template>
 
-<script>
-export default {
-  name: 'Home',
-  data(){
-    return {
-      blogList:[
-        {
-          blogId:1,
-          blogTitle:'稍等，数据请求中',
-          blogImg:'https://www.peteralbus.com:8440/assets/blog/imgs/cover/cover1.jpg',
-          blogType:1,
-          blogDescription:'如果长时间仍显示本文字，请检查网络或联系PeterAlbus',
-          blogAuthor:'PeterAlbus',
-          blogContent:'',
-          blogTime:'2021-7-19',
-          blogLike:999,
-          blogViews:999,
-          isTop:1
-        }
-      ],
-      friendLinkList:[
-        {
-          linkId:1,
-          linkName:'loading',
-          linkUrl:'#'
-        }
-      ]
-    }
-  },
-  created() {
-    this.getBlogList()
-    this.getFriendLinkList()
-  },
-  methods:{
-    getBlogList: function (){
-      let that=this;
-      that.$axios.get('queryAll')
+<script setup lang="ts">
+import {computed, onMounted, ref} from "vue";
+import {Avatar,StarFilled,Clock} from "@element-plus/icons-vue";
+import { toClipboard } from '@soerenmartius/vue3-clipboard'
+import axios from "axios";
+import {ElMessage} from "element-plus";
+
+let blogList = ref([
+  {
+    blogId: 1,
+    blogTitle: '稍等，数据请求中',
+    blogImg: 'https://www.peteralbus.com:8440/assets/blog/imgs/cover/cover1.jpg',
+    blogType: 1,
+    blogDescription: '如果长时间仍显示本文字，请检查网络或联系PeterAlbus',
+    blogAuthor: 'PeterAlbus',
+    blogContent: '',
+    blogTime: '2021-7-19',
+    blogLike: 999,
+    blogViews: 999,
+    isTop: 1
+  }
+])
+
+let friendLinkList=ref([
+  {
+    linkId: 1,
+    linkName: 'loading',
+    linkUrl: '#'
+  }
+])
+
+let famousQuotes= ref({
+  id: 0,
+  uuid: "",
+  hitokoto: "",
+  type: "",
+  from: "",
+  from_who: null,
+  creator: "",
+  creator_uid: 0,
+  reviewer: 0,
+  commit_from: "",
+  created_at: "",
+  length: 0
+})
+
+let showFrom = ref(false)
+
+const getQuotes= ()=>{
+  axios({
+    method: "get",
+    url: "https://v1.hitokoto.cn/?c=c&c=b&c=a&encode=json",
+  })
       .then(res=>{
-        that.blogList=res.data;
+        famousQuotes.value=res.data
       })
-    },
-    getFriendLinkList: function (){
-      let that=this;
-      that.$axios.get('friendLink/getFriendLinkList')
-          .then(res=>{
-            that.friendLinkList=res.data;
-          })
-    }
-  },
-  computed:{
-    topBlogs: function (){
-      let topBlogs=[];
-      for(let i of this.blogList)
-      {
-        if(i.isTop==1)
-        {
-          topBlogs.push(i);
-        }
-      }
-      return topBlogs.reverse();
-    },
-    recentBlogs: function (){
-      let recentBlogs=this.blogList.reverse();
-      return recentBlogs.slice(0, 10);
-    },
-    getType: function (){
-      return function (type){
-        let types=['学习笔记','生活','ACG','科技','随笔']
-        return types[type-1];
-      }
+}
+
+const copyQuotes=()=>{
+  toClipboard(famousQuotes.value.hitokoto+"——"+famousQuotes.value.from)
+  ElMessage.success("复制成功!点击右键可换一句")
+}
+
+let backgrounds=[
+    'https://file.peteralbus.com/assets/blog/static/background/background-lumine.jpg',
+    'https://file.peteralbus.com/assets/blog/static/background/background-kazuha.jpg',
+    'https://file.peteralbus.com/assets/blog/static/background/background-blueeyes.jpg'
+]
+
+let randomIndex=Math.floor(Math.random()*backgrounds.length)
+
+const getBlogList=function () {
+  axios.get('queryAll')
+      .then(res => {
+        blogList.value = res.data;
+      })
+}
+
+const getFriendLinkList=function () {
+  axios.get('friendLink/getFriendLinkList')
+      .then(res => {
+        friendLinkList.value = res.data;
+      })
+}
+
+onMounted(()=>{
+  getBlogList()
+  getFriendLinkList()
+  getQuotes()
+})
+
+const topBlogs=computed(()=>{
+  let topBlogs = [];
+  for (let i of blogList.value) {
+    if (i.isTop == 1) {
+      topBlogs.push(i);
     }
   }
-}
+  return topBlogs.reverse();
+})
+
+const recentBlogs = computed (function () {
+      let recentBlogs = blogList.value.reverse();
+      return recentBlogs.slice(0, 10);
+    })
+
+const getType = computed(function () {
+  return function (type: number) {
+    let types = ['学习笔记', '生活', 'ACG', '科技', '随笔']
+    return types[type - 1];
+  }
+})
+
+
 </script>
 
 <style scoped>
@@ -188,7 +239,7 @@ export default {
   left: 0;
   right: 0;
   height: 100vh;
-  background: url("../assets/background1.jpg") fixed center center;
+
   text-align: center;
   color: #fff !important;
   animation: header-effect 1s !important;
@@ -198,22 +249,22 @@ export default {
   position: absolute;
   width: 100%;
   padding-top: 20px;
-  margin-top: 35vh;
+  margin-top: 33vh;
   line-height: 1.5;
   color: #eee;
   background: rgba(34, 44, 63, 0.5) !important;
   box-shadow: 3px 3px 6px 3px rgba(0, 0, 0, .3);
 }
 
-.banner-container a{
+.banner-container a {
   color: white;
 }
 
-.banner-container a:hover{
+.banner-container a:hover {
   color: black;
 }
 
-@keyframes header-effect{
+@keyframes header-effect {
   0% {
     opacity: 0;
     filter: alpha(opacity=0);

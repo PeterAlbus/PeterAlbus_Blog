@@ -42,9 +42,9 @@
                 </router-link>
                 <p style="height: 90px;overflow: hidden">{{item.blogDescription}}</p>
                 <p class="info">
-                  <span type="info"><i class="el-icon-user-solid"></i>{{item.blogAuthor}}</span>
-                  <span type="info"><i class="el-icon-alarm-clock"></i>{{item.blogTime}}</span>
-                  <span type="info"><i class="el-icon-star-on"></i>{{item.blogLike}}</span>
+                  <span type="info"><el-icon style="vertical-align: -10%"><avatar /></el-icon>{{ item.blogAuthor }}</span>
+                  <span type="info"><el-icon style="vertical-align: -10%"><clock /></el-icon>{{ item.blogTime }}</span>
+                  <span type="info"><el-icon style="vertical-align: -10%"><star-filled /></el-icon>{{ item.blogLike }}</span>
                 </p>
               </div>
             </el-col>
@@ -101,7 +101,9 @@
 </template>
 
 <script>
+import {Avatar,StarFilled,Clock} from "@element-plus/icons-vue";
 export default {
+  components:{Avatar,StarFilled,Clock},
   name: "Types",
   data(){
     return {

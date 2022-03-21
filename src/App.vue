@@ -4,14 +4,9 @@
   <Footer></Footer>
 </template>
 
-<script>
+<script setup lang="ts">
 import TopNavBar from "@/components/TopNavBar.vue";
 import Footer from "@/components/Footer.vue";
-export default {
-  name:'App',
-  components: {Footer, TopNavBar}
-}
-
 </script>
 
 <style lang="scss">
