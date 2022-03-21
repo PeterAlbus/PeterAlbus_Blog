@@ -15,7 +15,7 @@
               <el-input v-model="friendLink.linkName"></el-input>
             </el-form-item>
             <el-form-item label="友情链接地址">
-              <el-input v-model="friendLink.linkSrc"></el-input>
+              <el-input v-model="friendLink.linkUrl"></el-input>
             </el-form-item>
             <el-button v-on:click="submitLink" type="success" round>添加</el-button>
           </el-form>

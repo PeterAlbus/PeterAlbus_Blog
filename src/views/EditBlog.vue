@@ -8,30 +8,29 @@
   </div>
   <div class="main-container">
     <el-row>
-      <el-col :lg="{span:16,offset:4}">
+      <el-col :lg="{span:16,offset:4}" :sm="{span:20,offset:2}" :xs="{span:22,offset:1}">
         <div class="blog-content">
           <el-form ref="blogForm" :model="blog" :rules="rules">
             <el-form-item label="标题：" prop="blogTitle">
-              <el-input v-model="blog.blogTitle" placeholder="标题" prefix-icon='el-icon-notebook-2'></el-input>
+              <el-input v-model="blog.blogTitle" placeholder="标题" :prefix-icon='Document'></el-input>
             </el-form-item>
             <el-form-item label="封面图片(点击上传):" prop="goodPath">
               <el-upload
                   class="avatar-uploader"
-                  list-type="picture-card"
                   action="https://www.peteralbus.com:8089/upload"
                   :show-file-list="false"
                   :on-success="handleAvatarSuccess"
                   :before-upload="beforeAvatarUpload"
               >
-                <img style="width: 100px; height: 100px"  v-if="blog.blogImg" :src="blog.blogImg" class="avatar" alt="">
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                <img style="width: 200px; height: 200px"  v-if="imageUrl" :src="imageUrl" class="avatar" alt="">
+                <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
               </el-upload>
             </el-form-item>
             <el-form-item label="作者：" prop="blogAuthor">
-              <el-input v-model="blog.blogAuthor" placeholder="作者" prefix-icon='el-icon-notebook-2'></el-input>
+              <el-input v-model="blog.blogAuthor" placeholder="作者" :prefix-icon='User'></el-input>
             </el-form-item>
             <el-form-item label="描述：" prop="blogDescription">
-              <el-input v-model="blog.blogDescription" placeholder="描述" prefix-icon='el-icon-notebook-2'></el-input>
+              <el-input v-model="blog.blogDescription" placeholder="描述" :prefix-icon='ChatLineSquare'></el-input>
             </el-form-item>
             <el-form-item label="分类：" prop="blogType">
               <el-radio-group v-model="blog.blogType">
@@ -52,7 +51,7 @@
               <v-md-editor v-model="blog.blogContent"></v-md-editor>
             </el-form-item>
             <el-form-item style="text-align: center;">
-              <el-button type="success" v-on:click="onSubmit('blogForm')">提交</el-button>
+              <el-button type="success" @click="onSubmit(blogForm)">提交</el-button>
               <el-button type="info" v-on:click="getBlog">重置</el-button>
             </el-form-item>
           </el-form>
@@ -62,137 +61,150 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "NewBlog",
-  data() {
-    return {
-      blog:{
-        blogId:this.$route.query.id,
-        blogTitle:'',
-        blogImg:'',
-        blogType:1,
-        blogDescription:'',
-        blogAuthor:'PeterAlbus',
-        blogContent:'',
-        blogTime:'2021-07-22',
-        blogLike:0,
-        blogViews:0,
-        isTop:0
-      },
-      rules: {
-        blogTitle: [
-          {required: true, message: '标题不可为空', trigger: 'blur'}
-        ],
-        blogAuthor: [
-          {required: true, message: '作者不可为空', trigger: 'blur'}
-        ],
-        blogDescription: [
-          {required: true, message: '描述不可为空', trigger: 'blur'}
-        ],
-        blogType: [
-          {required: true, message: '必须选择类型', trigger: 'blur'}
-        ],
-        blogContent: [
-          {required: true, message: '内容不可为空', trigger: 'blur'}
-        ]
-      },
-      friendLinkList:[
-        {
-          linkId:1,
-          linkName:'loading',
-          linkUrl:'#'
-        }
-      ]
-    };
-  },
-  created() {
-    this.getBlog()
-    this.getFriendLinkList()
-  },
-  methods:{
-    handleAvatarSuccess(res, file) {
-      console.log(res);
-      if (res !== 'error') {
-        this.blog.blogImg = res;
-        this.$message.success("上传成功");
-      } else this.$message.error("上传失败!");
-    },
-    getFriendLinkList: function (){
-      let that=this;
-      that.$axios.get('friendLink/getFriendLinkList')
-          .then(res=>{
-            that.friendLinkList=res.data;
-          })
-    },
-    beforeAvatarUpload(file) {
-      console.log(file.type);
-      const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
-      const isLt2M = file.size / 1024 / 1024 < 2;
+<script setup lang="ts">
+import {Plus,Document,User,ChatLineSquare} from '@element-plus/icons-vue'
+import {onMounted, reactive, ref} from "vue";
+import { useRoute } from 'vue-router'
+import qs from "qs";
+import axios from "axios";
+import type {
+  UploadFile,
+  UploadRawFile,
+  UploadProgressEvent,
+  FormInstance
+} from 'element-plus'
+import {ElMessage} from "element-plus";
+import router from "@/router";
+const blogForm = ref<FormInstance>()
+const route = useRoute()
 
-      if (!isJPG) {
-        this.$message.error('上传图片只能是 JPG/PNG 格式!');
-      }
-      if (!isLt2M) {
-        this.$message.error('上传图片大小不能超过 2MB!');
-      }
-      return isJPG && isLt2M;
-    },
-    getBlog:function (){
-      let that=this;
-      if(that.blog.blogId!==undefined)
+let imageUrl=ref('')
+
+let blog=ref({
+  blogId:route.query.id,
+  blogTitle:'',
+  blogImg:'',
+  blogType:1,
+  blogDescription:'',
+  blogAuthor:'PeterAlbus',
+  blogContent:'',
+  blogTime:'2021-07-22',
+  blogLike:0,
+  blogViews:0,
+  isTop:0
+})
+
+const rules=reactive({
+  blogTitle: [
+    {required: true, message: '标题不可为空', trigger: 'change'}
+  ],
+  blogAuthor: [
+    {required: true, message: '作者不可为空', trigger: 'change'}
+  ],
+  blogDescription: [
+    {required: true, message: '描述不可为空', trigger: 'change'}
+  ],
+  blogType: [
+    {required: true, message: '必须选择类型', trigger: 'change'}
+  ],
+  blogContent: [
+    {required: true, message: '内容不可为空', trigger: 'change'}
+  ]
+})
+
+let friendLinkList=ref([
+  {
+    linkId:1,
+    linkName:'loading',
+    linkUrl:'#'
+  }
+])
+
+const getFriendLinkList=function () {
+  axios.get('friendLink/getFriendLinkList')
+      .then(res => {
+        friendLinkList.value = res.data;
+      })
+}
+
+const getBlog = function (){
+  if(blog.value.blogId!==undefined)
+  {
+    axios.get('queryById?id='+blog.value.blogId)
+        .then(res=>{
+          blog.value=res.data;
+          imageUrl.value=blog.value.blogImg
+        })
+  }
+}
+
+const handleAvatarSuccess = (res: any, file: UploadFile) => {
+  if (res != 'error') {
+    blog.value.blogImg = res;
+    imageUrl.value=blog.value.blogImg
+    ElMessage.success("上传成功");
+  } else ElMessage.error("上传失败!");
+}
+
+const beforeAvatarUpload = (file: UploadRawFile) => {
+  const isJPG = file.type === 'image/jpeg'
+  const isLt2M = file.size / 1024 / 1024 < 2
+
+  if (!isJPG) {
+    ElMessage.error('Avatar picture must be JPG format!')
+  }
+  if (!isLt2M) {
+    ElMessage.error('Avatar picture size can not exceed 2MB!')
+  }
+  return isJPG && isLt2M
+}
+
+const onSubmit= async (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  await formEl.validate((valid, fields) => {
+    if (valid) {
+      if(blog.value.blogId!==undefined)
       {
-        that.$axios.get('queryById?id='+that.blog.blogId)
-            .then(res=>{
-              that.blog=res.data;
-            })
-      }
-    },
-    onSubmit(formName) {
-      // 为表单绑定验证功能
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          let that = this;
-          if(that.blog.blogId!==undefined)
-          {
-            console.log('update:',that.blog);
-            that.$axios.post('/update',that.$qs.stringify(that.blog))
+        console.log('update:',blog.value);
+        axios.post('/update',qs.stringify(blog.value))
             .then(res=>{
               if(res.data!='fail')
               {
-                that.$message.success('更新成功');
-                that.$router.push('/blog?id='+that.blog.blogId)
+                ElMessage.success('更新成功');
+                router.push('/blog?id='+blog.value.blogId)
               }
               else
               {
-                that.$message.error('更新失败');
+                ElMessage.error('更新失败');
               }
             })
-          }
-          else
-          {
-            console.log('new:',that.blog);
-            that.$axios.post('/add',that.$qs.stringify(that.blog))
-                .then(res=>{
-                  if(res.data!='fail')
-                  {
-                    that.$message.success('发布成功');
-                    that.$router.push('/blog?id='+that.blog.blogId)
-                  }
-                  else
-                  {
-                    that.$message.error('发布失败');
-                  }
-                })
-          }
-          //that.$axios.post('/business/update',that.$qs.stringify(dat))
-        } else {
-          return false;
-        }
-      });
-    },
-  }
+      }
+      else
+      {
+        console.log('new:',blog.value);
+        axios.post('/add',qs.stringify(blog.value))
+            .then(res=>{
+              if(res.data!='fail')
+              {
+                ElMessage.success('发布成功');
+                router.push('/blog?id='+blog.value.blogId)
+              }
+              else
+              {
+                ElMessage.error('发布失败');
+              }
+            })
+      }
+    } else {
+      console.log('error submit!', fields)
+    }
+  })
 }
+
+onMounted(()=>{
+  getFriendLinkList()
+  getBlog()
+})
 </script>
 
 <style scoped>
@@ -217,29 +229,5 @@ export default {
 
 .blog-content{
   text-align: left;
-}
-
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #409EFF;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 150px;
-  height: 150px;
-  line-height: 150px;
-  text-align: center;
-}
-.avatar {
-  width: 150px;
-  height: 150px;
-  display: block;
 }
 </style>

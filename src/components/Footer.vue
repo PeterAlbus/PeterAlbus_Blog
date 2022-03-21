@@ -8,7 +8,7 @@
               </a>
             </div>
     </div>
-    <div style="height: 61px" v-if="screenWidth<600"></div>
+    <div style="height: 61px" v-if="screenWidth<640"></div>
   </div>
 </template>
 

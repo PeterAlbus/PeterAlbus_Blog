@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar nav" v-if="screenWidth>=600">
+  <div class="navbar nav" v-if="screenWidth>=640">
     <div class="nav-title">PeterAlbus的博客</div>
     <div style="display: flex">
       <div class="nav-item" v-for="item in navItems">
@@ -12,7 +12,7 @@
       </div>
     </div>
   </div>
-  <div class="navbar-bottom" v-if="screenWidth<600">
+  <div class="navbar-bottom" v-if="screenWidth<640">
     <el-row class="navbar-bottom-list">
       <el-col :span="24/navItems.length" class="navbar-bottom-item" v-for="item in navItems">
         <router-link :to="item.indexPath" active-class="active-item">
