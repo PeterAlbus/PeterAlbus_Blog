@@ -20,7 +20,7 @@
       <el-col :lg="{span:6}" :sm="9">
         <div class="module">
           <div class="content paragraph">
-            <el-avatar :size="50" :src="require('../assets/2.png')"></el-avatar>
+            <el-avatar :size="50" src="/assets/2.png"></el-avatar>
             <h4>PeterAlbus</h4>
             <el-tooltip class="item" effect="dark" content="发送电子邮件" placement="top">
               <a href="mailto:wuhongdb@163.com">

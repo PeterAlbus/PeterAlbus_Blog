@@ -36,7 +36,7 @@ export default {
   width: 100%;
   overflow: hidden;
   background: #373D41;
-  border-top: 10px solid #4B6186;
+  border-top: 10px solid #326139;
   position: relative;
   text-align: center;
 }

@@ -2,7 +2,7 @@
   <div class="home-banner">
     <div class="banner-container">
       <div>
-        <el-avatar :size="150" :src="require('../assets/2.png')"></el-avatar>
+        <el-avatar :size="150" src="/assets/2.png"></el-avatar>
         <h2>欢迎来到PeterAlbus的个人博客</h2>
         <br>
         <el-tooltip class="item" effect="dark" content="发送电子邮件" placement="top">
@@ -35,7 +35,7 @@
             <el-col :span="16">
               <div class="blog-description">
                 <router-link :to="{ path: '/blog',query:{id:item.blogId}}">
-                  <h4>{{item.blogTitle}}&emsp;<el-tag size="mini">{{getType(item.blogType)}}</el-tag></h4>
+                  <h4>{{item.blogTitle}}&emsp;<el-tag size="small">{{getType(item.blogType)}}</el-tag></h4>
                 </router-link>
                 <p style="height: 110px">{{item.blogDescription}}</p>
                 <p class="info">
@@ -59,7 +59,7 @@
             <el-col :span="16">
               <div class="blog-description">
                 <router-link :to="{ path: '/blog',query:{id:item.blogId}}">
-                  <h4 style="height: 40px"><span style="white-space: nowrap">{{item.blogTitle}}&emsp;</span><el-tag size="mini">{{getType(item.blogType)}}</el-tag></h4>
+                  <h4 style="height: 40px"><span style="white-space: nowrap">{{item.blogTitle}}&emsp;</span><el-tag size="small">{{getType(item.blogType)}}</el-tag></h4>
                 </router-link>
                 <p style="height: 90px;overflow: hidden">{{item.blogDescription}}</p>
                 <p class="info">
@@ -76,7 +76,7 @@
     <el-col :lg="{span:6}" :sm="9">
       <div class="module">
         <div class="content paragraph">
-          <el-avatar :size="50" :src="require('../assets/2.png')"></el-avatar>
+          <el-avatar :size="50" src="/assets/2.png"></el-avatar>
           <h4>PeterAlbus</h4>
           <el-tooltip class="item" effect="dark" content="发送电子邮件" placement="top">
             <a href="mailto:wuhongdb@163.com">

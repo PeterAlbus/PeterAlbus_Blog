@@ -10,7 +10,14 @@
     <el-col :span="24">
       <el-row>
         <el-col :lg="{span:16,offset:4}">
-          <el-radio-group v-model="selectType">
+          <el-radio-group v-model="selectType" size="large" v-if="screenWidth>=500">
+            <el-radio-button :label="1">学习笔记</el-radio-button>
+            <el-radio-button :label="2">生活</el-radio-button>
+            <el-radio-button :label="3">ACG</el-radio-button>
+            <el-radio-button :label="4">科技</el-radio-button>
+            <el-radio-button :label="5">随笔</el-radio-button>
+          </el-radio-group>
+          <el-radio-group v-model="selectType" size="small" v-if="screenWidth<500">
             <el-radio-button :label="1">学习笔记</el-radio-button>
             <el-radio-button :label="2">生活</el-radio-button>
             <el-radio-button :label="3">ACG</el-radio-button>
@@ -31,7 +38,7 @@
             <el-col :span="16">
               <div class="blog-description">
                 <router-link :to="{ path: '/blog',query:{id:item.blogId}}">
-                  <h4 style="height: 40px"><span style="white-space: nowrap">{{item.blogTitle}}&emsp;</span><el-tag size="mini">{{getType(item.blogType)}}</el-tag></h4>
+                  <h4 style="height: 40px"><span style="white-space: nowrap">{{item.blogTitle}}&emsp;</span><el-tag size="small">{{getType(item.blogType)}}</el-tag></h4>
                 </router-link>
                 <p style="height: 90px;overflow: hidden">{{item.blogDescription}}</p>
                 <p class="info">
@@ -43,7 +50,7 @@
             </el-col>
           </el-row>
         </el-card>
-        <div style="background-color: white">
+        <div style="background-color: white;display: flex;justify-content: center">
           <el-pagination v-if="screenWidth>=600"
               layout="total, sizes, prev, pager, next, jumper"
               :page-sizes="[5,10,20]"
@@ -64,7 +71,7 @@
     <el-col :lg="{span:6}" :sm="9">
       <div class="module">
         <div class="content paragraph">
-          <el-avatar :size="50" :src="require('../assets/2.png')"></el-avatar>
+          <el-avatar :size="50" src="/assets/2.png"></el-avatar>
           <h4>PeterAlbus</h4>
           <el-tooltip class="item" effect="dark" content="发送电子邮件" placement="top">
             <a href="mailto:wuhongdb@163.com">

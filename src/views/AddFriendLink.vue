@@ -24,7 +24,7 @@
       <el-col :lg="{span:6}" :sm="9">
         <div class="module">
           <div class="content">
-            <el-avatar :size="50" :src="require('../assets/2.png')"></el-avatar>
+            <el-avatar :size="50" src="/assets/2.png"></el-avatar>
             <h4>PeterAlbus</h4>
             <p>若有侵权，深表歉意。可联系删除</p>
             <el-tooltip class="item" effect="dark" content="发送电子邮件" placement="top">

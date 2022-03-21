@@ -1,2 +1,2 @@
 # PeterAlbus_Blog
-My personal blog based on vue.
+use Vite+Vue+Ts+ElementPlus

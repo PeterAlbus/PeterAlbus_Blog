@@ -1,64 +1,55 @@
 <template>
-  <div class="navbar" >
-    <el-menu active-text-color="#326139" text-color="#FFFFFF" id="navid" class="nav" mode="horizontal" :router="true">
-      <el-menu-item
-          v-if="screenWidth>=600"
-          class="nav-title"
-          style="font-size: large"
-          index="0"
-          route="/"
-      >PeterAlbus的博客</el-menu-item>
-      <div style="display: flex;justify-content: right">
-        <el-menu-item
-            v-if="screenWidth>=600"
-            class="nav-item"
-            route="/"
-            index="1"
-        ><i class="el-icon-s-home"></i>主页</el-menu-item>
-        <el-menu-item
-            v-if="screenWidth>=600"
-            class="nav-item"
-            route="/types"
-            index="2"
-        ><i class="el-icon-menu"></i>分类</el-menu-item>
-        <el-menu-item
-            v-if="screenWidth>=600"
-            class="nav-item"
-            route="/about"
-            index="4"
-        ><i class="el-icon-user"></i>关于我</el-menu-item>
-        <el-menu-item
-            v-if="screenWidth>=600"
-            class="nav-item"
-            route="/photo"
-            index="5"
-        ><i class="el-icon-picture-outline"></i>照片墙</el-menu-item>
-      </div>
-    </el-menu>
+  <div class="navbar nav" v-if="screenWidth>=600">
+    <div
+        class="nav-title"
+        style="font-size: large"
+    >PeterAlbus的博客</div>
+    <div style="display: flex">
+        <div class="nav-item">
+          <router-link to="/" active-class="active-top-item">
+            <el-icon style="vertical-align: -10%"><home-filled /></el-icon>主页
+          </router-link>
+        </div>
+        <div class="nav-item">
+          <router-link to="/types" active-class="active-top-item">
+            <el-icon style="vertical-align: -10%"><Menu /></el-icon>分类
+          </router-link>
+        </div>
+        <div class="nav-item">
+          <router-link to="/about" active-class="active-top-item">
+            <el-icon style="vertical-align: -10%"><user-filled /></el-icon>关于我
+          </router-link>
+        </div>
+        <div class="nav-item">
+          <router-link to="/photo" active-class="active-top-item">
+            <el-icon style="vertical-align: -10%"><picture-filled /></el-icon>照片墙
+          </router-link>
+        </div>
+    </div>
   </div>
   <div class="navbar-bottom" v-if="screenWidth<600">
     <el-row class="navbar-bottom-list">
       <el-col :span="6" class="navbar-bottom-item">
         <router-link to="/" active-class="active-item">
-          <p><i class="el-icon-s-home navbar-bottom-icon"></i></p>
+          <p><el-icon><home-filled /></el-icon></p>
           <span class="navbar-bottom-text">主页</span>
         </router-link>
       </el-col>
       <el-col :span="6" class="navbar-bottom-item">
         <router-link to="/types" active-class="active-item">
-          <p><i class="el-icon-menu navbar-bottom-icon"></i></p>
+          <p><el-icon><grid /></el-icon></p>
           <span class="navbar-bottom-text">分类</span>
         </router-link>
       </el-col>
       <el-col :span="6" class="navbar-bottom-item">
         <router-link to="/about" active-class="active-item">
-          <p><i class="el-icon-user navbar-bottom-icon"></i></p>
+          <p><el-icon><user-filled /></el-icon></p>
           <span class="navbar-bottom-text">关于我</span>
         </router-link>
       </el-col>
       <el-col :span="6" class="navbar-bottom-item">
         <router-link to="/photo" active-class="active-item">
-          <p><i class="el-icon-picture-outline navbar-bottom-icon"></i></p>
+          <p><el-icon><picture-filled /></el-icon></p>
           <span class="navbar-bottom-text">照片墙</span>
         </router-link>
       </el-col>
@@ -67,8 +58,12 @@
 </template>
 
 <script>
+import {HomeFilled,Menu,UserFilled,PictureFilled,Grid} from '@element-plus/icons-vue'
 export default {
   name: "TopNavBar",
+  components:{
+    HomeFilled,Menu,UserFilled,PictureFilled,Grid
+  },
   created () {
   },
   mounted () {
@@ -103,7 +98,9 @@ export default {
   top: 0;
   left: 0;
   right: 0;
-  height:10px; /* 高度 */
+  /*height:10px; !* 高度 *!*/
+  display: flex;
+  justify-content: space-around;
   z-index:99; /* 层叠顺序，数值越大就越高。页面滚动的时候就不会被其他内容所遮挡。 */
 }
 
@@ -148,8 +145,13 @@ export default {
   transition: .3s;
 }
 
+.active-top-item{
+  position: relative;
+  color: #82A96D !important;
+  transition: .3s;
+}
+
 .nav{
-  justify-content: space-between;
   background: rgba(0, 0, 0, 0.5) !important;
   box-shadow: 3px 3px 6px 3px rgba(0, 0, 0, .3);
 }
@@ -157,8 +159,12 @@ export default {
 .nav-item{
   height: 100%;
   line-height: 60px;
-  margin-right: 20px;
+  padding:0 30px 0 30px;
   background: rgba(0, 0, 0, 0) !important;
+}
+
+.nav-item a{
+  color: white;
 }
 
 .nav-menu{

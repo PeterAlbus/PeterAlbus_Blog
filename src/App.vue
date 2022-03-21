@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import TopNavBar from "@/components/TopNavBar";
-import Footer from "@/components/Footer";
+import TopNavBar from "@/components/TopNavBar.vue";
+import Footer from "@/components/Footer.vue";
 export default {
   name:'App',
   components: {Footer, TopNavBar}
@@ -19,6 +19,14 @@ export default {
 html,body,div,span,h1,h2,h3,h4,h5,h6,ul,ol,li,p{
   margin: 0;
   padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+.router-link-active {
+  text-decoration: none;
 }
 
 #app {

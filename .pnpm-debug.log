@@ -1,0 +1,14 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1
+  },
+  "1 error pnpm": {
+    "code": "ERR_PNPM_NO_SCRIPT",
+    "err": {
+      "name": "pnpm",
+      "message": "Missing script: install",
+      "code": "ERR_PNPM_NO_SCRIPT",
+      "stack": "pnpm: Missing script: install\n    at Object.handler (D:\\softwares\\Program Files\\nodejs\\node_global\\node_modules\\pnpm\\dist\\pnpm.cjs:176134:15)\n    at async D:\\softwares\\Program Files\\nodejs\\node_global\\node_modules\\pnpm\\dist\\pnpm.cjs:180328:21\n    at async run (D:\\softwares\\Program Files\\nodejs\\node_global\\node_modules\\pnpm\\dist\\pnpm.cjs:180302:34)\n    at async runPnpm (D:\\softwares\\Program Files\\nodejs\\node_global\\node_modules\\pnpm\\dist\\pnpm.cjs:180513:5)\n    at async D:\\softwares\\Program Files\\nodejs\\node_global\\node_modules\\pnpm\\dist\\pnpm.cjs:180505:7"
+    }
+  }
+}
