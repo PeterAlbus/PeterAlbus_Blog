@@ -2,12 +2,12 @@
   <div class="banner">
     <div class="banner-container">
       <div>
-        <h1>分类查看</h1>
+        <h1>上传图片</h1>
       </div>
     </div>
   </div>
-  <el-row class="main-container">
-    <el-col :span="16" :offset="4">
+  <el-row class="main-container" style="justify-content: center;align-items: center">
+    <div style="width: 250px">
       <el-form>
         <el-form-item label="图片名称">
           <el-input v-model="imgName"></el-input>
@@ -16,77 +16,86 @@
           <el-upload
               class="avatar-uploader"
               action="https://www.peteralbus.com:8089/photo/upload/"
-              ref="upload"
-              list-type="picture-card"
+              ref="uploadRef"
               :data="upData"
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload"
-              :auto-upload="false">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              :auto-upload="false"
+              :on-change="onFileChange"
+          >
+            <img style="width: 178px; height: 178px"  v-if="imageUrl" :src="imageUrl" class="avatar" alt="">
+            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
           </el-upload>
         </el-form-item>
         <el-button v-on:click="submitUpload">上传</el-button>
       </el-form>
-    </el-col>
+    </div>
   </el-row>
 
 </template>
 
-<script>
-export default {
-  name: "UploadPhoto",
-  data() {
-    return {
-      imgName:'',
-      imageUrl: '',
-      friendLinkList:[
-        {
-          linkId:1,
-          linkName:'loading',
-          linkUrl:'#'
-        }
-      ]
-    }
-  },
-  created() {
-    this.getFriendLinkList()
-  },
-  methods: {
-    submitUpload() {
-      this.$refs.upload.submit();
-    },
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
-    },
-    beforeAvatarUpload(file) {
-      // const isJPG = file.type === 'image/jpeg';
-      // const isLt2M = file.size / 1024 / 1024 < 2;
-      //
-      // if (!isJPG) {
-      //   this.$message.error('上传头像图片只能是 JPG 格式!');
-      // }
-      // if (!isLt2M) {
-      //   this.$message.error('上传头像图片大小不能超过 2MB!');
-      // }
-      return true;
-    },
-    getFriendLinkList: function (){
-      let that=this;
-      that.$axios.get('friendLink/getFriendLinkList')
-          .then(res=>{
-            that.friendLinkList=res.data;
-          })
-    }
-  },
-  computed:{
-    upData:function () {
-      let data={imgName:this.imgName}
-      return data
-    }
+<script setup lang="ts">
+import {Plus} from '@element-plus/icons-vue'
+import {computed, onMounted, ref} from "vue";
+import type {ElUpload, UploadFile, UploadProgressEvent, UploadRawFile} from "element-plus";
+import {ElMessage} from "element-plus";
+import axios from "axios";
+import router from "@/router";
+
+const uploadRef=ref<InstanceType<typeof ElUpload>>()
+
+
+let imgName=ref('')
+let imageUrl=ref('')
+let friendLinkList=ref([
+  {
+    linkId:1,
+    linkName:'loading',
+    linkUrl:'#'
   }
+])
+
+const getFriendLinkList=function () {
+  axios.get('friendLink/getFriendLinkList')
+      .then(res => {
+        friendLinkList.value = res.data;
+      })
 }
+
+const submitUpload = ()=>{
+  uploadRef.value!.submit();
+}
+
+const handleAvatarSuccess = (res: UploadProgressEvent, file: UploadFile) => {
+  ElMessage.success("上传成功")
+  router.push('/photo')
+}
+
+const onFileChange = (file: UploadFile, fileList: UploadFile[])=>{
+  imageUrl.value = URL.createObjectURL(file.raw!)
+}
+
+const beforeAvatarUpload = (file: UploadRawFile) => {
+  const isIMG = file.type === 'image/jpeg'||file.type === 'image/png'||file.type === 'image/gif'
+  const isLt2M = file.size / 1024 / 1024 < 2
+
+  if (!isIMG) {
+    ElMessage.error('选择的文件不是图片！')
+  }
+  if (!isLt2M) {
+    ElMessage.error('图片大小不能超过2M！')
+  }
+  return isIMG && isLt2M
+}
+
+const upData=computed(()=>{
+  return {imgName: imgName.value}
+})
+
+onMounted(()=>{
+  getFriendLinkList()
+})
 </script>
 
 <style scoped>
@@ -107,29 +116,5 @@ export default {
   margin-top: 13vh;
   line-height: 1.5;
   color: #eee;
-}
-
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #409EFF;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 150px;
-  height: 150px;
-  line-height: 150px;
-  text-align: center;
-}
-.avatar {
-  width: 150px;
-  height: 150px;
-  display: block;
 }
 </style>

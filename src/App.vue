@@ -124,6 +124,7 @@ a {
    cursor: pointer;
    position: relative;
    overflow: hidden;
+   background-color: #fbfdff;
    transition: var(--el-transition-duration-fast);
  }
 .avatar-uploader .el-upload:hover {
@@ -140,5 +141,43 @@ a {
   width: 178px;
   height: 178px;
   display: block;
+}
+
+*::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width : 10px;  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 1px;
+}
+*::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 10px;
+  box-shadow   : inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background   : #33613A;
+}
+*::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  box-shadow   : inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  background   : #ededed;
+}
+
+@media screen and (min-width: 768px){
+  .sticky-box {
+    position: -webkit-sticky;
+    position: sticky;
+    height: 60px;
+    margin-bottom: 30px;
+    top: 70px;
+  }
+
+  .hide-big-screen{
+    display: none!important;
+  }
+}
+@media screen and (max-width: 767px){
+  .hide-small-screen{
+    opacity: 0;
+    transform: scale(0.5);
+  }
 }
 </style>

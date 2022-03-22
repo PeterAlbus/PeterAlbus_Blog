@@ -1,10 +1,10 @@
 <template>
-  <div class="home-banner" :style="{background:'url('+backgrounds[randomIndex]+') fixed center center'}">
+  <div class="home-banner" :style="{background:'url('+backgrounds[randomIndex]+') fixed center center',backgroundSize:'cover',OBackgroundSize:'cover',MozBackgroundSize:'cover'}">
     <div class="banner-container">
       <div>
         <el-avatar :size="150" src="/assets/2.png"></el-avatar>
         <h2>欢迎来到PeterAlbus的个人博客</h2>
-        <div @mouseout="showFrom=false" @mouseover="showFrom=true" style="height: 30px;color:#ccccd6;font-size: 0.5em;">
+        <div @mouseout="showFrom=false" @mouseover="showFrom=true" style="height: 30px;color:#ccccd6;font-size: 0.8em;">
           <p
               @click="copyQuotes"
               @contextmenu.prevent="getQuotes"
@@ -58,7 +58,7 @@
       </div>
 
       <div class="module">
-        <h2 class="title">最新发布</h2>
+        <h2 class="title">最新发布<span style="float:right;"><router-link to="/types">查看全部>></router-link></span></h2>
         <el-card class="content" v-for="item in recentBlogs" shadow="hover" :body-style="{ padding: '0px' }">
           <el-row style="height: 170px">
             <el-col :span="8">
@@ -84,32 +84,34 @@
       </div>
     </el-col>
     <el-col :lg="{span:6}" :sm="9">
-      <div class="module">
-        <div class="content paragraph">
-          <el-avatar :size="50" src="/assets/2.png"></el-avatar>
-          <h4>PeterAlbus</h4>
-          <el-tooltip class="item" effect="dark" content="发送电子邮件" placement="top">
-            <a href="mailto:wuhongdb@163.com">
-              <i class="fa fa-fw fa-envelope" style="font-size:20px"></i>
-            </a>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="github" placement="top">
-            <a href="https://github.com/PeterAlbus" target="_blank">
-              <i class="fa fa-fw fa-github" style="font-size:20px"></i>
-            </a>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="bilibili" placement="top">
-            <a href="https://space.bilibili.com/2003822" target="_blank">
-              <i class="iconfont icon-bilibili-line" style="font-size:20px"></i>
-            </a>
-          </el-tooltip>
+      <div class="sticky-box">
+        <div class="module">
+          <div class="content paragraph">
+            <el-avatar :size="50" src="/assets/2.png"></el-avatar>
+            <h4>PeterAlbus</h4>
+            <el-tooltip class="item" effect="dark" content="发送电子邮件" placement="top">
+              <a href="mailto:wuhongdb@163.com">
+                <i class="fa fa-fw fa-envelope" style="font-size:20px"></i>
+              </a>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="github" placement="top">
+              <a href="https://github.com/PeterAlbus" target="_blank">
+                <i class="fa fa-fw fa-github" style="font-size:20px"></i>
+              </a>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="bilibili" placement="top">
+              <a href="https://space.bilibili.com/2003822" target="_blank">
+                <i class="iconfont icon-bilibili-line" style="font-size:20px"></i>
+              </a>
+            </el-tooltip>
+          </div>
         </div>
-      </div>
 
-      <div class="module">
-        <h2 class="title">友情链接</h2>
-        <div class="content paragraph">
-          <p v-for="item in friendLinkList"><a :href="item.linkUrl" target="_blank">{{ item.linkName }}</a></p>
+        <div class="module">
+          <h2 class="title"><el-icon style="vertical-align: -10%"><link-icon /></el-icon>友情链接</h2>
+          <div class="content paragraph">
+            <p v-for="item in friendLinkList"><a :href="item.linkUrl" target="_blank">{{ item.linkName }}</a></p>
+          </div>
         </div>
       </div>
     </el-col>
@@ -118,7 +120,7 @@
 
 <script setup lang="ts">
 import {computed, onMounted, ref} from "vue";
-import {Avatar,StarFilled,Clock} from "@element-plus/icons-vue";
+import {Avatar,StarFilled,Clock,Link as LinkIcon} from "@element-plus/icons-vue";
 import { toClipboard } from '@soerenmartius/vue3-clipboard'
 import axios from "axios";
 import {ElMessage} from "element-plus";
@@ -167,7 +169,7 @@ let showFrom = ref(false)
 const getQuotes= ()=>{
   axios({
     method: "get",
-    url: "https://v1.hitokoto.cn/?c=c&c=b&c=a&encode=json",
+    url: "https://v1.hitokoto.cn/?c=c&c=b&c=a&c=d&encode=json",
   })
       .then(res=>{
         famousQuotes.value=res.data

@@ -50,10 +50,10 @@
             <el-form-item label="内容：" prop="blogContent">
               <v-md-editor v-model="blog.blogContent"></v-md-editor>
             </el-form-item>
-            <el-form-item style="text-align: center;">
+            <div style="display: flex;justify-content: center!important;">
               <el-button type="success" @click="onSubmit(blogForm)">提交</el-button>
-              <el-button type="info" v-on:click="getBlog">重置</el-button>
-            </el-form-item>
+              <el-button type="info" v-on:click="getBlog">重置为原博客</el-button>
+            </div>
           </el-form>
         </div>
       </el-col>
@@ -147,16 +147,16 @@ const handleAvatarSuccess = (res: any, file: UploadFile) => {
 }
 
 const beforeAvatarUpload = (file: UploadRawFile) => {
-  const isJPG = file.type === 'image/jpeg'
+  const isIMG = file.type === 'image/jpeg'||file.type === 'image/png'||file.type === 'image/gif'
   const isLt2M = file.size / 1024 / 1024 < 2
 
-  if (!isJPG) {
-    ElMessage.error('Avatar picture must be JPG format!')
+  if (!isIMG) {
+    ElMessage.error('选择的文件不是图片！')
   }
   if (!isLt2M) {
-    ElMessage.error('Avatar picture size can not exceed 2MB!')
+    ElMessage.error('图片大小不能超过2M！')
   }
-  return isJPG && isLt2M
+  return isIMG && isLt2M
 }
 
 const onSubmit= async (formEl: FormInstance | undefined) => {

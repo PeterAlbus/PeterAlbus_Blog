@@ -9,6 +9,8 @@ import qs from 'qs'
 
 import VMdEditor from '@kangc/v-md-editor';
 import '@kangc/v-md-editor/lib/style/base-editor.css';
+import VMdPreview from '@kangc/v-md-editor/lib/preview';
+import '@kangc/v-md-editor/lib/style/preview.css';
 
 import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress';
 import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
@@ -26,8 +28,12 @@ axios.defaults.baseURL='https://www.peteralbus.com:8089/'
 VMdEditor.use(vuepressTheme, {
     Prism
 });
+
+VMdPreview.use(vuepressTheme, {
+    Prism
+});
 const app=createApp(App)
 app.config.globalProperties.$axios=axios;
 app.config.globalProperties.$qs=qs;
-app.use(VueAxios,axios).use(router).use(VMdEditor).use(PeterAlbusVue).mount('#app')
+app.use(VueAxios,axios).use(router).use(VMdEditor).use(VMdPreview).use(PeterAlbusVue).mount('#app')
 // app.config.devtools=true
