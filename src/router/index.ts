@@ -8,6 +8,7 @@ const Document=()=>import('../views/Document.vue')
 const EditBlog=()=>import('../views/EditBlog.vue')
 const UploadPhoto=()=>import('../views/UploadPhoto.vue')
 const AddFriendLink=()=>import('../views/AddFriendLink.vue')
+const Login=()=>import('../views/Login.vue')
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -19,6 +20,18 @@ const routes: Array<RouteRecordRaw> = [
             content:{
                 keywords:'PeterAlbus,Vue,个人博客',
                 description:'PeterAlbus的博客主页'
+            }
+        }
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: Login,
+        meta:{
+            title:'登录——PeterAlbus的博客',
+            content:{
+                keywords:'PeterAlbus,Vue',
+                description:'PeterAlbus的博客登录页'
             }
         }
     },

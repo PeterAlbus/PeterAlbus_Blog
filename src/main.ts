@@ -23,7 +23,20 @@ import 'element-plus/dist/index.css'
 
 axios.defaults.withCredentials=false;
 axios.defaults.baseURL='https://www.peteralbus.com:8089/'
+// axios.defaults.baseURL='https://localhost:8089/'
 
+axios.interceptors.request.use(
+    config => {
+        if (localStorage.getItem("token")) { //判断token是否存在
+            // @ts-ignore
+            config.headers.satoken_peteralbus_blog = localStorage.getItem("token");  //将token设置成请求头
+        }
+        return config;
+    },
+    err => {
+        return Promise.reject(err);
+    }
+);
 
 VMdEditor.use(vuepressTheme, {
     Prism

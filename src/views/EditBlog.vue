@@ -165,33 +165,39 @@ const onSubmit= async (formEl: FormInstance | undefined) => {
     if (valid) {
       if(blog.value.blogId!==undefined)
       {
-        console.log('update:',blog.value);
         axios.post('/update',qs.stringify(blog.value))
             .then(res=>{
-              if(res.data!='fail')
+              if(res.data=='fail')
               {
-                ElMessage.success('更新成功');
-                router.push('/blog?id='+blog.value.blogId)
+                ElMessage.error('更新失败');
+              }
+              else if(res.data=='noPermission')
+              {
+                ElMessage.error('你没有权限进行此操作!');
               }
               else
               {
-                ElMessage.error('更新失败');
+                ElMessage.success('更新成功');
+                router.push('/blog?id='+blog.value.blogId)
               }
             })
       }
       else
       {
-        console.log('new:',blog.value);
         axios.post('/add',qs.stringify(blog.value))
             .then(res=>{
-              if(res.data!='fail')
+              if(res.data=='fail')
               {
-                ElMessage.success('发布成功');
-                router.push('/blog?id='+blog.value.blogId)
+                ElMessage.error('发布失败');
+              }
+              else if(res.data=='noPermission')
+              {
+                ElMessage.error('你没有权限进行此操作!');
               }
               else
               {
-                ElMessage.error('发布失败');
+                ElMessage.success('发布成功');
+                router.push('/blog?id='+blog.value.blogId)
               }
             })
       }

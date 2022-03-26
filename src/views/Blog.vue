@@ -63,7 +63,6 @@ import {onMounted, ref ,nextTick} from "vue";
 import {useRoute} from "vue-router";
 import {ArrowRight,Notebook,Share as shareIcon} from "@element-plus/icons-vue";
 import axios from "axios";
-import qs from "qs";
 import PersonalInfo from '@/components/PersonalInfo.vue'
 import type {vMdEditor} from "@kangc/v-md-editor"
 
@@ -95,7 +94,7 @@ const getBlog=()=>{
         .then(res=>{
           blog.value=res.data;
           blog.value.blogViews+=1;
-          axios.post('/update',qs.stringify(blog.value));
+          axios.get('/visitBlog?blogId='+blog.value.blogId+"&ipAddress="+localStorage.getItem('ipAddress'));
           document.title = blog.value.blogTitle+'——PeterAlbus的博客'
           let meta:any=document.querySelector('meta[name="description"]')
           if(!meta)
