@@ -78,15 +78,15 @@ const onFileChange = (file: UploadFile, fileList: UploadFile[])=>{
 
 const beforeAvatarUpload = (file: UploadRawFile) => {
   const isIMG = file.type === 'image/jpeg'||file.type === 'image/png'||file.type === 'image/gif'
-  const isLt2M = file.size / 1024 / 1024 < 2
+  const isLt10M = file.size / 1024 / 1024 < 10
 
   if (!isIMG) {
     ElMessage.error('选择的文件不是图片！')
   }
-  if (!isLt2M) {
-    ElMessage.error('图片大小不能超过2M！')
+  if (!isLt10M) {
+    ElMessage.error('图片大小不能超过10M！')
   }
-  return isIMG && isLt2M
+  return isIMG && isLt10M
 }
 
 const upData=computed(()=>{

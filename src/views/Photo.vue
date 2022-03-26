@@ -10,81 +10,57 @@
   <div class="main-container">
     <el-row>
       <el-col :lg="{span:11,offset:3}" :sm="15">
-        <el-row>
-          <el-col :span="7">
-            <el-card class="photo" v-for="item in photoLeft" shadow="hover" :body-style="{ padding: '0px' }">
-              <a :href="item.imgSrc" target="_blank">
-                <el-image :src="item.imgThumb" style="width: 100%" fit="cover" lazy>
-                  <template #placeholder>
-                    <div class="image-slot">
-                      加载中<span class="dot">...</span>
-                    </div>
-                  </template>
-                </el-image>
-                <span class="paragraph">{{item.imgName}}</span>
-              </a>
-            </el-card>
-          </el-col>
-          <el-col :span="7" :offset="1">
-            <el-card class="photo" v-for="item in photoMid" shadow="hover" :body-style="{ padding: '0px' }">
-              <a :href="item.imgSrc" target="_blank">
-                <el-image :src="item.imgThumb" style="width: 100%" fit="cover" lazy>
-                  <template #placeholder>
-                    <div class="image-slot">
-                      加载中<span class="dot">...</span>
-                    </div>
-                  </template>
-                </el-image>
-                <span class="paragraph">{{item.imgName}}</span>
-              </a>
-            </el-card>
-          </el-col>
-          <el-col :span="7" :offset="1">
-            <el-card class="photo" v-for="item in photoRight" shadow="hover" :body-style="{ padding: '0px' }">
-              <a :href="item.imgSrc" target="_blank">
-                <el-image :src="item.imgThumb" style="width: 100%" fit="cover" lazy>
-                  <template #placeholder>
-                    <div class="image-slot">
-                      加载中<span class="dot">...</span>
-                    </div>
-                  </template>
-                </el-image>
-                <span class="paragraph">{{item.imgName}}</span>
-              </a>
-            </el-card>
-          </el-col>
-        </el-row>
+        <div style="margin: 0 auto;width: 90%;">
+          <el-row>
+            <el-col :span="7">
+              <el-card class="photo" v-for="item in photoLeft" shadow="hover" :body-style="{ padding: '0px' }">
+                <a :href="item.imgSrc" target="_blank">
+                  <el-image :src="item.imgThumb" style="width: 100%" fit="cover" lazy>
+                    <template #placeholder>
+                      <div class="image-slot">
+                        加载中<span class="dot">...</span>
+                      </div>
+                    </template>
+                  </el-image>
+                  <span class="paragraph">{{item.imgName}}</span>
+                </a>
+              </el-card>
+            </el-col>
+            <el-col :span="7" :offset="1">
+              <el-card class="photo" v-for="item in photoMid" shadow="hover" :body-style="{ padding: '0px' }">
+                <a :href="item.imgSrc" target="_blank">
+                  <el-image :src="item.imgThumb" style="width: 100%" fit="cover" lazy>
+                    <template #placeholder>
+                      <div class="image-slot">
+                        加载中<span class="dot">...</span>
+                      </div>
+                    </template>
+                  </el-image>
+                  <span class="paragraph">{{item.imgName}}</span>
+                </a>
+              </el-card>
+            </el-col>
+            <el-col :span="7" :offset="1">
+              <el-card class="photo" v-for="item in photoRight" shadow="hover" :body-style="{ padding: '0px' }">
+                <a :href="item.imgSrc" target="_blank">
+                  <el-image :src="item.imgThumb" style="width: 100%" fit="cover" lazy>
+                    <template #placeholder>
+                      <div class="image-slot">
+                        加载中<span class="dot">...</span>
+                      </div>
+                    </template>
+                  </el-image>
+                  <span class="paragraph">{{item.imgName}}</span>
+                </a>
+              </el-card>
+            </el-col>
+          </el-row>
+        </div>
       </el-col>
       <el-col :lg="{span:6}" :sm="9">
         <div class="sticky-box">
-          <div class="module">
-            <div class="content paragraph">
-              <el-avatar :size="50" src="/assets/2.png"></el-avatar>
-              <h4>PeterAlbus</h4>
-              <p>若有侵权，深表歉意。可联系删除</p>
-              <el-tooltip class="item" effect="dark" content="发送电子邮件" placement="top">
-                <a href="mailto:wuhongdb@163.com">
-                  <i class="fa fa-fw fa-envelope" style="font-size:20px"></i>
-                </a>
-              </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="github" placement="top">
-                <a href="https://github.com/PeterAlbus" target="_blank">
-                  <i class="fa fa-fw fa-github" style="font-size:20px"></i>
-                </a>
-              </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="bilibili" placement="top">
-                <a href="https://space.bilibili.com/2003822" target="_blank">
-                  <i class="iconfont icon-bilibili-line" style="font-size:20px"></i>
-                </a>
-              </el-tooltip>
-            </div>
-          </div>
-          <div class="module">
-            <h2 class="title"><el-icon style="vertical-align: -10%"><link-icon /></el-icon>友情链接</h2>
-            <div class="content paragraph">
-              <p v-for="item in friendLinkList"><a :href="item.linkUrl" target="_blank">{{ item.linkName }}</a></p>
-            </div>
-          </div>
+          <PersonalInfo info="若有侵权，深表歉意。可联系删除"></PersonalInfo>
+          <FriendLinks></FriendLinks>
         </div>
       </el-col>
     </el-row>
@@ -93,8 +69,10 @@
 
 <script>
 import {Link} from "@element-plus/icons-vue";
+import FriendLinks from "@/components/FriendLinks.vue"
+import PersonalInfo from "@/components/PersonalInfo.vue"
 export default {
-  components:{LinkIcon:Link},
+  components:{LinkIcon:Link,FriendLinks,PersonalInfo},
   name: "Photo",
   data(){
     return {

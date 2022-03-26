@@ -85,34 +85,8 @@
     </el-col>
     <el-col :lg="{span:6}" :sm="9">
       <div class="sticky-box">
-        <div class="module">
-          <div class="content paragraph">
-            <el-avatar :size="50" src="/assets/2.png"></el-avatar>
-            <h4>PeterAlbus</h4>
-            <el-tooltip class="item" effect="dark" content="发送电子邮件" placement="top">
-              <a href="mailto:wuhongdb@163.com">
-                <i class="fa fa-fw fa-envelope" style="font-size:20px"></i>
-              </a>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="github" placement="top">
-              <a href="https://github.com/PeterAlbus" target="_blank">
-                <i class="fa fa-fw fa-github" style="font-size:20px"></i>
-              </a>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="bilibili" placement="top">
-              <a href="https://space.bilibili.com/2003822" target="_blank">
-                <i class="iconfont icon-bilibili-line" style="font-size:20px"></i>
-              </a>
-            </el-tooltip>
-          </div>
-        </div>
-
-        <div class="module">
-          <h2 class="title"><el-icon style="vertical-align: -10%"><link-icon /></el-icon>友情链接</h2>
-          <div class="content paragraph">
-            <p v-for="item in friendLinkList"><a :href="item.linkUrl" target="_blank">{{ item.linkName }}</a></p>
-          </div>
-        </div>
+        <PersonalInfo></PersonalInfo>
+        <FriendLinks></FriendLinks>
       </div>
     </el-col>
   </el-row>
@@ -120,10 +94,12 @@
 
 <script setup lang="ts">
 import {computed, onMounted, ref} from "vue";
-import {Avatar,StarFilled,Clock,Link as LinkIcon} from "@element-plus/icons-vue";
+import {Avatar,StarFilled,Clock} from "@element-plus/icons-vue";
 import { toClipboard } from '@soerenmartius/vue3-clipboard'
 import axios from "axios";
 import {ElMessage} from "element-plus";
+import FriendLinks from "@/components/FriendLinks.vue"
+import PersonalInfo from "@/components/PersonalInfo.vue"
 
 let blogList = ref([
   {
@@ -138,14 +114,6 @@ let blogList = ref([
     blogLike: 999,
     blogViews: 999,
     isTop: 1
-  }
-])
-
-let friendLinkList=ref([
-  {
-    linkId: 1,
-    linkName: 'loading',
-    linkUrl: '#'
   }
 ])
 
@@ -184,7 +152,10 @@ const copyQuotes=()=>{
 let backgrounds=[
     'https://file.peteralbus.com/assets/blog/static/background/background-lumine.jpg',
     'https://file.peteralbus.com/assets/blog/static/background/background-kazuha.jpg',
-    'https://file.peteralbus.com/assets/blog/static/background/background-blueeyes.jpg'
+    'https://file.peteralbus.com/assets/blog/static/background/background-blueeyes.jpg',
+    'https://file.peteralbus.com/assets/blog/static/background/background-girl1.jpg',
+    'https://file.peteralbus.com/assets/blog/static/background/background-mountain1.jpg',
+    'https://file.peteralbus.com/assets/blog/static/background/background-nogamenolife.jpg',
 ]
 
 let randomIndex=Math.floor(Math.random()*backgrounds.length)
@@ -196,16 +167,8 @@ const getBlogList=function () {
       })
 }
 
-const getFriendLinkList=function () {
-  axios.get('friendLink/getFriendLinkList')
-      .then(res => {
-        friendLinkList.value = res.data;
-      })
-}
-
 onMounted(()=>{
   getBlogList()
-  getFriendLinkList()
   getQuotes()
 })
 

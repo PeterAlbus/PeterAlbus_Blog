@@ -17,7 +17,7 @@ const routes: Array<RouteRecordRaw> = [
         meta:{
             title:'主页——PeterAlbus的博客',
             content:{
-                keywords:'PeterAlbus,Vue',
+                keywords:'PeterAlbus,Vue,个人博客',
                 description:'PeterAlbus的博客主页'
             }
         }
@@ -113,7 +113,7 @@ const routes: Array<RouteRecordRaw> = [
         meta:{
             title:'添加友情链接——PeterAlbus的博客',
             content:{
-                keywords:'PeterAlbus,Vue',
+                keywords:'PeterAlbus,Vue,个人博客',
                 description:'PeterAlbus的博客'
             }
         }
@@ -125,18 +125,18 @@ const router = createRouter({
     routes
 })
 
-// router.beforeEach((to, from, next)=>{
-//     if(to.meta.content) {
-//         // @ts-ignore
-//         document.querySelector('meta[name="keywords"]').setAttribute('content',to.meta.content.keywords)
-//         // @ts-ignore
-//         document.querySelector('meta[name="description"]').setAttribute('content',to.meta.content.description)
-//     }
-//     if(to.meta.title) {
-//         // @ts-ignore
-//         document.title = to.meta.title
-//     }
-//     next()
-// })
+router.beforeEach((to, from, next)=>{
+    if(to.meta.content) {
+        // @ts-ignore
+        document.querySelector('meta[name="keywords"]').setAttribute('content',to.meta.content.keywords)
+        // @ts-ignore
+        document.querySelector('meta[name="description"]').setAttribute('content',to.meta.content.description)
+    }
+    if(to.meta.title) {
+        // @ts-ignore
+        document.title = to.meta.title
+    }
+    next()
+})
 
 export default router

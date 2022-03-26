@@ -18,29 +18,9 @@
         </div>
       </el-col>
       <el-col :lg="{span:6}" :sm="9">
-        <div class="module">
-          <div class="content paragraph">
-            <el-avatar :size="50" src="/assets/2.png"></el-avatar>
-            <h4>PeterAlbus</h4>
-            <el-tooltip class="item" effect="dark" content="发送电子邮件" placement="top">
-              <a href="mailto:wuhongdb@163.com">
-                <i class="fa fa-fw fa-envelope" style="font-size:20px"></i>
-              </a>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="github" placement="top">
-              <a href="https://github.com/PeterAlbus" target="_blank">
-                <i class="fa fa-fw fa-github" style="font-size:20px"></i>
-              </a>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="bilibili" placement="top">
-              <a href="https://space.bilibili.com/2003822" target="_blank">
-                <i class="iconfont icon-bilibili-line" style="font-size:20px"></i>
-              </a>
-            </el-tooltip>
-          </div>
-        </div>
+        <PersonalInfo></PersonalInfo>
         <div class="sticky-box">
-          <div class="module anchors" :class="{'hide-small-screen':hideCatalogue}">
+          <div class="module anchors" :class="{'hide-small-screen':hideCatalogue}" v-if="titleList.length!==0">
             <h2 class="title"><el-icon style="vertical-align: -10%"><notebook /></el-icon>目录</h2>
             <div class="content" style="padding: 10px">
               <el-scrollbar max-height="30vh">
@@ -74,7 +54,7 @@
     </el-row>
   </div>
   <div class="fixed-buttons hide-big-screen">
-    <el-button type="success" :icon="Notebook" circle @click="hideCatalogue=!hideCatalogue" />
+    <el-button type="success" :icon="Notebook" circle @click="hideCatalogue=!hideCatalogue" v-if="titleList.length!==0"/>
   </div>
 </template>
 
@@ -84,6 +64,7 @@ import {useRoute} from "vue-router";
 import {ArrowRight,Notebook,Share as shareIcon} from "@element-plus/icons-vue";
 import axios from "axios";
 import qs from "qs";
+import PersonalInfo from '@/components/PersonalInfo.vue'
 import type {vMdEditor} from "@kangc/v-md-editor"
 
 const route=useRoute()
@@ -229,6 +210,7 @@ onMounted(()=>{
 
 .anchor:hover{
   transform: translateX(+5px);
+  background-color: #f1f1f1;
 }
 
 .fixed-buttons{
