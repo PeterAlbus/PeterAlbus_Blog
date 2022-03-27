@@ -1,7 +1,38 @@
 <template>
-  <div class="navbar nav" v-if="screenWidth>=640">
+  <div class="navbar nav" v-if="screenWidth>=768">
     <div class="nav-title">PeterAlbus的博客</div>
     <div style="display: flex">
+      <div class="nav-avatar">
+        <router-link to="/login">
+          <el-avatar class="avatar-img"
+                     :size="35"
+                     :src="userStore.userAvatar"
+          />
+        </router-link>
+        <div class="user-info">
+          <h4 style="padding: 4px">{{userStore.userUsername}}</h4>
+          <p style="padding: 4px">
+            <el-tag
+                :type="identityType"
+                effect="dark"
+            >
+              {{ userIdentity }}
+            </el-tag>
+          </p>
+          <div class="operations" v-if="userStore.userId===''">
+            <el-divider />
+            <div class="operation" @click="toLink('/login')"><el-icon style="vertical-align: -10%"><lollipop /></el-icon> 登录</div>
+            <div class="operation" @click="toLink('/register')"><el-icon style="vertical-align: -10%"><tickets /></el-icon> 注册</div>
+          </div>
+          <div class="operations" v-if="userStore.userId!==''">
+            <el-divider />
+            <div class="operation" @click="toLink('/userCenter')"><el-icon style="vertical-align: -10%"><avatar /></el-icon> 个人中心</div>
+            <div class="operation"><el-icon style="vertical-align: -10%"><setting /></el-icon> 设置</div>
+            <el-divider />
+            <div class="operation" @click="logout"><el-icon style="vertical-align: -10%"><close /></el-icon> 退出登录</div>
+          </div>
+        </div>
+      </div>
       <div class="nav-item" v-for="item in navItems">
         <router-link :to="item.indexPath" active-class="active-top-item">
           <el-icon style="vertical-align: -10%">
@@ -12,9 +43,9 @@
       </div>
     </div>
   </div>
-  <div class="navbar-bottom" v-if="screenWidth<640">
-    <el-row class="navbar-bottom-list">
-      <el-col :span="24/navItems.length" class="navbar-bottom-item" v-for="item in navItems">
+  <div class="navbar-bottom" v-if="screenWidth<768">
+    <el-row class="navbar-bottom-list" justify="space-between">
+      <el-col :span="Math.floor(24/(navItems.length+1))" class="navbar-bottom-item" v-for="item in navItems">
         <router-link :to="item.indexPath" active-class="active-item">
           <p>
             <el-icon>
@@ -24,13 +55,40 @@
           <span class="navbar-bottom-text">{{ item.name }}</span>
         </router-link>
       </el-col>
+      <el-col :span="Math.floor(24/(navItems.length+1))" class="navbar-bottom-item">
+        <router-link to="/login">
+          <p>
+            <el-avatar
+                :size="16"
+                :src="userStore.userAvatar"
+            />
+          </p>
+          <span class="navbar-bottom-text">个人中心</span>
+        </router-link>
+      </el-col>
     </el-row>
   </div>
 </template>
 
 <script setup lang="ts">
-import {onMounted, reactive, ref} from "vue";
-import {HomeFilled, Menu, UserFilled, PictureFilled} from "@element-plus/icons-vue";
+import {computed, onMounted, reactive, ref} from "vue";
+import {
+  HomeFilled,
+  Menu,
+  UserFilled,
+  PictureFilled,
+  Setting,
+  Close,
+  Avatar,
+  Lollipop,
+  Tickets
+} from "@element-plus/icons-vue";
+import {useUserStore} from "@/store/user";
+import axios from "axios";
+import {ElMessage} from "element-plus";
+import router from "@/router";
+
+const userStore=useUserStore()
 
 let screenWidth = ref(document.body.clientWidth)
 let navItems = [{name: "主页", indexPath: "/", iconName: HomeFilled},
@@ -41,6 +99,58 @@ let navItems = [{name: "主页", indexPath: "/", iconName: HomeFilled},
 const resize = function () {
   screenWidth.value = document.body.clientWidth
 }
+
+const logout = () => {
+  axios.get('/user/logout')
+      .then((res)=>{
+        ElMessage.success('登出成功');
+        localStorage.removeItem("token")
+        userStore.logout()
+        router.push('/')
+      })
+}
+
+const toLink = (path:any) =>{
+  router.push(path)
+}
+
+const identityType = computed(()=>{
+  if(userStore.userIdentity==0)
+  {
+    return "warning"
+  }
+  else if(userStore.userIdentity==1)
+  {
+    return "success"
+  }
+  else if(userStore.userIdentity==5)
+  {
+    return ""
+  }
+  else
+  {
+    return "info"
+  }
+})
+
+const userIdentity = computed(()=>{
+  if(userStore.userIdentity==0)
+  {
+    return "站长"
+  }
+  else if(userStore.userIdentity==1)
+  {
+    return "管理员"
+  }
+  else if(userStore.userIdentity==5)
+  {
+    return "普通用户"
+  }
+  else
+  {
+    return "游客"
+  }
+})
 
 onMounted(() => {
   window.addEventListener('resize', resize)
@@ -110,6 +220,52 @@ onMounted(() => {
   box-shadow: 3px 3px 6px 3px rgba(0, 0, 0, .3);
 }
 
+.nav-avatar{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 0;
+  background: rgba(0, 0, 0, 0) !important;
+}
+
+.avatar-img{
+  transform-origin: right top;
+  transition-property:transform;
+  transition-duration:0.3s;
+  transition-timing-function:ease;
+}
+
+.nav-avatar:hover .avatar-img
+{
+  transform: scale(1.8);
+}
+
+.nav-avatar:hover .user-info
+{
+  opacity: 1;
+  transform: scale(1) translateX(-14px);
+}
+
+.user-info
+{
+  opacity: 0;
+  position: fixed;
+  top: 60px;
+  width: 200px;
+
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 3px 8px 6px rgba(7,17,27,0.05);
+  padding: 15px;
+  transform-origin: top;
+  transform: scale(0.3) translateY(-20px);
+  transition-property:opacity,transform;
+  transition-duration:0.3s;
+  transition-timing-function:ease;
+  z-index: -1;
+}
+
 .nav-item {
   height: 100%;
   line-height: 60px;
@@ -139,5 +295,29 @@ onMounted(() => {
   outline: 0 !important;
   color: #82A96D !important;
   background: none !important;
+}
+
+.operations{
+  width: 100%;
+}
+
+.operations a{
+  color: #2E3E4F;
+}
+
+.operations a:hover{
+  color: #82A96D;
+}
+
+.operation{
+  text-align: left;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.operation:hover{
+  background-color: #F1F1F1;
+  color: #63a35c;
 }
 </style>

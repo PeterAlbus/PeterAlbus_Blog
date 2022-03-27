@@ -50,7 +50,7 @@ a {
   padding-bottom: 20px;
   margin: 0;
   background-color: #eeeeee;
-  min-height: 60vh;
+  min-height: 70vh;
 }
 
 .main-container a{
@@ -58,7 +58,7 @@ a {
 }
 
 .main-container a:hover{
-  color: #4B6186;
+  color: #82A96D;
 }
 
 .module{

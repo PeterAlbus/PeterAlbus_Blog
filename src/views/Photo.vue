@@ -1,12 +1,5 @@
 <template xmlns="http://www.w3.org/1999/html">
-  <div class="banner">
-    <div class="banner-container">
-      <div>
-        <h1>照片墙</h1>
-        <p>会收录一些图片。点击可查看原图。</p>
-      </div>
-    </div>
-  </div>
+  <Banner title="照片墙" description="会收录一些图片。点击可查看原图。"></Banner>
   <div class="main-container">
     <el-row>
       <el-col :lg="{span:11,offset:3}" :sm="15">
@@ -71,8 +64,9 @@
 import {Link} from "@element-plus/icons-vue";
 import FriendLinks from "@/components/FriendLinks.vue"
 import PersonalInfo from "@/components/PersonalInfo.vue"
+import Banner from '@/components/Banner.vue'
 export default {
-  components:{LinkIcon:Link,FriendLinks,PersonalInfo},
+  components:{Banner, LinkIcon:Link,FriendLinks,PersonalInfo},
   name: "Photo",
   data(){
     return {
@@ -126,7 +120,7 @@ export default {
     }
   },
   computed:{
-    photoLeft:function (){
+    photoRight:function (){
       let count=0;
       let photoLeft=[];
       for(let i of this.photoList)
@@ -152,7 +146,7 @@ export default {
       }
       return photoMid.reverse();
     },
-    photoRight:function (){
+    photoLeft:function (){
       let count=0;
       let photoRight=[];
       for(let i of this.photoList)
@@ -170,25 +164,6 @@ export default {
 </script>
 
 <style scoped>
-.banner {
-  position: relative;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 30vh;
-  background: url("../assets/background.jpg") fixed center center;
-  text-align: center;
-  color: #fff !important;
-}
-
-.banner-container {
-  position: absolute;
-  width: 100%;
-  margin-top: 13vh;
-  line-height: 1.5;
-  color: #eee;
-}
-
 .photo {
   padding: 0 0 5px 0;
   background-color: white;

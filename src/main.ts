@@ -21,6 +21,8 @@ import 'vue3-social-share/lib/index.css'
 
 import 'element-plus/dist/index.css'
 
+import store from './store'
+
 axios.defaults.withCredentials=false;
 axios.defaults.baseURL='https://www.peteralbus.com:8089/'
 // axios.defaults.baseURL='https://localhost:8089/'
@@ -48,5 +50,5 @@ VMdPreview.use(vuepressTheme, {
 const app=createApp(App)
 app.config.globalProperties.$axios=axios;
 app.config.globalProperties.$qs=qs;
-app.use(VueAxios,axios).use(router).use(VMdEditor).use(VMdPreview).use(PeterAlbusVue).mount('#app')
+app.use(VueAxios,axios).use(router).use(VMdEditor).use(VMdPreview).use(PeterAlbusVue).use(store).mount('#app')
 // app.config.devtools=true

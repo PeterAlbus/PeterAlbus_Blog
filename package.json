@@ -16,6 +16,7 @@
     "axios": "^0.26.1",
     "element-plus": "^2.1.4",
     "font-awesome": "^4.7.0",
+    "pinia": "^2.0.12",
     "prismjs": "^1.27.0",
     "qs": "^6.10.3",
     "vite-plugin-prismjs": "^0.0.8",
