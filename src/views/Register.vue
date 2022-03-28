@@ -8,8 +8,8 @@
             <h2 v-if="registerByPhone">手机注册</h2>
             <h2 v-if="!registerByPhone">邮箱注册</h2>
             <div class="switch" >
-              <span @click="registerByPhone=false" v-if="registerByPhone">使用邮箱注册</span>
-              <span @click="registerByPhone=true" v-if="!registerByPhone">使用手机注册</span>
+              <span @click="registerByPhone=false;canGetVerifyCode=true;time=0" v-if="registerByPhone">使用邮箱注册</span>
+              <span @click="registerByPhone=true;canGetVerifyCode=false;time=0" v-if="!registerByPhone">使用手机注册</span>
             </div>
           </div>
           <el-form
@@ -41,7 +41,7 @@
             </el-form-item>
             <div>
               <el-button type="primary" @click="submitForm(ruleFormRef)" color="#63a35c">注册</el-button>&emsp;
-              <router-link to="/login"><el-button plain color="#63a35c">登录</el-button></router-link>
+              <el-button plain color="#63a35c" @click="toLoginPage">登录</el-button>
             </div>
           </el-form>
         </el-col>
@@ -249,7 +249,7 @@ const rules = reactive({
     { required: true, message: '请输入用户名', trigger: 'change' },
   ],
   userVerifyCode: [
-    { required: true, message: '请输入用户名', trigger: 'change' },
+    { required: true, message: '请输入验证码', trigger: 'change' },
   ],
   userPassword: [
     { validator: validatePass, trigger: 'blur' },
@@ -285,6 +285,21 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   })
 }
 
+const toLoginPage= ()=>{
+  ElMessageBox.confirm(
+      '确定要离开本页面前往登录页?你将丢失填写的所有信息',
+      '警告',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+  )
+      .then(() => {
+        router.push('/login')
+      })
+      .catch(() => {})
+}
 </script>
 
 <style scoped>

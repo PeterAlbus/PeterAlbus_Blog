@@ -1,6 +1,6 @@
 <template>
   <div class="module">
-    <h2 class="title"><el-icon style="vertical-align: -10%"><link-icon /></el-icon>友情链接</h2>
+    <h2 class="title"><el-icon style="vertical-align: -10%"><link-icon /></el-icon> 友情链接</h2>
     <div class="content paragraph">
       <p v-for="item in friendLinkList"><a :href="item.linkUrl" target="_blank">{{ item.linkName }}</a></p>
     </div>

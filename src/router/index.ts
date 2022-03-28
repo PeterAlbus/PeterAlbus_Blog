@@ -204,6 +204,7 @@ router.beforeEach((to, from, next)=>{
     if((to.name=='Login'||to.name=='Register')&&userStore.userId!='')
     {
         next('/userCenter')
+        return
     }
     if(to.meta.content) {
         // @ts-ignore

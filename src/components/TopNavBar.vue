@@ -27,6 +27,7 @@
           <div class="operations" v-if="userStore.userId!==''">
             <el-divider />
             <div class="operation" @click="toLink('/userCenter')"><el-icon style="vertical-align: -10%"><avatar /></el-icon> 个人中心</div>
+            <div class="operation"><el-icon style="vertical-align: -10%"><message /></el-icon> 消息</div>
             <div class="operation"><el-icon style="vertical-align: -10%"><setting /></el-icon> 设置</div>
             <el-divider />
             <div class="operation" @click="logout"><el-icon style="vertical-align: -10%"><close /></el-icon> 退出登录</div>
@@ -81,7 +82,8 @@ import {
   Close,
   Avatar,
   Lollipop,
-  Tickets
+  Tickets,
+  Message
 } from "@element-plus/icons-vue";
 import {useUserStore} from "@/store/user";
 import axios from "axios";

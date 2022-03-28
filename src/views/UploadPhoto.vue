@@ -24,7 +24,7 @@
               :auto-upload="false"
               :on-change="onFileChange"
           >
-            <img style="width: 178px; height: 178px"  v-if="imageUrl" :src="imageUrl" class="avatar" alt="">
+            <el-image style="width: 178px; height: 178px"  v-if="imageUrl" :src="imageUrl" class="avatar" alt="" fit="cover"/>
             <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
           </el-upload>
         </el-form-item>

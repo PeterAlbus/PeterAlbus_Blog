@@ -22,7 +22,7 @@
                   :on-success="handleAvatarSuccess"
                   :before-upload="beforeAvatarUpload"
               >
-                <img style="width: 200px; height: 200px"  v-if="imageUrl" :src="imageUrl" class="avatar" alt="">
+                <el-image style="width: 200px; height: 200px"  v-if="imageUrl" :src="imageUrl" class="avatar" fit="cover" alt=""/>
                 <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
               </el-upload>
             </el-form-item>
