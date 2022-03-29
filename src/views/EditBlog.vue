@@ -197,7 +197,7 @@ const onSubmit= async (formEl: FormInstance | undefined) => {
               else
               {
                 ElMessage.success('发布成功');
-                router.push('/blog?id='+blog.value.blogId)
+                router.push('/')
               }
             })
       }

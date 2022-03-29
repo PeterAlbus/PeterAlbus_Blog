@@ -9,7 +9,7 @@
             type="textarea"
             placeholder="请友善交流，文明用语"
         />
-        <div>
+        <div style="display: flex;flex-direction: row;justify-content: right;align-items: center">
           <el-checkbox v-model="hideMyself" label="1" size="small">匿名</el-checkbox>
           <el-button
               size="small" @click="addComment"
@@ -17,26 +17,47 @@
               type="primary" color="#63a35c">发布</el-button>
         </div>
       </div>
-      <el-scrollbar max-height="20vh">
-        <div v-for="item in comments" class="main-comment">
+      <el-scrollbar max-height="20vh" ref="scrollbarRef">
+        <div v-for="item in currentPageComments" class="main-comment">
           <div class="comment-user">
             <el-avatar :src="item.userAvatar" :size="30"></el-avatar>
-            <span style="padding: 0 10px 0 10px;display: flex;align-items: center">{{item.userUsername}}<el-tag :type="identityType(item.userIdentity)" effect="dark" size="small">{{ userIdentity(item.userIdentity) }}</el-tag></span>
+            <span style="padding: 0 10px 0 10px;display: flex;align-items: center">{{item.userUsername}}</span>
+            <el-tag :type="identityType(item.userIdentity)" effect="dark" size="small">{{ userIdentity(item.userIdentity) }}</el-tag>
           </div>
           <div style="padding: 10px 10px 10px 40px" class="comment-box">
             <div style="width: 100%">{{item.commentContent}}</div>
           </div>
           <div class="comment-buttons">
-            <el-icon class="comment-button" @click="openComment(item,item)"><chat-line-square /></el-icon>
-          </div>
-          <div class="side-comment" v-if="item.hasComment">
-            <div v-for="i in item.comments" class="comment-box">
-              <div style="width: 100%"><span style="font-weight: bold;color: #56AD93">{{ i.userUsername }}</span> {{i.commentContent}}</div>
-              <div class="comment-buttons">
-                <el-icon class="comment-button" @click="openComment(i,item)"><chat-line-square /></el-icon>
-              </div>
+            <div class="comment-button">{{item.gmtCreate}}</div>
+            <div class="comment-button">{{item.index+1}}楼</div>
+            <div class="comment-button" @click="openComment(item,item)"><el-icon style="vertical-align: -15%"><chat-line-square /></el-icon>回复</div>
+            <div class="comment-button" @click="deleteComment(item)" v-if="userStore.userIdentity<=1||userStore.userId===item.commentUserId">
+              <el-icon style="vertical-align: -15%"><chat-line-square /></el-icon>删除
             </div>
           </div>
+          <el-scrollbar max-height="130px">
+            <div class="side-comment" v-if="item.hasComment">
+              <div v-for="i in item.comments" class="comment-box">
+                <div style="width: 100%"><span style="font-weight: bold;color: #56AD93">{{ i.userUsername }}</span> {{i.commentContent}}</div>
+                <div class="comment-buttons">
+                  <div class="comment-button" @click="openComment(i,item)"><el-icon style="vertical-align: -15%"><chat-line-square /></el-icon>回复</div>
+                  <div class="comment-button" @click="deleteComment(i)" v-if="userStore.userIdentity<=1||userStore.userId===i.commentUserId">
+                    <el-icon style="vertical-align: -15%"><chat-line-square /></el-icon>删除
+                  </div>
+                </div>
+              </div>
+            </div>
+          </el-scrollbar>
+          <el-divider></el-divider>
+        </div>
+        <div style="display: flex;justify-content: center">
+          <el-pagination layout="prev, pager, next"
+                         small hide-on-single-page
+                         v-model:current-page="currentPage"
+                         :page-size="3"
+                         @current-change="toTop"
+                         :total="comments.length">
+          </el-pagination>
         </div>
       </el-scrollbar>
     </div>
@@ -52,7 +73,7 @@
         type="textarea"
         placeholder="请友善交流，文明用语"
     />
-    <div>
+    <div style="display: flex;flex-direction: row;justify-content: right;align-items: center">
       <el-checkbox v-model="hideMyself" label="1" size="small">匿名</el-checkbox>
       <el-button
           size="small" @click="showFloatComment=false"
@@ -67,28 +88,35 @@
 </template>
 
 <script setup lang="ts">
-import {computed, onMounted, reactive, ref, watch} from "vue";
+import {computed, onMounted, PropType, reactive, ref, watch} from "vue";
 import axios from "axios";
 import {Comment,ChatLineSquare,Close} from "@element-plus/icons-vue"
 import qs from "qs";
 import {useUserStore} from "@/store/user";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
+import type { ElScrollbar } from 'element-plus'
+import {useRoute} from "vue-router";
+import router from "@/router";
+const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
+
+const toTop=()=>{
+  scrollbarRef.value!.setScrollTop(0)
+}
 
 const userStore = useUserStore()
+const route=useRoute()
 const showFloatComment = ref(false)
 const hideMyself = ref(false)
 const commentUsername= ref('')
+const currentPage=ref(1)
 
 const props = defineProps({
-  blogId: {
-    default() {
-      return ''
-    },
-  }
+  blogId: {}
 });
 
 let comments=ref([
   {
+    index: 0,
     commentId:"1",
     commentTarget:1,
     commentTargetId:"1505910717547618306",
@@ -97,22 +125,30 @@ let comments=ref([
     userAvatar:"https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
     userIdentity:-1,
     commentContent:"数据加载中",
-    gmtCreate:null,
-    gmtModified:null,
+    gmtCreate:'',
+    gmtModified:'',
     hasComment:false,
     comments:[{
       commentUserId:"-1",
       commentContent:"",
       userUsername:"匿名",
       userAvatar:"https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
-      userIdentity:-1
+      userIdentity:-1,
+      gmtCreate:''
     }]
   }
 ])
 
-const newComment=reactive({
+interface Comment {
+  commentTarget:number
+  commentTargetId:any
+  commentUserId:string
+  commentContent:string
+}
+
+const newComment=reactive<Comment>({
   commentTarget:1,
-  commentTargetId:"",
+  commentTargetId:route.query.id,
   commentUserId:"-1",
   commentContent:"",
 })
@@ -131,11 +167,15 @@ const openComment=(comment:any,bigComment:any)=>{
 }
 
 const getComments=()=>{
+  if(!props.blogId) return
   axios.get("/comment/getCommentByBlogId?blogId="+props.blogId)
   .then((res)=>{
     comments.value=res.data
+    let count=0
     for(let comment of comments.value)
     {
+      comment.index=count
+      count++
       if(comment.commentUserId!=='-1')
       {
         axios.get("/user/getUserById?userId="+comment.commentUserId)
@@ -174,6 +214,7 @@ const getComments=()=>{
             }
           })
     }
+    comments.value.reverse()
   })
 }
 
@@ -189,7 +230,19 @@ const addComment=()=>{
   .then((res)=>{
     if(res.data=="notLogin")
     {
-      ElMessage.error("没有登录不可评论！")
+      ElMessageBox.confirm(
+          '没有登录账号无法进行评论',
+          '信息',
+          {
+            confirmButtonText: '前往注册/登录',
+            cancelButtonText: '取消',
+            type: 'info',
+          }
+      )
+          .then(() => {
+            router.push('/login')
+          })
+          .catch(() => {})
     }
     else if(res.data=="fail")
     {
@@ -216,7 +269,21 @@ const addCommentToComment=()=>{
       .then((res)=>{
         if(res.data=="notLogin")
         {
-          ElMessage.error("没有登录不可评论！")
+          ElMessageBox.confirm(
+              '没有登录账号无法进行评论',
+              '信息',
+              {
+                confirmButtonText: '前往注册/登录',
+                cancelButtonText: '取消',
+                type: 'info',
+              }
+          )
+              .then(() => {
+                router.push('/login')
+              })
+              .catch(() => {
+                newCommentToComment.commentContent=""
+              })
         }
         else if(res.data=="fail")
         {
@@ -230,6 +297,33 @@ const addCommentToComment=()=>{
           getComments()
         }
       })
+}
+
+const deleteComment=(comment:any)=>{
+  ElMessageBox.confirm(
+      '确认要删除本条评论吗？删除后无法恢复！',
+      '警告',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+  )
+      .then(() => {
+        axios.post('/comment/deleteComment',qs.stringify(comment))
+        .then((res)=>{
+          if(res.data=="noPermission")
+          {
+            ElMessage.error("你没有权限进行此操作")
+          }
+          else
+          {
+            ElMessage.success("删除成功")
+            getComments()
+          }
+        })
+      })
+      .catch(() => {})
 }
 
 const identityType = (userIdentity:any)=>{
@@ -270,6 +364,12 @@ const userIdentity = (userIdentity:any)=>{
   }
 }
 
+const currentPageComments=computed(
+    function (){
+      return comments.value.slice((currentPage.value-1)*3,currentPage.value*3)
+    }
+)
+
 watch(() => props.blogId,
     () => {
       getComments()
@@ -282,18 +382,18 @@ onMounted(()=>{
 
 <style scoped>
 .main-comment{
-  background-color: #F7F7F7;
+  background-color: #ffffff;
   margin: 5px;
-  padding: 5px;
-  border-radius: 5px;
   text-align: left;
 }
 
 .side-comment{
-  background-color: #E3E3E3;
+  background-color: #f3f3f3;
   margin: 5px 5px 5px 40px ;
-  padding: 5px;
+  padding: 10px;
   text-align: left;
+  border-radius: 5px;
+
 }
 
 .comment-user{
@@ -319,8 +419,10 @@ onMounted(()=>{
 }
 
 .comment-button{
-  color: black;
+  color: gray;
   cursor: pointer;
+  font-size: small;
+  padding: 0 10px 0 10px;
 }
 
 .comment-button:hover{

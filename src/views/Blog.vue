@@ -35,7 +35,7 @@
               </el-scrollbar>
             </div>
           </div>
-          <Comment :blogId="blogId"></Comment>
+          <Comment :blogId="blog.blogId"></Comment>
           <div class="module">
             <h2 class="title"><el-icon style="vertical-align: -10%"><share-icon /></el-icon> 分享本页面</h2>
             <div class="content paragraph">
@@ -89,8 +89,6 @@ let blog=ref({
   blogViews:200,
   isTop:1
 })
-
-let blogId:string='-1'
 
 const getBlog=()=>{
   if(blog.value.blogId!==undefined)
@@ -158,10 +156,6 @@ const getFriendLinkList=function () {
 }
 
 onMounted(()=>{
-  if(route.query.id!=null)
-  {
-    blogId=route.query.id.toString()
-  }
   getBlog()
   getFriendLinkList()
 })
