@@ -40,7 +40,7 @@
             <h2 class="title"><el-icon style="vertical-align: -10%"><share-icon /></el-icon> 分享本页面</h2>
             <div class="content paragraph">
               <Share
-                  :url="'https://www.peteralbus.com/%23/blog?id%3D'+blog.blogId"
+                  :url="'https://www.peteralbus.com/#/blog?id='+blog.blogId"
                   :title="blog.blogTitle"
                   source="PeterAlbus的博客"
                   :description="blog.blogDescription"

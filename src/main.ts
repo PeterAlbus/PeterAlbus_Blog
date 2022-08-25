@@ -50,5 +50,6 @@ VMdPreview.use(vuepressTheme, {
 const app=createApp(App)
 app.config.globalProperties.$axios=axios;
 app.config.globalProperties.$qs=qs;
-app.use(VueAxios,axios).use(router).use(VMdEditor).use(VMdPreview).use(PeterAlbusVue).use(store).mount('#app')
+app.use(VueAxios,axios).use(router).use(VMdEditor).use(VMdPreview).use(PeterAlbusVue).use(store)
+app.mount('#app')
 // app.config.devtools=true

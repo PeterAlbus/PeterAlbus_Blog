@@ -28,6 +28,7 @@ declare module 'vue' {
     ElUpload: typeof import('element-plus/es')['ElUpload']
     Footer: typeof import('./src/components/Footer.vue')['default']
     FriendLinks: typeof import('./src/components/FriendLinks.vue')['default']
+    MusicPlayer: typeof import('./src/components/MusicPlayer.vue')['default']
     PersonalInfo: typeof import('./src/components/PersonalInfo.vue')['default']
     TopNavBar: typeof import('./src/components/TopNavBar.vue')['default']
   }

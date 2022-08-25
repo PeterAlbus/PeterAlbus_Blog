@@ -17,6 +17,7 @@
               class="avatar-uploader"
               action="https://www.peteralbus.com:8089/photo/upload/"
               ref="uploadRef"
+              :headers="headerObj"
               :data="upData"
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
@@ -55,6 +56,10 @@ let friendLinkList=ref([
     linkUrl:'#'
   }
 ])
+let token=localStorage.getItem("token")
+let headerObj= {
+      satoken_peteralbus_blog:token
+    }
 
 const getFriendLinkList=function () {
   axios.get('friendLink/getFriendLinkList')

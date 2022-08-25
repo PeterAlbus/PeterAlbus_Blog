@@ -32,7 +32,7 @@
             <div class="comment-button">{{item.index+1}}楼</div>
             <div class="comment-button" @click="openComment(item,item)"><el-icon style="vertical-align: -15%"><chat-line-square /></el-icon>回复</div>
             <div class="comment-button" @click="deleteComment(item)" v-if="userStore.userIdentity<=1||userStore.userId===item.commentUserId">
-              <el-icon style="vertical-align: -15%"><chat-line-square /></el-icon>删除
+              <el-icon style="vertical-align: -15%"><delete /></el-icon>删除
             </div>
           </div>
           <el-scrollbar max-height="130px">
@@ -42,7 +42,7 @@
                 <div class="comment-buttons">
                   <div class="comment-button" @click="openComment(i,item)"><el-icon style="vertical-align: -15%"><chat-line-square /></el-icon>回复</div>
                   <div class="comment-button" @click="deleteComment(i)" v-if="userStore.userIdentity<=1||userStore.userId===i.commentUserId">
-                    <el-icon style="vertical-align: -15%"><chat-line-square /></el-icon>删除
+                    <el-icon style="vertical-align: -15%"><delete /></el-icon>删除
                   </div>
                 </div>
               </div>
@@ -90,7 +90,7 @@
 <script setup lang="ts">
 import {computed, onMounted, PropType, reactive, ref, watch} from "vue";
 import axios from "axios";
-import {Comment,ChatLineSquare,Close} from "@element-plus/icons-vue"
+import {Comment, ChatLineSquare, Close, Delete} from "@element-plus/icons-vue"
 import qs from "qs";
 import {useUserStore} from "@/store/user";
 import {ElMessage, ElMessageBox} from "element-plus";
@@ -198,7 +198,7 @@ const getComments=()=>{
             {
               if(item.commentUserId!=='-1')
               {
-                axios.get("/user/getUserById?userId="+comment.commentUserId)
+                axios.get("/user/getUserById?userId="+item.commentUserId)
                     .then((result)=>{
                       item.userUsername=result.data.userUsername
                       item.userAvatar=result.data.userAvatar

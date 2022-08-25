@@ -9,11 +9,16 @@
             </div>
     </div>
     <div style="height: 61px" v-if="screenWidth<640"></div>
+
+  </div>
+  <div class="music-container">
+    <MusicPlayer></MusicPlayer>
   </div>
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {onMounted, ref} from "vue"
+import MusicPlayer from '@/components/MusicPlayer.vue'
 
 let screenWidth = ref(document.body.clientWidth)
 const resize = function (){
@@ -54,5 +59,12 @@ onMounted(()=>{
   margin: 0 auto;
   overflow: hidden;
   padding: 30px 0;
+}
+
+.music-container {
+  position: fixed;
+  width: 15%;
+  right: 0;
+  bottom: 120px;
 }
 </style>

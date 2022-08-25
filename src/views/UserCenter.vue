@@ -6,6 +6,7 @@
           class="avatar-uploader"
           action="https://www.peteralbus.com:8089/user/uploadAvatar/"
           ref="uploadRef"
+          :headers="headerObj"
           :data="upData"
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
@@ -145,6 +146,11 @@ import {computed, reactive, ref} from "vue";
 import qs from "qs";
 
 const userStore=useUserStore()
+
+let token=localStorage.getItem("token")
+let headerObj= {
+  satoken_peteralbus_blog:token
+}
 
 const changingName=ref(false)
 const username=ref('')
