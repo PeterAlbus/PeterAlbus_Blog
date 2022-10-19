@@ -105,7 +105,7 @@ let blogList = ref([
   {
     blogId: 1,
     blogTitle: '稍等，数据请求中',
-    blogImg: 'https://www.peteralbus.com:8440/assets/blog/imgs/cover/cover1.jpg',
+    blogImg: 'https://file.peteralbus.com/assets/blog/imgs/cover/cover1.jpg',
     blogType: 1,
     blogDescription: '如果长时间仍显示本文字，请检查网络或联系PeterAlbus',
     blogAuthor: 'PeterAlbus',
@@ -156,6 +156,8 @@ let backgrounds=[
     'https://file.peteralbus.com/assets/blog/static/background/background-girl1.jpg',
     'https://file.peteralbus.com/assets/blog/static/background/background-mountain1.jpg',
     'https://file.peteralbus.com/assets/blog/static/background/background-nogamenolife.jpg',
+    'https://file.peteralbus.com/assets/blog/static/background/background-ai1.jpg',
+    'https://file.peteralbus.com/assets/blog/static/background/background-ai2.jpg',
 ]
 
 let randomIndex=Math.floor(Math.random()*backgrounds.length)

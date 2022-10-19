@@ -94,7 +94,7 @@ export default {
         {
           blogId:1,
           blogTitle:'本站介绍',
-          blogImg:'https://www.peteralbus.com:8440/assets/blog/imgs/cover/cover1.jpg',
+          blogImg:'https://file.peteralbus.com/assets/blog/imgs/cover/cover1.jpg',
           blogType:1,
           blogDescription:'本站是如何建立的？',
           blogAuthor:'PeterAlbus',
