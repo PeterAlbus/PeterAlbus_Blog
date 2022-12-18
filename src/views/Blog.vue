@@ -97,7 +97,16 @@ const getBlog=()=>{
         .then(res=>{
           blog.value=res.data;
           blog.value.blogViews+=1;
-          axios.get('/visitBlog?blogId='+blog.value.blogId+"&ipAddress="+localStorage.getItem('ipAddress'));
+          if(!localStorage.getItem('ipAddress')||localStorage.getItem('ipAddress')=='127.0.0.1') {
+            axios.get('https://ip.useragentinfo.com/json')
+                .then((res)=>{
+                  localStorage.setItem('ipAddress',res.data.ip||'127.0.0.1')
+                  axios.get('/visitBlog?blogId='+blog.value.blogId+"&ipAddress="+localStorage.getItem('ipAddress'));
+                })
+          }
+          else {
+            axios.get('/visitBlog?blogId='+blog.value.blogId+"&ipAddress="+localStorage.getItem('ipAddress'));
+          }
           document.title = blog.value.blogTitle+'——PeterAlbus的博客'
           let meta:any=document.querySelector('meta[name="description"]')
           if(!meta)

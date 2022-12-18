@@ -180,4 +180,8 @@ a {
     transform: scale(0.5);
   }
 }
+
+#app .music-container .aplayer .aplayer-body{
+  bottom: 120px;
+}
 </style>
