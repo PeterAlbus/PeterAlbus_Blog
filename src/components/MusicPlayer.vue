@@ -137,9 +137,9 @@ onMounted(() => {
       })
       instance.lrc.toggle()
       instance.volume(0.1,true)
-      setTimeout(()=>{
-        instance.play()
-      },5000)
+      // setTimeout(()=>{
+      //   instance.play()
+      // },5000)
     })
   })
 })
