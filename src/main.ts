@@ -29,9 +29,8 @@ axios.defaults.baseURL='https://www.peteralbus.com:8089/'
 
 axios.interceptors.request.use(
     config => {
-        if (localStorage.getItem("token")) { //判断token是否存在
-            // @ts-ignore
-            config.headers.satoken_peteralbus_blog = localStorage.getItem("token");  //将token设置成请求头
+        if (localStorage.getItem("token") && config.headers ) { //判断token是否存在
+            config.headers['satoken_peteralbus_blog'] = localStorage.getItem("token")||'';  //将token设置成请求头
         }
         return config;
     },
