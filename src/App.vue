@@ -1,187 +1,20 @@
 <template>
-  <top-nav-bar></top-nav-bar>
-  <router-view/>
-  <Footer></Footer>
+  <el-config-provider :locale="locale">
+    <TopNavBar />
+    <RouterView />
+    <Footer />
+  </el-config-provider>
 </template>
 
 <script setup lang="ts">
 import TopNavBar from "@/components/TopNavBar.vue";
 import Footer from "@/components/Footer.vue";
+import { RouterView } from "vue-router";
+import zhCn from "element-plus/dist/locale/zh-cn.mjs"
+import { ref } from "vue";
+
+const locale = ref(zhCn)
 </script>
 
-<style lang="scss">
-/***************** CSS重置 *******************/
-html,body,div,span,h1,h2,h3,h4,h5,h6,ul,ol,li,p{
-  margin: 0;
-  padding: 0;
-}
-
-a {
-  text-decoration: none;
-}
-
-.router-link-active {
-  text-decoration: none;
-}
-
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-
-.main-container{
-  padding-top: 20px;
-  padding-bottom: 20px;
-  margin: 0;
-  background-color: #eeeeee;
-  min-height: 70vh;
-}
-
-.main-container a{
-  color: black;
-}
-
-.main-container a:hover{
-  color: #82A96D;
-}
-
-.module{
-  position: relative;
-  margin: 0 auto;
-  width: 90%;
-}
-
-.paragraph{
-  padding: 10px;
-}
-
-//用于博客列表
-.blog-cover{
-  height: 170px;
-  width: 100%;
-}
-
-.title {
-  position: relative;
-  margin: 0;
-  padding: 6px 20px;
-  height: 20px;
-  border-bottom: 1px solid #eaeaea;
-  border-radius: 5px 5px 5px 5px;
-  background-color: #f7f7f7;
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 20px;
-  text-align: left;
-}
-
-.content {
-  position: relative;
-  background-color: #fff;
-  border-radius: 5px 5px 5px 5px;
-}
-
-.module{
-  position: relative;
-  margin: 0 auto;
-  width: 90%;
-  padding: 8px;
-}
-
-.blog-description{
-  text-align: left;
-  height: 150px;
-  padding: 10px;
-}
-
-.info{
-  height: 20px;
-}
-
-.info span{
-  font-size: smaller;
-}
-
- .avatar-uploader .el-upload {
-   border: 1px dashed #d9d9d9;
-   border-radius: 6px;
-   cursor: pointer;
-   position: relative;
-   overflow: hidden;
-   background-color: #fbfdff;
-   transition: var(--el-transition-duration-fast);
- }
-.avatar-uploader .el-upload:hover {
-  border-color: var(--el-color-primary);
-}
-.el-icon.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  text-align: center;
-}
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-
-*::-webkit-scrollbar {
-  /*滚动条整体样式*/
-  width : 3px;  /*高宽分别对应横竖滚动条的尺寸*/
-  height: 1px;
-}
-*::-webkit-scrollbar-thumb {
-  /*滚动条里面小方块*/
-  border-radius: 10px;
-  box-shadow   : inset 0 0 5px rgba(0, 0, 0, 0.2);
-  background   : #33613A;
-}
-*::-webkit-scrollbar-track {
-  /*滚动条里面轨道*/
-  box-shadow   : inset 0 0 5px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  background   : #ededed;
-}
-
-@media screen and (min-width: 768px){
-  .sticky-box {
-    position: -webkit-sticky;
-    position: sticky;
-    height: 60px;
-    margin-bottom: 30px;
-    top: 70px;
-  }
-
-  .hide-big-screen{
-    display: none!important;
-  }
-}
-@media screen and (max-width: 767px){
-  .hide-small-screen{
-    opacity: 0;
-    transform: scale(0.5);
-  }
-}
-
-#app .music-container .aplayer .aplayer-body{
-  bottom: 120px;
-}
+<style scoped>
 </style>

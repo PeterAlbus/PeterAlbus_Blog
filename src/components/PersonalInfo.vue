@@ -1,7 +1,7 @@
 <template>
   <div class="module">
     <div class="content paragraph">
-      <el-avatar :size="50" src="/assets/2.png"></el-avatar>
+      <el-avatar :size="50" src="https://file.peteralbus.com/assets/blog/imgs/blog_avatar.png"></el-avatar>
       <h4>PeterAlbus</h4>
       <p v-if="info!==''">{{ info }}</p>
       <el-tooltip class="item" effect="dark" content="发送电子邮件" placement="top">

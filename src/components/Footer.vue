@@ -20,7 +20,7 @@
 import {onMounted, ref} from "vue"
 import MusicPlayer from '@/components/MusicPlayer.vue'
 
-let screenWidth = ref(document.body.clientWidth)
+const screenWidth = ref(document.body.clientWidth)
 const resize = function (){
   screenWidth.value = document.body.clientWidth
 }

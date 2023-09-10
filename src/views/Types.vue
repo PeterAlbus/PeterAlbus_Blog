@@ -1,11 +1,5 @@
 <template>
-  <div class="banner">
-    <div class="banner-container">
-      <div>
-        <h1>分类查看</h1>
-      </div>
-    </div>
-  </div>
+  <Banner title="分类查看"/>
   <el-row class="main-container">
     <el-col :span="24">
       <el-row>
@@ -30,7 +24,8 @@
     <el-col :lg="{span:11,offset:3}" :sm="15">
       <div class="module">
         <h2 class="title">博文列表</h2>
-        <el-card v-for="item in currentPageBlogs" shadow="hover" :body-style="{ padding: '0px' }">
+        <el-card v-for="item in currentPageBlogs" :key="item.blogId"
+                 shadow="hover" :body-style="{ padding: '0px' }">
           <el-row style="height: 170px">
             <el-col :span="8">
               <el-image :src="item.blogImg" fit="cover" class="blog-cover"></el-image>
@@ -42,9 +37,9 @@
                 </router-link>
                 <p style="height: 90px;overflow: hidden">{{item.blogDescription}}</p>
                 <p class="info">
-                  <span type="info"><el-icon style="vertical-align: -10%"><avatar /></el-icon>{{ item.blogAuthor }}</span>
-                  <span type="info"><el-icon style="vertical-align: -10%"><clock /></el-icon>{{ item.blogTime }}</span>
-                  <span type="info"><el-icon style="vertical-align: -10%"><star-filled /></el-icon>{{ item.blogLike }}</span>
+                  <span type="info"><el-icon style="vertical-align: -10%"><Avatar /></el-icon>{{ item.blogAuthor }}</span>
+                  <span type="info"><el-icon style="vertical-align: -10%"><Clock /></el-icon>{{ item.blogTime }}</span>
+                  <span type="info"><el-icon style="vertical-align: -10%"><StarFilled /></el-icon>{{ item.blogLike }}</span>
                 </p>
               </div>
             </el-col>
@@ -77,110 +72,69 @@
   </el-row>
 </template>
 
-<script>
-import {Avatar,StarFilled,Clock,Link} from "@element-plus/icons-vue";
+<script setup lang="ts">
 import FriendLinks from "@/components/FriendLinks.vue"
 import PersonalInfo from "@/components/PersonalInfo.vue"
-export default {
-  components:{Avatar,StarFilled,Clock,LinkIcon:Link,FriendLinks,PersonalInfo},
-  name: "Types",
-  data(){
-    return {
-      screenWidth: document.body.clientWidth,
-      selectType:1,
-      currentPage:1,
-      pageSize:10,
-      blogList:[
-        {
-          blogId:1,
-          blogTitle:'本站介绍',
-          blogImg:'https://file.peteralbus.com/assets/blog/imgs/cover/cover1.jpg',
-          blogType:1,
-          blogDescription:'本站是如何建立的？',
-          blogAuthor:'PeterAlbus',
-          blogContent:'',
-          blogTime:'2021-7-19',
-          blogLike:18,
-          blogViews:200,
-          isTop:1
-        }
-      ],
-      friendLinkList:[
-        {
-          linkId:1,
-          linkName:'loading',
-          linkUrl:'#'
-        }
-      ]
-    }
-  },
-  created() {
-    this.getBlogList()
-    this.getFriendLinkList()
-    window.addEventListener('resize',this.resize)
-  },
-  methods:{
-    resize(){
-      this.screenWidth = document.body.clientWidth
-    },
-    getBlogList: function (){
-      let that=this;
-      that.$axios.get('queryAll')
-          .then(res=>{
-            that.blogList=res.data;
-          })
-    },
-    getFriendLinkList: function (){
-      let that=this;
-      that.$axios.get('friendLink/getFriendLinkList')
-          .then(res=>{
-            that.friendLinkList=res.data;
-          })
-    }
-  },
-  computed:{
-    selectedBlogs: function (){
-      let slectedBlogs=[];
-      for(let i of this.blogList)
-      {
-        if(i.blogType===this.selectType)
-        {
-          slectedBlogs.push(i);
-        }
-      }
-      slectedBlogs=slectedBlogs.reverse();
-      return slectedBlogs;
-    },
-    currentPageBlogs:function (){
-      return this.selectedBlogs.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)
-    },
-    getType: function (){
-      return function (type){
-        let types=['学习笔记','生活','ACG','科技','随笔']
-        return types[type-1];
-      }
+import Banner from "@/components/Banner.vue";
+import { computed, onMounted, Ref, ref } from "vue";
+import { fetchBlogList } from "@/services/blogApi";
+
+const screenWidth:Ref<number> = ref(document.body.clientWidth);
+
+const resize = () => {
+  screenWidth.value = document.body.clientWidth;
+};
+
+const selectType:Ref<number> = ref(1);
+const currentPage:Ref<number> = ref(1);
+const pageSize:Ref<number> = ref(10);
+const blogList:Ref = ref([
+  {
+    blogId:1,
+    blogTitle:'本站介绍',
+    blogImg:'https://file.peteralbus.com/assets/blog/imgs/cover/cover1.jpg',
+    blogType:1,
+    blogDescription:'本站是如何建立的？',
+    blogAuthor:'PeterAlbus',
+    blogContent:'',
+    blogTime:'2021-7-19',
+    blogLike:18,
+    blogViews:200,
+    isTop:1
+  }
+]);
+
+const getBlogList = () => {
+  fetchBlogList().then(res => {
+    blogList.value = res.data;
+  });
+};
+
+const selectedBlogs = computed(() => {
+  let selectedBlogs = [];
+  for (const i of blogList.value) {
+    if (i.blogType === selectType.value) {
+      selectedBlogs.push(i);
     }
   }
-}
+  selectedBlogs = selectedBlogs.reverse();
+  return selectedBlogs;
+});
+
+const currentPageBlogs = computed(() => {
+  return selectedBlogs.value.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value);
+});
+
+const getType = (type:number) => {
+  const types = ['学习笔记', '生活', 'ACG', '科技', '随笔'];
+  return types[type - 1];
+};
+
+onMounted(() => {
+  window.addEventListener('resize', resize);
+  getBlogList();
+});
 </script>
 
 <style scoped>
-.banner {
-  position: relative;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 30vh;
-  background: url("../assets/background.jpg") fixed center center;
-  text-align: center;
-  color: #fff !important;
-}
-
-.banner-container {
-  position: absolute;
-  width: 100%;
-  margin-top: 13vh;
-  line-height: 1.5;
-  color: #eee;
-}
 </style>

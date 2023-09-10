@@ -1,11 +1,14 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+
+import App from "./App.vue";
+import router from "./router";
+import "nprogress/nprogress.css";
+import "./assets/main.css";
+import "element-plus/dist/index.css"; // element plus样式
+import * as ElIcons from "@element-plus/icons-vue"; //element plus图标
 import 'font-awesome/css/font-awesome.min.css'
 import './assets/iconfont/iconfont.css'
-import qs from 'qs'
 
 import VMdEditor from '@kangc/v-md-editor';
 import '@kangc/v-md-editor/lib/style/base-editor.css';
@@ -19,36 +22,31 @@ import Prism from 'prismjs';
 import PeterAlbusVue from 'vue3-social-share';
 import 'vue3-social-share/lib/index.css'
 
-import 'element-plus/dist/index.css'
+//全局移动指令
+import dragMove from "./directives/dragMove";
 
-import store from './store'
+const app = createApp(App);
+//全局引用element-plus
+// import ElementPlus from 'element-plus';
+// app.use(ElementPlus);
 
-axios.defaults.withCredentials=false;
-axios.defaults.baseURL='https://www.peteralbus.com:8089/'
-// axios.defaults.baseURL='https://localhost:8089/'
-
-axios.interceptors.request.use(
-    config => {
-        if (localStorage.getItem("token") && config.headers ) { //判断token是否存在
-            config.headers['satoken_peteralbus_blog'] = localStorage.getItem("token")||'';  //将token设置成请求头
-        }
-        return config;
-    },
-    err => {
-        return Promise.reject(err);
-    }
-);
+// 全局注册element-plus图标
+for (const name in ElIcons) {
+  if(name==='Share') continue;
+  app.component(name, (ElIcons as any)[name]);
+}
 
 VMdEditor.use(vuepressTheme, {
-    Prism
+  Prism
 });
 
 VMdPreview.use(vuepressTheme, {
-    Prism
+  Prism
 });
-const app=createApp(App)
-app.config.globalProperties.$axios=axios;
-app.config.globalProperties.$qs=qs;
-app.use(VueAxios,axios).use(router).use(VMdEditor).use(VMdPreview).use(PeterAlbusVue).use(store)
-app.mount('#app')
-// app.config.devtools=true
+
+app.use(createPinia());
+app.use(router);
+//注册全局移动指令
+app.use(dragMove);
+app.use(VMdEditor).use(VMdPreview).use(PeterAlbusVue);
+app.mount("#app");

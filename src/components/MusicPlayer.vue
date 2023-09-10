@@ -6,7 +6,7 @@
 import 'APlayer/dist/APlayer.min.css';
 import APlayer from 'APlayer';
 import {nextTick, onBeforeUnmount, onMounted, ref} from 'vue'
-import axios from "axios";
+import { fetchMusicList } from "@/services/musicApi";
 
 const playerRef = ref()
 let instance:any;
@@ -14,17 +14,17 @@ let instance:any;
 // APlayer歌曲信息
 class Audio {
   // 音频艺术家
-  artist: String;
+  artist: string;
   // 音频名称
-  name: String;
+  name: string;
   // 音频链接
-  url: String;
+  url: string;
   // 音频封面
-  cover: String;
+  cover: string;
   // 歌词
-  lrc: String;
+  lrc: string;
 
-  constructor(artist: String, name: String, url: String, cover: String, lrc: String) {
+  constructor(artist: string, name: string, url: string, cover: string, lrc: string) {
     this.artist = artist;
     this.name = name;
     this.url = url;
@@ -82,7 +82,7 @@ const props = defineProps({
   volume: {
     type: Number,
     default: 0.7,
-    validator: (value: Number) => {
+    validator: (value: number) => {
       return value >= 0 && value <= 1;
     }
   },
@@ -116,8 +116,8 @@ const props = defineProps({
 // 初始化
 onMounted(() => {
   nextTick(() => {
-    axios.get('/music/queryAll')
-    .then(res=>{
+    fetchMusicList().then(res => {
+      const audioList: Audio[] = res.data
       instance = new APlayer({
         container: playerRef.value,
         fixed: props.fixed,
@@ -133,7 +133,7 @@ onMounted(() => {
         listFolded: props.listFolded,
         listMaxHeight: props.listMaxHeight,
         storageName: props.storageName,
-        audio: res.data
+        audio: audioList
       })
       instance.lrc.toggle()
       instance.volume(0.1,true)

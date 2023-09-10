@@ -1,4 +1,4 @@
-<template xmlns="http://www.w3.org/1999/html">
+<template>
   <Banner title="照片墙" description="会收录一些图片。点击可查看原图。"></Banner>
   <div class="main-container">
     <el-row>
@@ -6,7 +6,9 @@
         <div style="margin: 0 auto;width: 90%;">
           <el-row>
             <el-col :span="7">
-              <el-card class="photo" v-for="item in photoLeft" shadow="hover" :body-style="{ padding: '0px' }">
+              <el-card class="photo"
+                       v-for="item in photoLeft" :key="item.imgId"
+                       shadow="hover" :body-style="{ padding: '0px' }">
                 <a :href="item.imgSrc" target="_blank">
                   <el-image :src="item.imgThumb" style="width: 100%" fit="cover" lazy>
                     <template #placeholder>
@@ -20,7 +22,9 @@
               </el-card>
             </el-col>
             <el-col :span="7" :offset="1">
-              <el-card class="photo" v-for="item in photoMid" shadow="hover" :body-style="{ padding: '0px' }">
+              <el-card class="photo"
+                       v-for="item in photoMid" :key="item.imgId"
+                       shadow="hover" :body-style="{ padding: '0px' }">
                 <a :href="item.imgSrc" target="_blank">
                   <el-image :src="item.imgThumb" style="width: 100%" fit="cover" lazy>
                     <template #placeholder>
@@ -34,7 +38,9 @@
               </el-card>
             </el-col>
             <el-col :span="7" :offset="1">
-              <el-card class="photo" v-for="item in photoRight" shadow="hover" :body-style="{ padding: '0px' }">
+              <el-card class="photo"
+                       v-for="item in photoRight" :key="item.imgId"
+                       shadow="hover" :body-style="{ padding: '0px' }">
                 <a :href="item.imgSrc" target="_blank">
                   <el-image :src="item.imgThumb" style="width: 100%" fit="cover" lazy>
                     <template #placeholder>
@@ -60,107 +66,79 @@
   </div>
 </template>
 
-<script>
-import {Link} from "@element-plus/icons-vue";
+<script setup lang="ts">
 import FriendLinks from "@/components/FriendLinks.vue"
 import PersonalInfo from "@/components/PersonalInfo.vue"
 import Banner from '@/components/Banner.vue'
-export default {
-  components:{Banner, LinkIcon:Link,FriendLinks,PersonalInfo},
-  name: "Photo",
-  data(){
-    return {
-      photoList:[
-        {
-          imgId:1,
-          imgSrc:'https://file.peteralbus.com/assets/blog/imgs/cover/cover1.jpg',
-          imgThumb:'https://file.peteralbus.com/assets/blog/imgs/cover/cover1.jpg',
-          imgName:'loading'
-        },
-        {
-          imgId:2,
-          imgSrc:'https://file.peteralbus.com/assets/blog/imgs/cover/8a0be7eaef3c44469200443affd26d33',
-          imgThumb:'https://file.peteralbus.com/assets/blog/imgs/cover/cover1.jpg',
-          imgName:'loading'
-        },
-        {
-          imgId:3,
-          imgSrc:'https://file.peteralbus.com/assets/blog/imgs/cover/79f797340075430abcdc9b80fc908f66',
-          imgThumb:'https://file.peteralbus.com/assets/blog/imgs/cover/cover1.jpg',
-          imgName:'loading'
-        },
-      ],
-      friendLinkList:[
-        {
-          linkId:1,
-          linkName:'loading',
-          linkUrl:'#'
-        }
-      ]
+import { computed, onMounted, Ref, ref } from "vue";
+import { fetchPhotoList } from "@/services/photoApi";
+
+const photoList:Ref = ref([
+  {
+    imgId:1,
+    imgSrc:'https://file.peteralbus.com/assets/blog/imgs/cover/cover1.jpg',
+    imgThumb:'https://file.peteralbus.com/assets/blog/imgs/cover/cover1.jpg',
+    imgName:'loading'
+  },
+  {
+    imgId:2,
+    imgSrc:'https://file.peteralbus.com/assets/blog/imgs/cover/8a0be7eaef3c44469200443affd26d33',
+    imgThumb:'https://file.peteralbus.com/assets/blog/imgs/cover/cover1.jpg',
+    imgName:'loading'
+  },
+  {
+    imgId:3,
+    imgSrc:'https://file.peteralbus.com/assets/blog/imgs/cover/79f797340075430abcdc9b80fc908f66',
+    imgThumb:'https://file.peteralbus.com/assets/blog/imgs/cover/cover1.jpg',
+    imgName:'loading'
+  },
+])
+
+const getPhotoList= ()=>{
+  fetchPhotoList().then((res)=>{
+    photoList.value=res.data
+  })
+};
+
+onMounted(()=>{
+  getPhotoList()
+})
+
+const photoRight = computed(() => {
+  let count = 0;
+  const photoLeft = [];
+  for (const i of photoList.value) {
+    if (count % 3 === 0) {
+      photoLeft.push(i);
     }
-  },
-  created() {
-    this.getPhotoList()
-    this.getFriendLinkList()
-  },
-  methods:{
-    getPhotoList:function (){
-      let that=this;
-      that.$axios.get('/photo/queryAll')
-      .then(res=>{
-        that.photoList=res.data;
-      })
-    },
-    getFriendLinkList: function (){
-      let that=this;
-      that.$axios.get('friendLink/getFriendLinkList')
-          .then(res=>{
-            that.friendLinkList=res.data;
-          })
-    }
-  },
-  computed:{
-    photoRight:function (){
-      let count=0;
-      let photoLeft=[];
-      for(let i of this.photoList)
-      {
-        if(count%3===0)
-        {
-          photoLeft.push(i);
-        }
-        count++;
-      }
-      return photoLeft.reverse();
-    },
-    photoMid:function (){
-      let count=0;
-      let photoMid=[];
-      for(let i of this.photoList)
-      {
-        if(count%3===1)
-        {
-          photoMid.push(i);
-        }
-        count++;
-      }
-      return photoMid.reverse();
-    },
-    photoLeft:function (){
-      let count=0;
-      let photoRight=[];
-      for(let i of this.photoList)
-      {
-        if(count%3===2)
-        {
-          photoRight.push(i);
-        }
-        count++;
-      }
-      return photoRight.reverse();
-    },
+    count++;
   }
-}
+  return photoLeft.reverse();
+});
+
+const photoMid = computed(() => {
+  let count = 0;
+  const photoMid = [];
+  for (const i of photoList.value) {
+    if (count % 3 === 1) {
+      photoMid.push(i);
+    }
+    count++;
+  }
+  return photoMid.reverse();
+});
+
+const photoLeft = computed(() => {
+  let count = 0;
+  const photoRight = [];
+  for (const i of photoList.value) {
+    if (count % 3 === 2) {
+      photoRight.push(i);
+    }
+    count++;
+  }
+  return photoRight.reverse();
+});
 </script>
 
 <style scoped>

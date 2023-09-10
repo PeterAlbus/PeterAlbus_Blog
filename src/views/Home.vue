@@ -2,7 +2,7 @@
   <div class="home-banner" :style="{background:'url('+backgrounds[randomIndex]+') fixed center center',backgroundSize:'cover',OBackgroundSize:'cover',MozBackgroundSize:'cover'}">
     <div class="banner-container">
       <div>
-        <el-avatar :size="150" src="/assets/2.png"></el-avatar>
+        <el-avatar :size="150" src="https://file.peteralbus.com/assets/blog/imgs/blog_avatar.png"></el-avatar>
         <h2>欢迎来到PeterAlbus的个人博客</h2>
         <div @mouseout="showFrom=false" @mouseover="showFrom=true" style="height: 30px;color:#ccccd6;font-size: 0.8em;">
           <p
@@ -34,7 +34,7 @@
     <el-col :lg="{span:11,offset:3}" :sm="15">
       <div class="module">
         <h2 class="title">置顶博文</h2>
-        <el-card class="content" v-for="(item,index) in topBlogs" shadow="hover" :body-style="{ padding: '0px' }">
+        <el-card class="content" v-for="item in topBlogs" :key="item.blogId" shadow="hover" :body-style="{ padding: '0px' }">
           <el-row style="height: 170px">
             <el-col :span="8">
               <el-image :src="item.blogImg" fit="cover" class="blog-cover"></el-image>
@@ -47,9 +47,9 @@
                 </router-link>
                 <p style="height: 110px">{{ item.blogDescription }}</p>
                 <p class="info">
-                  <span type="info"><el-icon style="vertical-align: -10%"><avatar /></el-icon>{{ item.blogAuthor }}</span>
-                  <span type="info"><el-icon style="vertical-align: -10%"><clock /></el-icon>{{ item.blogTime }}</span>
-                  <span type="info"><el-icon style="vertical-align: -10%"><star-filled /></el-icon>{{ item.blogLike }}</span>
+                  <span type="info"><el-icon style="vertical-align: -10%"><Avatar /></el-icon>{{ item.blogAuthor }}</span>
+                  <span type="info"><el-icon style="vertical-align: -10%"><Clock /></el-icon>{{ item.blogTime }}</span>
+                  <span type="info"><el-icon style="vertical-align: -10%"><StarFilled /></el-icon>{{ item.blogLike }}</span>
                 </p>
               </div>
             </el-col>
@@ -59,7 +59,7 @@
 
       <div class="module">
         <h2 class="title">最新发布<span style="float:right;"><router-link to="/types">查看全部>></router-link></span></h2>
-        <el-card class="content" v-for="item in recentBlogs" shadow="hover" :body-style="{ padding: '0px' }">
+        <el-card class="content" v-for="item in recentBlogs" :key="item.blogId" shadow="hover" :body-style="{ padding: '0px' }">
           <el-row style="height: 170px">
             <el-col :span="8">
               <el-image :src="item.blogImg" fit="cover" class="blog-cover"></el-image>
@@ -73,9 +73,9 @@
                 </router-link>
                 <p style="height: 90px;overflow: hidden">{{ item.blogDescription }}</p>
                 <p class="info">
-                  <span type="info"><el-icon style="vertical-align: -10%"><avatar /></el-icon>{{ item.blogAuthor }}</span>
-                  <span type="info"><el-icon style="vertical-align: -10%"><clock /></el-icon>{{ item.blogTime }}</span>
-                  <span type="info"><el-icon style="vertical-align: -10%"><star-filled /></el-icon>{{ item.blogLike }}</span>
+                  <span type="info"><el-icon style="vertical-align: -10%"><Avatar /></el-icon>{{ item.blogAuthor }}</span>
+                  <span type="info"><el-icon style="vertical-align: -10%"><Clock /></el-icon>{{ item.blogTime }}</span>
+                  <span type="info"><el-icon style="vertical-align: -10%"><StarFilled /></el-icon>{{ item.blogLike }}</span>
                 </p>
               </div>
             </el-col>
@@ -94,14 +94,14 @@
 
 <script setup lang="ts">
 import {computed, onMounted, ref} from "vue";
-import {Avatar,StarFilled,Clock} from "@element-plus/icons-vue";
 import { toClipboard } from '@soerenmartius/vue3-clipboard'
 import axios from "axios";
 import {ElMessage} from "element-plus";
 import FriendLinks from "@/components/FriendLinks.vue"
 import PersonalInfo from "@/components/PersonalInfo.vue"
+import { fetchBlogList } from "@/services/blogApi";
 
-let blogList = ref([
+const blogList = ref([
   {
     blogId: 1,
     blogTitle: '稍等，数据请求中',
@@ -117,7 +117,7 @@ let blogList = ref([
   }
 ])
 
-let famousQuotes= ref({
+const famousQuotes= ref({
   id: 0,
   uuid: "",
   hitokoto: "",
@@ -132,7 +132,7 @@ let famousQuotes= ref({
   length: 0
 })
 
-let showFrom = ref(false)
+const showFrom = ref(false)
 
 const getQuotes= ()=>{
   axios({
@@ -149,7 +149,7 @@ const copyQuotes=()=>{
   ElMessage.success("复制成功!点击右键可换一句")
 }
 
-let backgrounds=[
+const backgrounds=[
     'https://file.peteralbus.com/assets/blog/static/background/background-lumine.jpg',
     'https://file.peteralbus.com/assets/blog/static/background/background-kazuha.jpg',
     'https://file.peteralbus.com/assets/blog/static/background/background-blueeyes.jpg',
@@ -160,13 +160,13 @@ let backgrounds=[
     'https://file.peteralbus.com/assets/blog/static/background/background-ai2.jpg',
 ]
 
-let randomIndex=Math.floor(Math.random()*backgrounds.length)
+const randomIndex=Math.floor(Math.random()*backgrounds.length)
+// const randomIndex=4
 
 const getBlogList=function () {
-  axios.get('queryAll')
-      .then(res => {
-        blogList.value = res.data;
-      })
+  fetchBlogList().then(res=>{
+    blogList.value=res.data
+  })
 }
 
 onMounted(()=>{
@@ -175,8 +175,8 @@ onMounted(()=>{
 })
 
 const topBlogs=computed(()=>{
-  let topBlogs = [];
-  for (let i of blogList.value) {
+  const topBlogs = [];
+  for (const i of blogList.value) {
     if (i.isTop == 1) {
       topBlogs.push(i);
     }
@@ -185,13 +185,13 @@ const topBlogs=computed(()=>{
 })
 
 const recentBlogs = computed (function () {
-      let recentBlogs = blogList.value.reverse();
-      return recentBlogs.slice(0, 10);
-    })
+  const recentBlogs = blogList.value.reverse();
+  return recentBlogs.slice(0, 10);
+})
 
 const getType = computed(function () {
   return function (type: number) {
-    let types = ['学习笔记', '生活', 'ACG', '科技', '随笔']
+    const types = ['学习笔记', '生活', 'ACG', '科技', '随笔']
     return types[type - 1];
   }
 })

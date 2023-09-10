@@ -3,41 +3,71 @@
     <div class="nav-title">PeterAlbus的博客</div>
     <div style="display: flex">
       <div class="nav-avatar">
-        <router-link to="/login">
+        <router-link to="/login" style="line-height: 0">
           <el-avatar class="avatar-img"
                      :size="35"
                      :src="userStore.userAvatar"
           />
         </router-link>
         <div class="user-info">
-          <h4 style="padding: 4px">{{userStore.userUsername}}</h4>
+          <h4 style="padding: 4px">{{ userStore.userUsername }}</h4>
           <p style="padding: 4px">
             <el-tag
-                :type="identityType"
-                effect="dark"
+              :type="identityType"
+              effect="dark"
             >
               {{ userIdentity }}
             </el-tag>
           </p>
           <div class="operations" v-if="userStore.userId===''">
             <el-divider />
-            <div class="operation" @click="toLink('/login')"><el-icon style="vertical-align: -10%"><lollipop /></el-icon> 登录</div>
-            <div class="operation" @click="toLink('/register')"><el-icon style="vertical-align: -10%"><tickets /></el-icon> 注册</div>
+            <div class="operation" @click="toLink('/login')">
+              <el-icon style="vertical-align: -10%">
+                <Lollipop />
+              </el-icon>
+              登录
+            </div>
+            <div class="operation" @click="toLink('/register')">
+              <el-icon style="vertical-align: -10%">
+                <Tickets />
+              </el-icon>
+              注册
+            </div>
           </div>
           <div class="operations" v-if="userStore.userId!==''">
             <el-divider />
-            <div class="operation" @click="toLink('/userCenter')"><el-icon style="vertical-align: -10%"><avatar /></el-icon> 个人中心</div>
-            <div class="operation"><el-icon style="vertical-align: -10%"><message /></el-icon> 消息</div>
-            <div class="operation"><el-icon style="vertical-align: -10%"><setting /></el-icon> 设置</div>
+            <div class="operation" @click="toLink('/userCenter')">
+              <el-icon style="vertical-align: -10%">
+                <Avatar />
+              </el-icon>
+              个人中心
+            </div>
+            <div class="operation">
+              <el-icon style="vertical-align: -10%">
+                <Message />
+              </el-icon>
+              消息
+            </div>
+            <div class="operation">
+              <el-icon style="vertical-align: -10%">
+                <Setting />
+              </el-icon>
+              设置
+            </div>
             <el-divider />
-            <div class="operation" @click="logout"><el-icon style="vertical-align: -10%"><close /></el-icon> 退出登录</div>
+            <div class="operation" @click="logout">
+              <el-icon style="vertical-align: -10%">
+                <Close />
+              </el-icon>
+              退出登录
+            </div>
           </div>
         </div>
       </div>
-      <div class="nav-item" v-for="item in navItems">
+      <div class="nav-item" v-for="item in navItems" :key="item.name">
         <router-link :to="item.indexPath" active-class="active-top-item">
           <el-icon style="vertical-align: -10%">
-            <component :is="item.iconName"/>
+            <component :is="item.iconName" />
           </el-icon>
           {{ item.name }}
         </router-link>
@@ -46,11 +76,13 @@
   </div>
   <div class="navbar-bottom" v-if="screenWidth<768">
     <el-row class="navbar-bottom-list" justify="space-between">
-      <el-col :span="Math.floor(24/(navItems.length+1))" class="navbar-bottom-item" v-for="item in navItems">
+      <el-col :span="Math.floor(24/(navItems.length+1))"
+              class="navbar-bottom-item"
+              v-for="item in navItems" :key="item.name">
         <router-link :to="item.indexPath" active-class="active-item">
           <p>
             <el-icon>
-              <component :is="item.iconName"/>
+              <component :is="item.iconName" />
             </el-icon>
           </p>
           <span class="navbar-bottom-text">{{ item.name }}</span>
@@ -60,8 +92,8 @@
         <router-link to="/login">
           <p>
             <el-avatar
-                :size="16"
-                :src="userStore.userAvatar"
+              :size="16"
+              :src="userStore.userAvatar"
             />
           </p>
           <span class="navbar-bottom-text">个人中心</span>
@@ -72,91 +104,65 @@
 </template>
 
 <script setup lang="ts">
-import {computed, onMounted, reactive, ref} from "vue";
-import {
-  HomeFilled,
-  Menu,
-  UserFilled,
-  PictureFilled,
-  Setting,
-  Close,
-  Avatar,
-  Lollipop,
-  Tickets,
-  Message
-} from "@element-plus/icons-vue";
-import {useUserStore} from "@/store/user";
-import axios from "axios";
-import {ElMessage} from "element-plus";
-import router from "@/router";
+import { computed, onMounted, ref } from "vue";
+import { useUserStore } from "@/stores/user";
+import { ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
+import { logoutUser } from "@/services/userApi";
 
-const userStore=useUserStore()
+const router = useRouter();
+const userStore = useUserStore();
 
-let screenWidth = ref(document.body.clientWidth)
-let navItems = [{name: "主页", indexPath: "/", iconName: HomeFilled},
-  {name: "分类", indexPath: "/types", iconName: Menu},
-  {name: "关于我", indexPath: "/about", iconName: UserFilled},
-  {name: "照片墙", indexPath: "/photo", iconName: PictureFilled}]
+const screenWidth = ref(document.body.clientWidth);
+const navItems = [{ name: "主页", indexPath: "/", iconName: "HomeFilled" },
+  { name: "分类", indexPath: "/types", iconName: "Menu" },
+  { name: "关于我", indexPath: "/about", iconName: "UserFilled" },
+  { name: "照片墙", indexPath: "/photo", iconName: "PictureFilled" }];
 
-const resize = function () {
-  screenWidth.value = document.body.clientWidth
-}
+const resize = function() {
+  screenWidth.value = document.body.clientWidth;
+};
 
 const logout = () => {
-  axios.get('/user/logout')
-      .then((res)=>{
-        ElMessage.success('登出成功');
-        localStorage.removeItem("token")
-        userStore.logout()
-        router.push('/')
-      })
-}
+  logoutUser().then(() => {
+    ElMessage.success("登出成功");
+    localStorage.removeItem("token");
+    userStore.logout();
+    router.push("/");
+  });
+};
 
-const toLink = (path:any) =>{
-  router.push(path)
-}
+const toLink = (path: any) => {
+  router.push(path);
+};
 
-const identityType = computed(()=>{
-  if(userStore.userIdentity==0)
-  {
-    return "warning"
+const identityType = computed(() => {
+  if (userStore.userIdentity == 0) {
+    return "warning";
+  } else if (userStore.userIdentity == 1) {
+    return "success";
+  } else if (userStore.userIdentity == 5) {
+    return "";
+  } else {
+    return "info";
   }
-  else if(userStore.userIdentity==1)
-  {
-    return "success"
-  }
-  else if(userStore.userIdentity==5)
-  {
-    return ""
-  }
-  else
-  {
-    return "info"
-  }
-})
+});
 
-const userIdentity = computed(()=>{
-  if(userStore.userIdentity==0)
-  {
-    return "站长"
+const userIdentity = computed(() => {
+  if (userStore.userIdentity == 0) {
+    return "站长";
+  } else if (userStore.userIdentity == 1) {
+    return "管理员";
+  } else if (userStore.userIdentity == 5) {
+    return "普通用户";
+  } else {
+    return "游客";
   }
-  else if(userStore.userIdentity==1)
-  {
-    return "管理员"
-  }
-  else if(userStore.userIdentity==5)
-  {
-    return "普通用户"
-  }
-  else
-  {
-    return "游客"
-  }
-})
+});
 
 onMounted(() => {
-  window.addEventListener('resize', resize)
-})
+  window.addEventListener("resize", resize);
+});
 </script>
 
 <style scoped>
@@ -222,7 +228,7 @@ onMounted(() => {
   box-shadow: 3px 3px 6px 3px rgba(0, 0, 0, .3);
 }
 
-.nav-avatar{
+.nav-avatar {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -231,26 +237,23 @@ onMounted(() => {
   background: rgba(0, 0, 0, 0) !important;
 }
 
-.avatar-img{
+.avatar-img {
   transform-origin: right top;
-  transition-property:transform;
-  transition-duration:0.3s;
-  transition-timing-function:ease;
+  transition-property: transform;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
 }
 
-.nav-avatar:hover .avatar-img
-{
+.nav-avatar:hover .avatar-img {
   transform: scale(1.8);
 }
 
-.nav-avatar:hover .user-info
-{
+.nav-avatar:hover .user-info {
   opacity: 1;
   transform: scale(1) translateX(-14px);
 }
 
-.user-info
-{
+.user-info {
   opacity: 0;
   position: fixed;
   top: 60px;
@@ -258,13 +261,13 @@ onMounted(() => {
 
   background-color: white;
   border-radius: 5px;
-  box-shadow: 0 3px 8px 6px rgba(7,17,27,0.05);
+  box-shadow: 0 3px 8px 6px rgba(7, 17, 27, 0.05);
   padding: 15px;
   transform-origin: top;
   transform: scale(0.3) translateY(-20px);
-  transition-property:opacity,transform;
-  transition-duration:0.3s;
-  transition-timing-function:ease;
+  transition-property: opacity, transform;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
   z-index: -1;
 }
 
@@ -299,26 +302,26 @@ onMounted(() => {
   background: none !important;
 }
 
-.operations{
+.operations {
   width: 100%;
 }
 
-.operations a{
+.operations a {
   color: #2E3E4F;
 }
 
-.operations a:hover{
+.operations a:hover {
   color: #82A96D;
 }
 
-.operation{
+.operation {
   text-align: left;
   border-radius: 5px;
   padding: 5px;
   cursor: pointer;
 }
 
-.operation:hover{
+.operation:hover {
   background-color: #F1F1F1;
   color: #63a35c;
 }

@@ -1,11 +1,5 @@
 <template>
-  <div class="banner">
-    <div class="banner-container">
-      <div>
-        <h1>博客详情</h1>
-      </div>
-    </div>
-  </div>
+  <Banner title="博客详情"></Banner>
   <div class="main-container">
     <el-row>
       <el-col :lg="{span:11,offset:3}" :sm="15">
@@ -25,7 +19,7 @@
             <div class="content" style="padding: 10px">
               <el-scrollbar max-height="30vh">
                 <div
-                    v-for="anchor in titleList"
+                    v-for="anchor in titleList" :key="anchor.lineIndex"
                     :style="{ padding: `2px 20px 2px ${anchor.indent * 20 + 20}px` }"
                     class="anchor"
                     @click="handleAnchorClick(anchor)"
@@ -35,7 +29,7 @@
               </el-scrollbar>
             </div>
           </div>
-          <Comment :blogId="blog.blogId"></Comment>
+          <Comment :blogId="blog.blogId as string"></Comment>
           <div class="module">
             <h2 class="title"><el-icon style="vertical-align: -10%"><share-icon /></el-icon> 分享本页面</h2>
             <div class="content paragraph">
@@ -63,19 +57,20 @@
 import {onMounted, ref ,nextTick} from "vue";
 import {useRoute} from "vue-router";
 import {ArrowRight,Notebook,Share as shareIcon} from "@element-plus/icons-vue";
-import axios from "axios";
 import PersonalInfo from '@/components/PersonalInfo.vue'
 import Comment from '@/components/Comment.vue'
 import type {vMdEditor} from "@kangc/v-md-editor"
+import Banner from "@/components/Banner.vue";
+import { fetchBlogById, getIpAddress, visitBlog } from "@/services/blogApi";
 
 
 const route=useRoute()
-let mdRef=ref<InstanceType<typeof vMdEditor>>()
-let titleList:any=ref([])
+const mdRef=ref<InstanceType<typeof vMdEditor>>()
+const titleList:any=ref([])
 
-let hideCatalogue=ref(true)
+const hideCatalogue=ref(true)
 
-let blog=ref({
+const blog=ref({
   blogId:route.query.id,
   blogTitle:'稍等，数据正在请求中',
   blogImg:'https://file.peteralbus.com/assets/blog/imgs/cover/cover1.jpg',
@@ -91,30 +86,26 @@ let blog=ref({
 })
 
 const getBlog=()=>{
-  if(blog.value.blogId!==undefined)
+  if(typeof blog.value.blogId == 'string')
   {
-    axios.get('queryById?id='+blog.value.blogId)
-        .then(res=>{
-          blog.value=res.data;
-          blog.value.blogViews+=1;
-          if(!localStorage.getItem('ipAddress')||localStorage.getItem('ipAddress')=='127.0.0.1') {
-            axios.get('https://ip.useragentinfo.com/json')
-                .then((res)=>{
-                  localStorage.setItem('ipAddress',res.data.ip||'127.0.0.1')
-                  axios.get('/visitBlog?blogId='+blog.value.blogId+"&ipAddress="+localStorage.getItem('ipAddress'));
-                })
-          }
-          else {
-            axios.get('/visitBlog?blogId='+blog.value.blogId+"&ipAddress="+localStorage.getItem('ipAddress'));
-          }
-          document.title = blog.value.blogTitle+'——PeterAlbus的博客'
-          let meta:any=document.querySelector('meta[name="description"]')
-          if(!meta)
-          {
-            meta.setAttribute('content',blog.value.blogDescription)
-          }
-          nextTick(getTitles)
+    fetchBlogById(blog.value.blogId).then(res => {
+      blog.value = res.data;
+      if(!localStorage.getItem('ipAddress')||localStorage.getItem('ipAddress')=='127.0.0.1') {
+        getIpAddress().then(res => {
+          localStorage.setItem('ipAddress', res.data.ip || '127.0.0.1')
         })
+      }
+      visitBlog(blog.value.blogId,localStorage.getItem('ipAddress')||'').then((res)=>{
+        if(res.data) blog.value.blogViews += 1;
+      })
+      document.title = blog.value.blogTitle+'——PeterAlbus的博客'
+      const meta:any=document.querySelector('meta[name="description"]')
+      if(!meta)
+      {
+        meta.setAttribute('content',blog.value.blogDescription)
+      }
+      nextTick(getTitles)
+    });
   }
 }
 
@@ -149,24 +140,8 @@ const handleAnchorClick=(anchor:any)=>{
   }
 }
 
-let friendLinkList=ref([
-  {
-    linkId:1,
-    linkName:'loading',
-    linkUrl:'#'
-  }
-])
-
-const getFriendLinkList=function () {
-  axios.get('friendLink/getFriendLinkList')
-      .then(res => {
-        friendLinkList.value = res.data;
-      })
-}
-
 onMounted(()=>{
   getBlog()
-  getFriendLinkList()
 })
 </script>
 
