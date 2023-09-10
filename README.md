@@ -1,16 +1,19 @@
-# Vite + Vue3 + TypeScript
+# PeterAlbusBlogHikari
 
-# 前端项目模板
+# 完全重构
 
-This template should help get you started developing with Vue 3 in Vite.
+在经历了从Vue + Webpack到Vite + Ts的转变后，项目再一次进行了重构。
 
-该模板可以帮助快速构建一个基于Vite的Vue3项目。
+此次主要优化接口管理及前后端对接部分，对接口进行了统一管理。
+
+此版本命名为Hikari——光。
+
+以下为项目介绍。
 
 ## Dependencies / 包含库
 
 + Vue3 + TypeScript + Less + Vue-Router + ESlint + Axios + Pinia
 + Element-Plus 2.2.15 + ElementPlus-Icons
-+ OpenLayers 7 + ECharts 5.3.3 + turf
 + moment / nprogress / qs
 
 ## Development  Standard / 开发规范
