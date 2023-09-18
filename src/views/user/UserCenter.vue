@@ -493,6 +493,7 @@ const userIdentity = computed(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: row;
 }
 
 .user-center-info {

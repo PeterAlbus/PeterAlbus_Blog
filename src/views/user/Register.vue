@@ -64,8 +64,6 @@
 import Banner from "@/components/Banner.vue";
 import { computed, reactive, ref } from "vue";
 import { ElMessage, ElMessageBox, FormInstance } from "element-plus";
-import axios from "axios";
-import qs from "qs";
 import { useRouter } from "vue-router";
 import { fetchMailVerifyCode, fetchPhoneVerifyCode, register } from "@/services/userApi";
 

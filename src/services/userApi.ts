@@ -28,4 +28,10 @@ export const changePhone = (data:object) => http.get(data, userUrl.setPhone);
 
 export const changeMail = (data:object) => http.get(data, userUrl.setMail);
 
+export const fetchResetPasswordVerifyCode = (account: string, type: string) =>
+  http.get({ account, type }, userUrl.applyResetPasswordVerifyCode);
+
+export const resetPassword = (data:object) =>
+  http.get(data, userUrl.resetPassword);
+
 

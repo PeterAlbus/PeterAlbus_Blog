@@ -12,8 +12,8 @@
             <h2 v-if="!loginByPhone">邮箱登录</h2>
             <h2 v-if="loginByPhone">手机登录</h2>
             <div class="switch">
-              <span v-if="!loginByPhone" @click="loginByPhone=true">使用手机登录</span>
-              <span v-if="loginByPhone" @click="loginByPhone=false">使用邮箱登录</span>
+              <span v-if="!loginByPhone" @click="loginByPhone=true;loginForm.userPhone=loginForm.userMail">使用手机登录</span>
+              <span v-if="loginByPhone" @click="loginByPhone=false;loginForm.userMail=loginForm.userPhone">使用邮箱登录</span>
             </div>
           </div>
           <el-form
@@ -41,6 +41,7 @@
                 <el-button plain color="#63a35c">注册</el-button>
               </router-link>
             </div>
+            <div class="reset_pass"><router-link to="/resetPassword">忘记密码?</router-link></div>
           </el-form>
         </el-col>
       </el-row>
@@ -156,5 +157,12 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 
 .switch:hover {
   color: #63a35c;
+}
+
+.reset_pass {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 0.8em;
+  color: #4B6186;
 }
 </style>
