@@ -64,3 +64,10 @@ export const photoUrl:any = {
     getPhotoList: "/photo/queryAll",
     addPhoto: "/photo/upload",
 }
+
+export const messageUrl:any = {
+    getInBoxMessageList: "/message/getInBoxMessage",
+    getOutBoxMessageList: "/message/getOutBoxMessage",
+    getUnreadMessageCount: "/message/getUnreadMessageCount",
+    readMessage: "/message/readMessage"
+}

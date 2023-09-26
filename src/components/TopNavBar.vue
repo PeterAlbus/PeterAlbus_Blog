@@ -22,13 +22,13 @@
           <div class="operations" v-if="userStore.userId===''">
             <el-divider />
             <div class="operation" @click="toLink('/login')">
-              <el-icon style="vertical-align: -10%">
+              <el-icon style="vertical-align: -15%">
                 <Lollipop />
               </el-icon>
               登录
             </div>
             <div class="operation" @click="toLink('/register')">
-              <el-icon style="vertical-align: -10%">
+              <el-icon style="vertical-align: -15%">
                 <Tickets />
               </el-icon>
               注册
@@ -37,19 +37,19 @@
           <div class="operations" v-if="userStore.userId!==''">
             <el-divider />
             <div class="operation" @click="toLink('/userCenter')">
-              <el-icon style="vertical-align: -10%">
+              <el-icon style="vertical-align: -15%">
                 <Avatar />
               </el-icon>
               个人中心
             </div>
-            <div class="operation">
-              <el-icon style="vertical-align: -10%">
+            <div class="operation" @click="showMessageBox = true">
+              <el-icon style="vertical-align: -15%">
                 <Message />
               </el-icon>
-              消息
+              消息<span v-if="newMessageCount" class="count_tip"> {{newMessageCount}} </span>
             </div>
             <div class="operation">
-              <el-icon style="vertical-align: -10%">
+              <el-icon style="vertical-align: -15%">
                 <Setting />
               </el-icon>
               设置
@@ -101,6 +101,7 @@
       </el-col>
     </el-row>
   </div>
+  <MessageBox v-model="showMessageBox"/>
 </template>
 
 <script setup lang="ts">
@@ -109,9 +110,19 @@ import { useUserStore } from "@/stores/user";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 import { logoutUser } from "@/services/userApi";
+import MessageBox from "@/components/MessageBox.vue";
+import { unreadMessageCount } from "@/services/messageApi";
 
 const router = useRouter();
 const userStore = useUserStore();
+const showMessageBox = ref(false);
+const newMessageCount = ref(0);
+
+router.beforeEach((to, from, next) => {
+  showMessageBox.value = false;
+  getNewMessageCount();
+  next();
+});
 
 const screenWidth = ref(document.body.clientWidth);
 const navItems = [{ name: "主页", indexPath: "/", iconName: "HomeFilled" },
@@ -121,6 +132,12 @@ const navItems = [{ name: "主页", indexPath: "/", iconName: "HomeFilled" },
 
 const resize = function() {
   screenWidth.value = document.body.clientWidth;
+};
+
+const getNewMessageCount = () => {
+  unreadMessageCount().then((res) => {
+    newMessageCount.value = res.data;
+  });
 };
 
 const logout = () => {
@@ -324,5 +341,14 @@ onMounted(() => {
 .operation:hover {
   background-color: #F1F1F1;
   color: #63a35c;
+}
+
+.count_tip {
+  background-color: #ff4d4f;
+  color: white;
+  padding: 0 5px;
+  border-radius: 40%;
+  font-size: 12px;
+  margin-left: 5px;
 }
 </style>
