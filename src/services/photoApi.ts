@@ -8,3 +8,5 @@ import http from './httpConfig';
 import { photoUrl } from "@/services/urlConfig";
 
 export const fetchPhotoList = () => http.get({},photoUrl.getPhotoList);
+
+export const uploadOriginPhoto = (data: FormData) => http.post(data, 'https://www.peteralbus.com:8089'+photoUrl.uploadOriginImg);

@@ -10,6 +10,7 @@ import { userUrl } from "@/services/urlConfig";
 export const isLogin = () => http.get({},userUrl.isLogin);
 export const mailLogin = (data: object) => http.get(data, userUrl.mailLogin);
 export const phoneLogin = (data: object) => http.get(data, userUrl.phoneLogin);
+
 export const register = (data: object) => http.post(data, userUrl.register);
 
 export const fetchMailVerifyCode = (account: string) => http.get({ account }, userUrl.applyMailVerifyCode);

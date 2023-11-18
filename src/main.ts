@@ -10,14 +10,8 @@ import * as ElIcons from "@element-plus/icons-vue"; //element plus图标
 import 'font-awesome/css/font-awesome.min.css'
 import './assets/iconfont/iconfont.css'
 
-import VMdEditor from '@kangc/v-md-editor';
-import '@kangc/v-md-editor/lib/style/base-editor.css';
-import VMdPreview from '@kangc/v-md-editor/lib/preview';
-import '@kangc/v-md-editor/lib/style/preview.css';
-
-import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress';
-import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
-import Prism from 'prismjs';
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 
 import PeterAlbusVue from 'vue3-social-share';
 import 'vue3-social-share/lib/index.css'
@@ -36,17 +30,9 @@ for (const name in ElIcons) {
   app.component(name, (ElIcons as any)[name]);
 }
 
-VMdEditor.use(vuepressTheme, {
-  Prism
-});
-
-VMdPreview.use(vuepressTheme, {
-  Prism
-});
-
 app.use(createPinia());
 app.use(router);
 //注册全局移动指令
 app.use(dragMove);
-app.use(VMdEditor).use(VMdPreview).use(PeterAlbusVue);
+app.use(PeterAlbusVue).use(mavonEditor);
 app.mount("#app");

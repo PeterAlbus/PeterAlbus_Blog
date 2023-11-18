@@ -35,6 +35,9 @@ dependencies:
   lodash:
     specifier: ^4.17.21
     version: 4.17.21
+  mavon-editor:
+    specifier: ^3.0.1
+    version: 3.0.1
   moment:
     specifier: ^2.29.4
     version: 2.29.4
@@ -3892,6 +3895,12 @@ packages:
       linkify-it: 2.2.0
       mdurl: 1.0.1
       uc.micro: 1.0.6
+    dev: false
+
+  /mavon-editor@3.0.1:
+    resolution: {integrity: sha512-973cYCwv+AB+fcecsU6Ua6UXATxDMaY0Q7QzKQ/GmRW1sg+3DolZDnCGXth7XHDgrmqKTO57N42fVYujt0wfFw==}
+    dependencies:
+      xss: 1.0.14
     dev: false
 
   /mdurl@1.0.1:

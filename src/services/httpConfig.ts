@@ -65,7 +65,7 @@ funArr.map((key: HttpName) => {
           },
           error => {
               if (error && error.response) {
-                  let msg = "";
+                  let msg = "服务器出错！";
                   switch (error.response.status) {
                       case 400:
                           msg = "错误请求";
@@ -86,7 +86,7 @@ funArr.map((key: HttpName) => {
                           msg = "请求超时";
                           break;
                       case 500:
-                          if (error.response.data.message !== null) {
+                          if (error.response.data.message != null) {
                               msg = error.response.data.message;
                           } else msg = "服务器出错!";
                           break;

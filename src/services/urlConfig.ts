@@ -36,7 +36,7 @@ export const blogUrl:any = {
     addBlog: "/blog/add",
     updateBlog: "/blog/update",
     visitBlog: "/blog/visitBlog",
-    uploadCover: "/blog/uploadCover",
+    uploadCover: "/blog/upload",
 }
 
 export const commentUrl:any = {
@@ -63,6 +63,7 @@ export const musicUrl:any = {
 export const photoUrl:any = {
     getPhotoList: "/photo/queryAll",
     addPhoto: "/photo/upload",
+    uploadOriginImg: "/photo/uploadOriginImg",
 }
 
 export const messageUrl:any = {

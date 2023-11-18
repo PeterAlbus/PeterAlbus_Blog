@@ -11,7 +11,7 @@
             <el-form-item label="封面图片(点击上传):" prop="goodPath">
               <el-upload
                 class="avatar-uploader"
-                action="https://www.peteralbus.com:8089/blog/upload"
+                :action="BASE_URL+blogUrl.uploadCover"
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload"
@@ -45,7 +45,7 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item label="内容：" prop="blogContent">
-              <v-md-editor v-model="blog.blogContent"></v-md-editor>
+              <mavon-editor ref="mdRef" v-model="blog.blogContent" codeStyle="xcode" @imgAdd="uploadImage" />
             </el-form-item>
             <div style="display: flex;justify-content: center!important;">
               <el-button type="success" @click="onSubmit(blogForm)">提交</el-button>
@@ -63,17 +63,20 @@ import { Plus, Document, User, ChatLineSquare } from "@element-plus/icons-vue";
 import { onMounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import type {
-  UploadFile,
   UploadRawFile,
   FormInstance
 } from "element-plus";
 import { ElMessage } from "element-plus";
 import Banner from "@/components/Banner.vue";
 import { addBlog, fetchBlogById, updateBlog } from "@/services/blogApi";
+import { blogUrl } from "@/services/urlConfig";
+import { uploadOriginPhoto } from "@/services/photoApi";
 
+const BASE_URL = 'https://www.peteralbus.com:8089';
 const blogForm = ref<FormInstance>();
 const route = useRoute();
 const router = useRouter();
+const mdRef = ref<any>();
 
 const imageUrl = ref("");
 
@@ -138,6 +141,16 @@ const beforeAvatarUpload = (file: UploadRawFile) => {
   }
   return isIMG && isLt2M;
 };
+
+const uploadImage = (pos:any, file:UploadRawFile) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('path','blog/imgs/blogimg');
+  console.log(formData.get('file'))
+  uploadOriginPhoto(formData).then(res => {
+    mdRef.value.$img2Url(pos, res.data);
+  });
+}
 
 const onSubmit = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;

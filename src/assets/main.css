@@ -185,3 +185,20 @@ a {
 #app .music-container .aplayer .aplayer-body {
   bottom: 120px;
 }
+
+/*md编辑器*/
+.v-note-wrapper.fullscreen {
+  z-index: 1501!important;
+}
+
+.v-note-wrapper {
+  z-index: auto!important;
+}
+
+
+.markdown-body .highlight pre, .markdown-body pre {
+  background-color: #ffffff!important;
+  padding: 6px!important;
+}
+
+
