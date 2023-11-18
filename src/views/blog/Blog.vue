@@ -23,7 +23,7 @@
             <div class="content" style="padding: 10px">
               <el-scrollbar max-height="30vh">
                 <div
-                    v-for="anchor in titleList" :key="anchor.lineIndex"
+                    v-for="anchor in titleList" :key="anchor.id"
                     :style="{ padding: `2px 20px 2px ${anchor.indent * 20 + 20}px` }"
                     class="anchor"
                     @click="handleAnchorClick(anchor)"
@@ -58,14 +58,13 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref ,nextTick} from "vue";
+import { onMounted, ref ,nextTick } from "vue";
 import {useRoute} from "vue-router";
 import {ArrowRight,Notebook,Share as shareIcon} from "@element-plus/icons-vue";
 import PersonalInfo from '@/components/PersonalInfo.vue'
 import Comment from '@/components/Comment.vue'
 import Banner from "@/components/Banner.vue";
 import { fetchBlogById, getIpAddress, visitBlog } from "@/services/blogApi";
-import { ElMessage } from "element-plus";
 
 
 const route=useRoute()

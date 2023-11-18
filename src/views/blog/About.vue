@@ -8,7 +8,11 @@
           <p style="padding: 0 5px 5px 5px"><i class="fa fa-user"></i> {{blog.blogAuthor}}&emsp;<i class="fa fa-calendar"></i> 发布于{{blog.blogTime}} <i class="fa fa-eye"></i> {{blog.blogViews}}次访问</p>
         </div>
         <div class="blog-content">
-          <v-md-preview :text="blog.blogContent" ref="mdRef"></v-md-preview>
+          <mavon-editor v-model="blog.blogContent" ref="mdRef"
+                        :boxShadow="false" :subfield="false"
+                        defaultOpen="preview" :editable="false"
+                        codeStyle="xcode" :toolbarsFlag="false"
+          />
         </div>
       </el-col>
       <el-col :lg="{span:6}" :sm="9">
@@ -19,7 +23,7 @@
             <div class="content" style="padding: 10px">
               <el-scrollbar max-height="30vh">
                 <div
-                    v-for="anchor in titleList" :key="anchor.lineIndex"
+                    v-for="anchor in titleList" :key="anchor.id"
                     :style="{ padding: `2px 20px 2px ${anchor.indent * 20 + 20}px` }"
                     class="anchor"
                     @click="handleAnchorClick(anchor)"
@@ -58,11 +62,10 @@ import {onMounted, ref ,nextTick} from "vue";
 import {ArrowRight,Notebook,Share as shareIcon} from "@element-plus/icons-vue";
 import PersonalInfo from '@/components/PersonalInfo.vue'
 import Comment from '@/components/Comment.vue'
-import type {vMdEditor} from "@kangc/v-md-editor"
 import Banner from "@/components/Banner.vue";
 import { fetchBlogById, getIpAddress, visitBlog } from "@/services/blogApi";
 
-const mdRef=ref<InstanceType<typeof vMdEditor>>()
+const mdRef=ref<any>()
 const titleList:any=ref([])
 
 const hideCatalogue=ref(true)
@@ -110,28 +113,28 @@ const getTitles=()=>{
     titleList.value = [];
     return;
   }
-
   const hTags = Array.from(new Set(titles.map((title:any) => title.tagName))).sort();
-
   titleList.value = titles.map((el:any) => ({
     title: el.innerText,
-    lineIndex: el.getAttribute('data-v-md-line'),
+    id: el.querySelectorAll('a')[0].id,
     indent: hTags.indexOf(el.tagName),
   }));
+  titleList.value = titleList.value.slice(titleList.value.length / 2)
 }
 
 const handleAnchorClick=(anchor:any)=>{
-  const { lineIndex } = anchor;
-
-  const heading = mdRef.value?.$el.querySelector(`[data-v-md-line="${lineIndex}"]`);
-
-  if (heading) {
-    mdRef.value?.scrollToTarget({
-      target: heading,
-      scrollContainer: window,
-      top: 60,
-    });
+  const target:HTMLElement|null = document.getElementById(anchor.id)
+  if(!target) return
+  let offsetTop:number = target.offsetTop || 0;
+  let parentElement:HTMLElement|null = target.offsetParent as HTMLElement;
+  while (parentElement) {
+    offsetTop += parentElement.offsetTop;
+    parentElement = parentElement.offsetParent as HTMLElement;
   }
+  window.scrollTo({
+    top: offsetTop - 60,
+    behavior: 'smooth'
+  })
 }
 
 onMounted(()=>{
