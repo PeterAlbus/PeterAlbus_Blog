@@ -45,7 +45,11 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item label="内容：" prop="blogContent">
-              <mavon-editor ref="mdRef" v-model="blog.blogContent" codeStyle="xcode" @imgAdd="uploadImage" />
+              <mavon-editor
+                style="width: 100%;" :shortCut="false"
+                ref="mdRef" v-model="blog.blogContent" codeStyle="xcode"
+                :toolbars="editorTools"
+                @imgAdd="uploadImage" @ImgDel="deleteImage"/>
             </el-form-item>
             <div style="display: flex;justify-content: center!important;">
               <el-button type="success" @click="onSubmit(blogForm)">提交</el-button>
@@ -70,7 +74,7 @@ import { ElMessage } from "element-plus";
 import Banner from "@/components/Banner.vue";
 import { addBlog, fetchBlogById, updateBlog } from "@/services/blogApi";
 import { blogUrl } from "@/services/urlConfig";
-import { uploadOriginPhoto } from "@/services/photoApi";
+import { deletePhotoByUrl, uploadOriginPhoto } from "@/services/photoApi";
 
 const BASE_URL = 'https://www.peteralbus.com:8089';
 const blogForm = ref<FormInstance>();
@@ -79,6 +83,38 @@ const router = useRouter();
 const mdRef = ref<any>();
 
 const imageUrl = ref("");
+
+const editorTools = {
+  bold: true, // 粗体
+  italic: true, // 斜体
+  header: true, // 标题
+  underline: true, // 下划线
+  strikethrough: true, // 中划线
+  mark: true, // 标记
+  superscript: true, // 上角标
+  subscript: true, // 下角标
+  quote: true, // 引用
+  ol: true, // 有序列表
+  ul: true, // 无序列表
+  link: true, // 链接
+  imagelink: true, // 图片链接
+  code: true, // code
+  table: true, // 表格
+  fullscreen: true, // 全屏编辑
+  readmodel: true, // 沉浸式阅读
+  htmlcode: true, // 展示html源码
+  help: true, // 帮助
+  /* 1.3.5 */
+  undo: true, // 上一步
+  redo: true, // 下一步
+  trash: true, // 清空
+  /* 2.1.8 */
+  alignleft: true, // 左对齐
+  aligncenter: true, // 居中
+  alignright: true, // 右对齐
+  /* 2.2.1 */
+  preview: true, // 预览
+}
 
 const blog = ref({
   blogId: route.query.id,
@@ -150,6 +186,12 @@ const uploadImage = (pos:any, file:UploadRawFile) => {
   uploadOriginPhoto(formData).then(res => {
     mdRef.value.$img2Url(pos, res.data);
   });
+}
+
+const deleteImage = (info:any) => {
+  deletePhotoByUrl(info[0]).then(() => {
+    ElMessage.success("远端删除图片成功")
+  })
 }
 
 const onSubmit = async (formEl: FormInstance | undefined) => {

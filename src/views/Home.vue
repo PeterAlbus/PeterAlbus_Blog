@@ -151,13 +151,16 @@ const copyQuotes=()=>{
 
 const backgrounds=[
     'https://file.peteralbus.com/assets/blog/static/background/background-lumine.jpg',
-    'https://file.peteralbus.com/assets/blog/static/background/background-kazuha.jpg',
-    'https://file.peteralbus.com/assets/blog/static/background/background-blueeyes.jpg',
+    // 'https://file.peteralbus.com/assets/blog/static/background/background-kazuha.jpg',
+    // 'https://file.peteralbus.com/assets/blog/static/background/background-blueeyes.jpg',
     'https://file.peteralbus.com/assets/blog/static/background/background-girl1.jpg',
-    'https://file.peteralbus.com/assets/blog/static/background/background-mountain1.jpg',
+    // 'https://file.peteralbus.com/assets/blog/static/background/background-mountain1.jpg',
     'https://file.peteralbus.com/assets/blog/static/background/background-nogamenolife.jpg',
-    'https://file.peteralbus.com/assets/blog/static/background/background-ai1.jpg',
-    'https://file.peteralbus.com/assets/blog/static/background/background-ai2.jpg',
+    // 'https://file.peteralbus.com/assets/blog/static/background/background-ai1.jpg',
+    // 'https://file.peteralbus.com/assets/blog/static/background/background-ai2.jpg',
+    'https://file.peteralbus.com/assets/blog/static/background/background_ygo_1_1440p.jpg',
+    'https://file.peteralbus.com/assets/blog/static/background/background_1440pba.jpg',
+    'https://file.peteralbus.com/assets/blog/static/background/background_1440psekiro.jpg',
 ]
 
 const randomIndex=Math.floor(Math.random()*backgrounds.length)

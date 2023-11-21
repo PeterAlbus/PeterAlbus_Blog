@@ -1,5 +1,5 @@
 <template>
-  <div class="banner" :style="{background:'url('+backgroundUrl+') fixed center center'}">
+  <div class="banner" :style="{backgroundImage:'url('+backgroundUrl+')'}">
     <div class="banner-container">
       <div>
         <h1>{{ title }}</h1>
@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
+defineProps({
   title: {
     type: String,
     default() {
@@ -41,6 +41,10 @@ const props = defineProps({
   height: 30vh;
   text-align: center;
   color: #fff !important;
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .banner-container {

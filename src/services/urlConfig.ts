@@ -64,6 +64,8 @@ export const photoUrl:any = {
     getPhotoList: "/photo/queryAll",
     addPhoto: "/photo/upload",
     uploadOriginImg: "/photo/uploadOriginImg",
+    deletePhotoByUrl: "/photo/deletePhotoByUrl",
+    deletePhotoById: "/photo/deletePhotoById"
 }
 
 export const messageUrl:any = {

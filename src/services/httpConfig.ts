@@ -31,7 +31,7 @@ funArr.map((key: HttpName) => {
     (<Http>http)[key] = async (data, url, header = null, baseURL = BASE_URL, showErrorMsg = true) => {
         // 根据全局配置创建 axios 实例
         const instance = axios.create(DEFAULT_CONFIG);
-        instance.defaults.transformRequest = data => qs.stringify(data);
+        // instance.defaults.transformRequest = data => qs.stringify(data);
 
         // 请求拦截器
         instance.interceptors.request.use(
@@ -136,7 +136,7 @@ funArr.map((key: HttpName) => {
             requestData.data = data;
         } else {
             // 将对象转为url参数形式 { a: 1, b: 2 } => ?a=1&b=2
-            requestData.data = data;
+            requestData.data = qs.stringify(data);
         }
 
         try {

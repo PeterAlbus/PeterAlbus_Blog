@@ -42,7 +42,7 @@
               </el-icon>
               个人中心
             </div>
-            <div class="operation" @click="showMessageBox = true">
+            <div class="operation" @click="showMessageBox = true;newMessageCount = 0;">
               <el-icon style="vertical-align: -15%">
                 <Message />
               </el-icon>
