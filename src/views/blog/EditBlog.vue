@@ -22,6 +22,8 @@
                   <Plus />
                 </el-icon>
               </el-upload>
+              &emsp;
+              <el-button type="danger" v-if="imageUrl" @click="deleteBlogAvatarFile">取消图片上传</el-button>
             </el-form-item>
             <el-form-item label="作者：" prop="blogAuthor">
               <el-input v-model="blog.blogAuthor" placeholder="作者" :prefix-icon="User"></el-input>
@@ -175,6 +177,10 @@ const beforeAvatarUpload = (file: UploadRawFile) => {
   if (!isLt2M) {
     ElMessage.error("图片大小不能超过2M！");
   }
+
+  if(isIMG && isLt2M && imageUrl.value) {
+    deleteBlogAvatarFile()
+  }
   return isIMG && isLt2M;
 };
 
@@ -192,6 +198,11 @@ const deleteImage = (info:any) => {
   deletePhotoByUrl(info[0]).then(() => {
     ElMessage.success("远端删除图片成功")
   })
+}
+
+const deleteBlogAvatarFile = () => {
+  deletePhotoByUrl(imageUrl.value)
+  imageUrl.value = ""
 }
 
 const onSubmit = async (formEl: FormInstance | undefined) => {
@@ -221,25 +232,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.banner {
-  position: relative;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 30vh;
-  background: url("../assets/background.jpg") fixed center center;
-  text-align: center;
-  color: #fff !important;
-}
-
-.banner-container {
-  position: absolute;
-  width: 100%;
-  margin-top: 13vh;
-  line-height: 1.5;
-  color: #eee;
-}
-
 .blog-content {
   text-align: left;
 }

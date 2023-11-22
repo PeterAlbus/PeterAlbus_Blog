@@ -106,6 +106,21 @@ a {
   padding: 10px;
 }
 
+.blog-description .blog-description-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.blog-description .blog-description-title.title-text {
+  white-space: nowrap;
+  display: inline-block;
+  max-width: calc(100% - 65px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .info {
   height: 20px;
 }

@@ -9,48 +9,30 @@
               <el-card class="photo"
                        v-for="item in photoLeft" :key="item.imgId"
                        shadow="hover" :body-style="{ padding: '0px' }">
-                <a :href="item.imgSrc" target="_blank">
-                  <el-image :src="item.imgThumb" style="width: 100%" fit="cover" lazy>
-                    <template #placeholder>
-                      <div class="image-slot">
-                        加载中<span class="dot">...</span>
-                      </div>
-                    </template>
-                  </el-image>
-                  <span class="paragraph">{{item.imgName}}</span>
-                </a>
+                <PhotoItem :imgName="item.imgName" :imgId="item.imgId.toString()"
+                           :imgSrc="item.imgSrc" :imgThumb="item.imgThumb"
+                           @deletePhoto="getPhotoList"
+                ></PhotoItem>
               </el-card>
             </el-col>
             <el-col :span="7" :offset="1">
               <el-card class="photo"
                        v-for="item in photoMid" :key="item.imgId"
                        shadow="hover" :body-style="{ padding: '0px' }">
-                <a :href="item.imgSrc" target="_blank">
-                  <el-image :src="item.imgThumb" style="width: 100%" fit="cover" lazy>
-                    <template #placeholder>
-                      <div class="image-slot">
-                        加载中<span class="dot">...</span>
-                      </div>
-                    </template>
-                  </el-image>
-                  <span class="paragraph">{{item.imgName}}</span>
-                </a>
+                <PhotoItem :imgName="item.imgName" :imgId="item.imgId.toString()"
+                           :imgSrc="item.imgSrc" :imgThumb="item.imgThumb"
+                           @deletePhoto="getPhotoList"
+                ></PhotoItem>
               </el-card>
             </el-col>
             <el-col :span="7" :offset="1">
               <el-card class="photo"
                        v-for="item in photoRight" :key="item.imgId"
                        shadow="hover" :body-style="{ padding: '0px' }">
-                <a :href="item.imgSrc" target="_blank">
-                  <el-image :src="item.imgThumb" style="width: 100%" fit="cover" lazy>
-                    <template #placeholder>
-                      <div class="image-slot">
-                        加载中<span class="dot">...</span>
-                      </div>
-                    </template>
-                  </el-image>
-                  <span class="paragraph">{{item.imgName}}</span>
-                </a>
+                <PhotoItem :imgName="item.imgName" :imgId="item.imgId.toString()"
+                           :imgSrc="item.imgSrc" :imgThumb="item.imgThumb"
+                           @deletePhoto="getPhotoList"
+                ></PhotoItem>
               </el-card>
             </el-col>
           </el-row>
@@ -70,6 +52,7 @@
 import FriendLinks from "@/components/FriendLinks.vue"
 import PersonalInfo from "@/components/PersonalInfo.vue"
 import Banner from '@/components/Banner.vue'
+import PhotoItem from "@/components/PhotoItem.vue";
 import { computed, onMounted, Ref, ref } from "vue";
 import { fetchPhotoList } from "@/services/photoApi";
 

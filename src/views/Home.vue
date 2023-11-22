@@ -42,7 +42,9 @@
             <el-col :span="16">
               <div class="blog-description">
                 <router-link :to="{ path: '/blog',query:{id:item.blogId}}">
-                  <h4>{{ item.blogTitle }}&emsp;<el-tag size="small">{{ getType(item.blogType) }}</el-tag>
+                  <h4 class="blog-description-title">
+                    <span class="title-text">{{item.blogTitle}}&emsp;</span>
+                    <el-tag size="small">{{getType(item.blogType)}}</el-tag>
                   </h4>
                 </router-link>
                 <p style="height: 110px">{{ item.blogDescription }}</p>
@@ -67,8 +69,9 @@
             <el-col :span="16">
               <div class="blog-description">
                 <router-link :to="{ path: '/blog',query:{id:item.blogId}}">
-                  <h4 style="height: 40px"><span style="white-space: nowrap">{{ item.blogTitle }}&emsp;</span>
-                    <el-tag size="small">{{ getType(item.blogType) }}</el-tag>
+                  <h4 style="height: 40px" class="blog-description-title">
+                    <span class="title-text">{{item.blogTitle}}&emsp;</span>
+                    <el-tag size="small">{{getType(item.blogType)}}</el-tag>
                   </h4>
                 </router-link>
                 <p style="height: 90px;overflow: hidden">{{ item.blogDescription }}</p>

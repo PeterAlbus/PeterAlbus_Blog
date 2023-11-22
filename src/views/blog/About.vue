@@ -12,6 +12,7 @@
                         :boxShadow="false" :subfield="false"
                         defaultOpen="preview" :editable="false"
                         codeStyle="xcode" :toolbarsFlag="false"
+                        :toolbars="{}" :shortCut="false"
           />
         </div>
       </el-col>

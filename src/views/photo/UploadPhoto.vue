@@ -67,15 +67,15 @@ const onFileChange = (file: UploadFile, fileList: UploadFile[]) => {
 
 const beforeAvatarUpload = (file: UploadRawFile) => {
   const isIMG = file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/gif";
-  const isLt10M = file.size / 1024 / 1024 < 10;
+  const isLt50M = file.size / 1024 / 1024 < 50;
 
   if (!isIMG) {
     ElMessage.error("选择的文件不是图片！");
   }
-  if (!isLt10M) {
-    ElMessage.error("图片大小不能超过10M！");
+  if (!isLt50M) {
+    ElMessage.error("图片大小不能超过50M！");
   }
-  return isIMG && isLt10M;
+  return isIMG && isLt50M;
 };
 
 const upData = computed(() => {

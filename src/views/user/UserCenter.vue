@@ -155,7 +155,7 @@ import {
   ElMessageBox,
   ElUpload
 } from "element-plus";
-import type { FormInstance, UploadFile, UploadProgressEvent, UploadRawFile } from "element-plus";
+import type { FormInstance, UploadRawFile } from "element-plus";
 import { useUserStore } from "@/stores/user";
 import { computed, reactive, ref } from "vue";
 import {

@@ -37,6 +37,7 @@ declare module '@vue/runtime-core' {
     MessageBox: typeof import('./src/components/MessageBox.vue')['default']
     MusicPlayer: typeof import('./src/components/MusicPlayer.vue')['default']
     PersonalInfo: typeof import('./src/components/PersonalInfo.vue')['default']
+    PhotoItem: typeof import('./src/components/PhotoItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TopNavBar: typeof import('./src/components/TopNavBar.vue')['default']
