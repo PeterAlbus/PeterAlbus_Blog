@@ -5,6 +5,7 @@
       <el-row>
         <el-col :lg="{span:16,offset:4}">
           <el-radio-group v-model="selectType" size="large" v-if="screenWidth>=500">
+            <el-radio-button :label="0">全部</el-radio-button>
             <el-radio-button :label="1">学习笔记</el-radio-button>
             <el-radio-button :label="2">生活</el-radio-button>
             <el-radio-button :label="3">ACG</el-radio-button>
@@ -114,9 +115,9 @@ const getBlogList = () => {
 };
 
 const selectedBlogs = computed(() => {
-  let selectedBlogs = [];
+  let selectedBlogs:Array<any> = [];
   for (const i of blogList.value) {
-    if (i.blogType === selectType.value) {
+    if (i.blogType === selectType.value || selectType.value == 0) {
       selectedBlogs.push(i);
     }
   }

@@ -242,6 +242,7 @@ onMounted(() => {
 
 .nav {
   background: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(50px) saturate(180%);
   box-shadow: 3px 3px 6px 3px rgba(0, 0, 0, .3);
 }
 
