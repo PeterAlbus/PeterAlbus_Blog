@@ -4,7 +4,11 @@ import qs from "qs";
 import { ElMessage } from "element-plus";
 import { BASE_URL } from "@/services/urlConfig";
 
-
+export interface HttpResult {
+    code: number;
+    message: string;
+    data: any;
+}
 // 可能需要自定义添加些配置
 // interface AxiosRequestConfig extends _AxiosRequestConfig {}
 // interface AxiosResponse extends _AxiosResponse { }

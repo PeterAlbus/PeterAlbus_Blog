@@ -1,5 +1,5 @@
 <template>
-  <div class="home-banner" :style="{background:'url('+backgrounds[randomIndex]+') fixed center center',backgroundSize:'cover',OBackgroundSize:'cover',MozBackgroundSize:'cover'}">
+  <div class="home-banner" :style="backgroundStyle">
     <div class="banner-container">
       <div>
         <el-avatar :size="150" src="https://file.peteralbus.com/assets/blog/imgs/blog_avatar.png"></el-avatar>
@@ -103,6 +103,8 @@ import {ElMessage} from "element-plus";
 import FriendLinks from "@/components/FriendLinks.vue"
 import PersonalInfo from "@/components/PersonalInfo.vue"
 import { fetchBlogList } from "@/services/blogApi";
+import { fetchBackgroundList } from "@/services/backgroundApi";
+import { HttpResult } from "@/services/httpConfig";
 
 const blogList = ref([
   {
@@ -152,21 +154,38 @@ const copyQuotes=()=>{
   ElMessage.success("复制成功!点击右键可换一句")
 }
 
-const backgrounds=[
-    'https://file.peteralbus.com/assets/blog/static/background/background-lumine.jpg',
-    // 'https://file.peteralbus.com/assets/blog/static/background/background-kazuha.jpg',
-    // 'https://file.peteralbus.com/assets/blog/static/background/background-blueeyes.jpg',
-    'https://file.peteralbus.com/assets/blog/static/background/background-girl1.jpg',
-    // 'https://file.peteralbus.com/assets/blog/static/background/background-mountain1.jpg',
-    'https://file.peteralbus.com/assets/blog/static/background/background-nogamenolife.jpg',
-    // 'https://file.peteralbus.com/assets/blog/static/background/background-ai1.jpg',
-    // 'https://file.peteralbus.com/assets/blog/static/background/background-ai2.jpg',
-    'https://file.peteralbus.com/assets/blog/static/background/background_ygo_1_1440p.jpg',
-    'https://file.peteralbus.com/assets/blog/static/background/background_1440pba.jpg',
-    'https://file.peteralbus.com/assets/blog/static/background/background_1440psekiro.jpg',
-]
+const backgrounds=ref([
+  {
+    url:'',
+    description:'无'
+  }
+])
 
-const randomIndex=Math.floor(Math.random()*backgrounds.length)
+const getBackgrounds = () => {
+  fetchBackgroundList().then((res:HttpResult) => {
+    backgrounds.value = []
+    res.data.map((item: any) => {
+      if (item.isShow) {
+        backgrounds.value.push({
+          url: item.backgroundUrl,
+          description: item.description
+        })
+      }
+    })
+    randomIndex.value=Math.floor(Math.random()*backgrounds.value.length)
+  })
+}
+
+const backgroundStyle = computed(() => {
+  return {
+    backgroundImage: `url(${backgrounds.value[randomIndex.value].url})`,
+    backgroundSize: 'cover',
+    OBackgroundSize: 'cover',
+    MozBackgroundSize: 'cover'
+  }
+})
+
+const randomIndex=ref(Math.floor(Math.random()*backgrounds.value.length))
 // const randomIndex=4
 
 const getBlogList=function () {
@@ -176,6 +195,7 @@ const getBlogList=function () {
 }
 
 onMounted(()=>{
+  getBackgrounds()
   getBlogList()
   getQuotes()
 })
@@ -191,7 +211,8 @@ const topBlogs=computed(()=>{
 })
 
 const recentBlogs = computed (function () {
-  const recentBlogs = blogList.value.reverse();
+  const blogListCopy = blogList.value;
+  const recentBlogs = blogListCopy.reverse();
   return recentBlogs.slice(0, 10);
 })
 

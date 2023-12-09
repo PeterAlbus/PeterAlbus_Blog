@@ -74,3 +74,9 @@ export const messageUrl:any = {
     getUnreadMessageCount: "/message/getUnreadMessageCount",
     readMessage: "/message/readMessage"
 }
+
+export const backgroundUrl:any = {
+    getBackgroundList: "/background/queryAll",
+    addBackground: "/background/add",
+    deleteBackground: "/background/delete",
+}
