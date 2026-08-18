@@ -104,7 +104,7 @@ import FriendLinks from "@/components/FriendLinks.vue"
 import PersonalInfo from "@/components/PersonalInfo.vue"
 import { fetchBlogList } from "@/services/blogApi";
 import { fetchBackgroundList } from "@/services/backgroundApi";
-import { HttpResult } from "@/services/httpConfig";
+import type { HttpResult } from "@/services/httpConfig";
 
 const blogList = ref([
   {
