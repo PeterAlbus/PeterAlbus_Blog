@@ -1,5 +1,11 @@
 # PeterAlbusBlogHikari
 
+## Repository documentation / 仓库文档
+
+- [Agent collaboration guide / 智能体协作指南](AGENTS.md)
+- [Frontend architecture / 前端代码结构与运行链路](docs/architecture.md)
+- [Backend integration contract / 前端所依赖的后端契约](docs/backend-contract.md)
+
 # 完全重构
 
 在经历了从Vue + Webpack到Vite + Ts的转变后，项目再一次进行了重构。
@@ -45,8 +51,9 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 ## Project Setup / 安装依赖
 
 ```sh
-npm install
-or pnpm install
+nvm use
+corepack enable
+pnpm install --frozen-lockfile
 ```
 
 ### Compile and Hot-Reload for Development / 编译并启动热更新服务器
@@ -76,6 +83,4 @@ or pnpm run test:unit
 npm run lint
 or pnpm run lint
 ```
-
-
 

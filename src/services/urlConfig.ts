@@ -1,8 +1,8 @@
 const env:string=import.meta.env.VITE_APP_ENV
 
 export const BASE_URL:string|undefined = {
-    dev: "https://www.peteralbus.com:8089/",
-    prod: "https://www.peteralbus.com:8089/",
+    dev: "https://www.peteralbus.com/api/",
+    prod: "https://www.peteralbus.com/api/",
     test: "https://api.testserver.com/base/url",
 }[env]
 

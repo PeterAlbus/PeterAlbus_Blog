@@ -1,6 +1,7 @@
 {
-  "name": "dt-web-stage",
+  "name": "PeterAlbus_Blog",
   "version": "0.0.0",
+  "packageManager": "pnpm@8.15.9",
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check build-only",
