@@ -1,9 +1,9 @@
 <template>
   <div class="navbar nav" v-if="screenWidth>=768">
     <div class="nav-title">PeterAlbus的博客</div>
-    <div style="display: flex">
+    <div class="nav-links">
       <div class="nav-avatar">
-        <router-link to="/login" style="line-height: 0">
+        <router-link to="/login" class="nav-avatar-link">
           <el-avatar class="avatar-img"
                      :size="35"
                      :src="userStore.userAvatar"
@@ -172,8 +172,11 @@ onMounted(() => {
   left: 0;
   right: 0;
   display: flex;
-  justify-content: space-around;
-  z-index: 99; /* 层叠顺序，数值越大就越高。页面滚动的时候就不会被其他内容所遮挡。 */
+  height: 64px;
+  padding: 0 max(5vw, 32px);
+  justify-content: space-between;
+  align-items: center;
+  z-index: 99;
 }
 
 .navbar-bottom {
@@ -181,26 +184,36 @@ onMounted(() => {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 99; /* 层叠顺序，数值越大就越高。页面滚动的时候就不会被其他内容所遮挡。 */
-
-  background-color: #ffffff;
-  box-shadow: 0 -1px 12px hsla(174, 63%, 15%, 0.15);
+  z-index: 99;
+  background: rgba(255, 255, 255, 0.92);
+  border-top: 1px solid rgba(50, 97, 57, 0.12);
+  box-shadow: 0 -10px 30px rgba(25, 48, 30, 0.09);
+  backdrop-filter: blur(18px) saturate(1.25);
   width: 100%;
-  height: 4rem;
-  padding: 0;
+  height: 64px;
+  padding: 6px 8px max(6px, env(safe-area-inset-bottom));
   display: grid;
   align-content: center;
-
-  transition: .4s;;
+  transition: var(--transition-normal);
 }
 
 .navbar-bottom-list a {
-  color: #326139;
+  display: block;
+  color: var(--color-primary-700);
 }
 
 .navbar-bottom-item {
-  display: inline-block;
+  display: flex;
+  min-height: 48px;
   text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-bottom-item p {
+  height: 20px;
+  margin: 0 0 1px;
+  line-height: 20px;
 }
 
 .navbar-bottom-icon {
@@ -208,28 +221,59 @@ onMounted(() => {
 }
 
 .navbar-bottom-text {
-  font-size: small;
+  display: block;
+  font-size: 10px;
+  font-weight: 550;
+  letter-spacing: 0.02em;
 }
 
 .active-item {
   position: relative;
-  color: #60638E !important;
-  transition: .3s;
+  color: #60638e !important;
+  transition: var(--transition-fast);
+}
+
+.active-item::after {
+  position: absolute;
+  right: 20%;
+  bottom: -5px;
+  left: 20%;
+  height: 2px;
+  border-radius: 99px;
+  background: currentColor;
+  content: "";
 }
 
 .active-top-item {
   position: relative;
-  color: #82A96D !important;
-  transition: .3s;
+  color: #b8d69e !important;
+  transition: var(--transition-fast);
+}
+
+.active-top-item::after {
+  position: absolute;
+  right: 0;
+  bottom: -9px;
+  left: 0;
+  height: 2px;
+  border-radius: 99px;
+  background: currentColor;
+  box-shadow: 0 0 10px rgba(184, 214, 158, 0.7);
+  content: "";
 }
 
 .nav {
-  background: rgba(0, 0, 0, 0.5) !important;
-  box-shadow: 3px 3px 6px 3px rgba(0, 0, 0, .3);
+  background: rgba(18, 30, 23, 0.72) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 30px rgba(8, 18, 11, 0.16);
+  backdrop-filter: blur(18px) saturate(1.2);
 }
 
 .nav-avatar {
+  position: relative;
   display: flex;
+  width: 50px;
+  flex: 0 0 50px;
   justify-content: center;
   align-items: center;
   height: 100%;
@@ -237,49 +281,72 @@ onMounted(() => {
   background: rgba(0, 0, 0, 0) !important;
 }
 
+.nav-avatar-link {
+  position: relative;
+  z-index: 102;
+  display: flex;
+  width: 50px;
+  height: 64px;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
 .avatar-img {
+  display: block;
   transform-origin: right top;
-  transition-property: transform;
-  transition-duration: 0.3s;
-  transition-timing-function: ease;
+  transition: transform 300ms ease, box-shadow 300ms ease;
+  will-change: transform;
 }
 
 .nav-avatar:hover .avatar-img {
+  box-shadow: 0 10px 24px rgba(8, 18, 11, 0.28);
   transform: scale(1.8);
 }
 
 .nav-avatar:hover .user-info {
   opacity: 1;
-  transform: scale(1) translateX(-14px);
+  visibility: visible;
+  transform: translate(-50%, 0);
 }
 
 .user-info {
   opacity: 0;
-  position: fixed;
-  top: 60px;
-  width: 200px;
+  visibility: hidden;
+  position: absolute;
+  top: 64px;
+  left: calc(50% - 14px);
+  width: 216px;
+  padding: 17px;
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(18px);
+  transform: translate(-50%, -8px);
+  transition: opacity var(--transition-normal), transform var(--transition-normal), visibility var(--transition-normal);
+  z-index: 101;
+}
 
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: 0 3px 8px 6px rgba(7, 17, 27, 0.05);
-  padding: 15px;
-  transform-origin: top;
-  transform: scale(0.3) translateY(-20px);
-  transition-property: opacity, transform;
-  transition-duration: 0.3s;
-  transition-timing-function: ease;
-  z-index: -1;
+.nav-links {
+  display: flex;
+  height: 64px;
+  align-items: center;
 }
 
 .nav-item {
-  height: 100%;
-  line-height: 60px;
-  padding: 0 30px 0 30px;
+  height: 64px;
+  line-height: 64px;
+  padding: 0 clamp(12px, 2vw, 28px);
   background: rgba(0, 0, 0, 0) !important;
 }
 
 .nav-item a {
-  color: white;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 14px;
+  font-weight: 550;
+  letter-spacing: 0.03em;
 }
 
 .nav-menu {
@@ -287,18 +354,20 @@ onMounted(() => {
 }
 
 .nav-title {
-  height: 100%;
+  height: 64px;
   margin: 0;
-  color: white;
-  line-height: 60px;
+  color: rgba(255, 255, 255, 0.94);
+  line-height: 64px;
   z-index: 100;
-  font-size: large;
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: 0.05em;
   background: rgba(0, 0, 0, 0) !important;
 }
 
 .nav-item:focus, .nav-item:hover a {
   outline: 0 !important;
-  color: #82A96D !important;
+  color: #b8d69e !important;
   background: none !important;
 }
 
@@ -316,13 +385,30 @@ onMounted(() => {
 
 .operation {
   text-align: left;
-  border-radius: 5px;
-  padding: 5px;
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
   cursor: pointer;
+  transition: color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
 }
 
 .operation:hover {
-  background-color: #F1F1F1;
-  color: #63a35c;
+  background: var(--color-primary-50);
+  color: var(--color-primary-600);
+  transform: translateX(2px);
+}
+
+:deep(.el-divider--horizontal) {
+  margin: 12px 0;
+  border-color: var(--color-border);
+}
+
+@media (max-width: 980px) {
+  .navbar {
+    padding: 0 24px;
+  }
+
+  .nav-item {
+    padding: 0 12px;
+  }
 }
 </style>

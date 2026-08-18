@@ -1,74 +1,85 @@
-/* color palette from <https://github.com/vuejs/theme> */
 :root {
-    --vt-c-white     : #ffffff;
-    --vt-c-white-soft: #f8f8f8;
-    --vt-c-white-mute: #f2f2f2;
+  --color-primary-900: #203f28;
+  --color-primary-800: #285032;
+  --color-primary-700: #326139;
+  --color-primary-600: #477d4b;
+  --color-primary-500: #63a35c;
+  --color-primary-400: #82a96d;
+  --color-primary-100: #e8f0e5;
+  --color-primary-50: #f3f7f1;
 
-    --vt-c-black     : #181818;
-    --vt-c-black-soft: #222222;
-    --vt-c-black-mute: #282828;
+  --color-background: #f2f4f0;
+  --color-background-soft: #f7f8f6;
+  --color-surface: #ffffff;
+  --color-surface-soft: #fafbf9;
+  --color-heading: #24322a;
+  --color-text: #3e4c44;
+  --color-text-secondary: #708078;
+  --color-text-muted: #98a39d;
+  --color-border: rgba(50, 97, 57, 0.12);
+  --color-border-strong: rgba(50, 97, 57, 0.22);
 
-    --vt-c-indigo: #2c3e50;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --shadow-sm: 0 2px 8px rgba(30, 54, 36, 0.05);
+  --shadow-md: 0 10px 30px rgba(30, 54, 36, 0.08);
+  --shadow-lg: 0 18px 50px rgba(24, 47, 30, 0.13);
+  --transition-fast: 160ms ease;
+  --transition-normal: 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
 
-    --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
-    --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
-    --vt-c-divider-dark-1 : rgba(84, 84, 84, 0.65);
-    --vt-c-divider-dark-2 : rgba(84, 84, 84, 0.48);
-
-    --vt-c-text-light-1: var(--vt-c-indigo);
-    --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
-    --vt-c-text-dark-1 : var(--vt-c-white);
-    --vt-c-text-dark-2 : rgba(235, 235, 235, 0.64);
-}
-
-/* semantic color variables for this project */
-:root {
-    --color-background     : var(--vt-c-white);
-    --color-background-soft: var(--vt-c-white-soft);
-    --color-background-mute: var(--vt-c-white-mute);
-
-    --color-border      : var(--vt-c-divider-light-2);
-    --color-border-hover: var(--vt-c-divider-light-1);
-
-    --color-heading: var(--vt-c-text-light-1);
-    --color-text   : var(--vt-c-text-light-1);
-
-    --section-gap: 160px;
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --color-background     : var(--vt-c-black);
-        --color-background-soft: var(--vt-c-black-soft);
-        --color-background-mute: var(--vt-c-black-mute);
-
-        --color-border      : var(--vt-c-divider-dark-2);
-        --color-border-hover: var(--vt-c-divider-dark-1);
-
-        --color-heading: var(--vt-c-text-dark-1);
-        --color-text   : var(--vt-c-text-dark-2);
-    }
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 *,
 *::before,
 *::after {
-    /*box-sizing : border-box;*/
-    /*margin     : 0;*/
-    /*position   : relative;*/
-    /*font-weight: normal;*/
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-    min-height : 100vh;
-    color      : var(--color-text);
-    background : var(--color-background);
-    transition : color 0.5s, background-color 0.5s;
-    line-height: 1.6;
-    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-        Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    font-size              : 15px;
-    text-rendering         : optimizeLegibility;
-    -webkit-font-smoothing : antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  color: var(--color-text);
+  background: var(--color-background);
+  font-family: "Inter", "PingFang SC", "Microsoft YaHei", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+::selection {
+  color: #fff;
+  background: rgba(71, 125, 75, 0.82);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

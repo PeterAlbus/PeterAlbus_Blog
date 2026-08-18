@@ -26,16 +26,16 @@
         <h2 class="title">博文列表</h2>
         <el-card v-for="item in currentPageBlogs" :key="item.blogId"
                  shadow="hover" :body-style="{ padding: '0px' }">
-          <el-row style="height: 170px">
+          <el-row class="blog-card-row">
             <el-col :span="8">
               <el-image :src="item.blogImg" fit="cover" class="blog-cover"></el-image>
             </el-col>
             <el-col :span="16">
               <div class="blog-description">
                 <router-link :to="{ path: '/blog',query:{id:item.blogId}}">
-                  <h4 style="height: 40px"><span style="white-space: nowrap">{{item.blogTitle}}&emsp;</span><el-tag size="small">{{getType(item.blogType)}}</el-tag></h4>
+                  <h4 class="blog-title-row"><span class="blog-title-text">{{item.blogTitle}}</span><el-tag class="blog-title-tag" size="small">{{getType(item.blogType)}}</el-tag></h4>
                 </router-link>
-                <p style="height: 90px;overflow: hidden">{{item.blogDescription}}</p>
+                <p class="blog-summary">{{item.blogDescription}}</p>
                 <p class="info">
                   <span type="info"><el-icon style="vertical-align: -10%"><Avatar /></el-icon>{{ item.blogAuthor }}</span>
                   <span type="info"><el-icon style="vertical-align: -10%"><Clock /></el-icon>{{ item.blogTime }}</span>
@@ -45,7 +45,7 @@
             </el-col>
           </el-row>
         </el-card>
-        <div style="background-color: white;display: flex;justify-content: center">
+        <div class="pagination-panel">
           <el-pagination v-if="screenWidth>=600"
               layout="total, sizes, prev, pager, next, jumper"
               :page-sizes="[5,10,20]"
@@ -137,4 +137,25 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.main-container > :deep(.el-col:first-child) {
+  margin-bottom: 24px;
+}
+
+.pagination-panel {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 767px) {
+  .main-container > :deep(.el-col) {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+}
 </style>

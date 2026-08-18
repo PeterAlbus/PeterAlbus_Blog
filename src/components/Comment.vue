@@ -7,18 +7,17 @@
       评论
     </h2>
     <div class="content paragraph">
-      <div style="padding: 3px;display: flex;justify-content: center;align-items: end;flex-direction: column">
+      <div class="comment-composer">
         <el-input
           v-model="newComment.commentContent"
           :autosize="{ minRows: 2, maxRows: 4 }"
           type="textarea"
           placeholder="请友善交流，文明用语"
         />
-        <div style="display: flex;flex-direction: row;justify-content: right;align-items: center">
+        <div class="comment-actions">
           <el-checkbox v-model="hideMyself" label="1" size="small">匿名</el-checkbox>
           <el-button
-            size="small" @click="addComment"
-            style="position: relative;float: right;margin: 3px;color: white"
+            class="comment-submit" size="small" @click="addComment"
             type="primary" color="#63a35c">发布
           </el-button>
         </div>
@@ -103,16 +102,14 @@
       type="textarea"
       placeholder="请友善交流，文明用语"
     />
-    <div style="display: flex;flex-direction: row;justify-content: right;align-items: center">
+    <div class="comment-actions">
       <el-checkbox v-model="hideMyself" label="1" size="small">匿名</el-checkbox>
       <el-button
-        size="small" @click="showFloatComment=false"
-        style="position: relative;float: right;margin: 3px"
+        class="comment-secondary" size="small" @click="showFloatComment=false"
         plain color="#63a35c">关闭
       </el-button>
       <el-button
-        size="small" @click="addCommentToComment"
-        style="position: relative;float: right;margin: 3px;color: white"
+        class="comment-submit" size="small" @click="addCommentToComment"
         type="primary" color="#63a35c">发布
       </el-button>
     </div>
@@ -365,25 +362,66 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.comment-composer {
+  display: flex;
+  padding: 3px;
+  align-items: stretch;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.comment-actions {
+  display: flex;
+  width: 100%;
+  min-height: 32px;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 9px;
+}
+
+.comment-actions :deep(.el-button) {
+  min-width: 62px;
+  min-height: 32px;
+  height: 32px;
+  margin: 0;
+  padding: 0 15px;
+  border-radius: 9px;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.comment-actions :deep(.el-checkbox) {
+  height: 32px;
+  margin-right: 1px;
+}
+
+.comment-submit {
+  box-shadow: 0 4px 12px rgba(71, 125, 75, 0.18) !important;
+}
+
 .main-comment {
-  background-color: #ffffff;
-  margin: 5px;
+  background: #ffffff;
+  margin: 8px 2px;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   text-align: left;
 }
 
 .side-comment {
-  background-color: #f3f3f3;
-  margin: 5px 5px 5px 40px;
-  padding: 10px;
+  background: var(--color-primary-50);
+  margin: 8px 4px 6px 34px;
+  padding: 12px;
   text-align: left;
-  border-radius: 5px;
-
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
 }
 
 .comment-user {
   display: flex;
   justify-content: left;
   align-items: center;
+  gap: 2px;
 }
 
 .comment-box {
@@ -399,23 +437,27 @@ onMounted(() => {
   display: flex;
   justify-content: right;
   align-items: center;
-  padding: 5px;
+  padding: 5px 2px 0;
+  flex-wrap: wrap;
 }
 
 .comment-button {
-  color: gray;
+  color: var(--color-text-muted);
   cursor: pointer;
-  font-size: small;
-  padding: 0 10px 0 10px;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  transition: color var(--transition-fast), background-color var(--transition-fast);
 }
 
 .comment-button:hover {
-  color: #63a35c;
+  color: var(--color-primary-600);
+  background: var(--color-primary-50);
 }
 
 .float-comment {
-  background-color: white;
-  padding: 0 10px 10px 10px;
+  background: rgba(255, 255, 255, 0.97);
+  padding: 15px;
   display: flex;
   justify-content: center;
   align-items: end;
@@ -424,16 +466,42 @@ onMounted(() => {
   right: 10px;
   top: 40vh;
   z-index: 101;
-  border-radius: 5px;
-  box-shadow: 0 3px 8px 6px rgba(7, 17, 27, 0.05);
-  width: 300px;
-  transition-property: opacity, transform;
-  transition-duration: 0.3s;
-  transition-timing-function: ease;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(16px);
+  width: min(340px, calc(100vw - 24px));
+  transition: opacity var(--transition-normal), transform var(--transition-normal);
 }
 
 .hide-float-comment {
-  transform: translateX(300px);
+  transform: translateX(calc(100% + 24px));
   opacity: 0;
+  pointer-events: none;
+}
+
+:deep(.el-divider--horizontal) {
+  margin: 12px 0 4px;
+  border-color: var(--color-border);
+}
+
+:deep(.el-scrollbar__bar) {
+  opacity: 0.5;
+}
+
+@media (max-width: 767px) {
+  .main-comment {
+    padding: 8px;
+  }
+
+  .side-comment {
+    margin-left: 18px;
+  }
+
+  .float-comment {
+    right: 12px;
+    top: auto;
+    bottom: 78px;
+  }
 }
 </style>

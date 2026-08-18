@@ -2,10 +2,10 @@
   <Banner title="登录"></Banner>
   <div class="main-container flex-box">
     <div class="form-box">
-      <el-row style="height: 100%" justify="space-between">
-        <el-col :sm="12" :xs="0">
-          <el-image style="width: 100%;height: 100%;border-radius: 5px 0 0 5px;"
-                    src="https://file.peteralbus.com/assets/blog/imgs/photo/DJI_0422.JPG" fit="cover" />
+      <el-row class="auth-form-row" justify="space-between">
+        <el-col :sm="12" :xs="0" class="auth-image-column">
+          <el-image class="auth-image"
+                    src="https://file.peteralbus.com/assets/blog/imgs/photo/DJI_0422.webp" fit="cover" />
         </el-col>
         <el-col :sm="12" :xs="24" class="flex-box" style="padding: 20px">
           <div style="margin: 0 30px 30px 30px">
@@ -136,25 +136,60 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 }
 
 .form-box {
-  background-color: white;
-  width: 75vw;
-  height: 500px;
-  box-shadow: 0 3px 8px 6px rgba(7, 17, 27, 0.05);
-  border-radius: 5px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.97);
+  width: min(980px, calc(100vw - 48px));
+  height: 520px;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-xl);
+  transition: box-shadow var(--transition-normal), transform var(--transition-normal);
 }
 
 .form-box:hover {
-  box-shadow: 0 5px 12px 8px rgba(7, 17, 27, 0.1);
+  box-shadow: var(--shadow-lg);
 }
 
 .switch {
+  display: inline-block;
   margin: 5px;
+  padding: 5px 10px;
   cursor: pointer;
-  color: #4B6186;
-  font-size: 0.8em;
+  color: var(--color-primary-600);
+  background: var(--color-primary-50);
+  border-radius: 999px;
+  font-size: 12px;
+  transition: color var(--transition-fast), background-color var(--transition-fast);
 }
 
 .switch:hover {
-  color: #63a35c;
+  color: var(--color-primary-800);
+  background: var(--color-primary-100);
+}
+
+.form-box h2 {
+  margin-bottom: 4px;
+  font-size: 26px;
+}
+
+.form-box :deep(.el-image) {
+  filter: saturate(0.92) contrast(0.96);
+}
+
+.form-box :deep(.el-form-item__label) {
+  justify-content: flex-start;
+}
+
+@media (max-width: 767px) {
+  .form-box {
+    width: calc(100vw - 28px);
+    height: auto;
+    min-height: 450px;
+    border-radius: var(--radius-lg);
+  }
+
+  .form-box :deep(.el-col) {
+    min-height: 450px;
+  }
 }
 </style>

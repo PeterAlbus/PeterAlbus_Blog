@@ -1,7 +1,7 @@
 <template>
   <Banner title="上传图片"></Banner>
   <el-row class="main-container" style="justify-content: center;align-items: center">
-    <div style="width: 250px">
+    <div class="upload-panel">
       <el-form>
         <el-form-item label="图片名称">
           <el-input v-model="imgName"></el-input>
@@ -26,7 +26,7 @@
             </el-icon>
           </el-upload>
         </el-form-item>
-        <el-button v-on:click="submitUpload">上传</el-button>
+        <el-button v-on:click="submitUpload" type="success">上传</el-button>
       </el-form>
     </div>
   </el-row>
@@ -84,4 +84,32 @@ const upData = computed(() => {
 </script>
 
 <style scoped>
+.upload-panel {
+  width: min(360px, calc(100vw - 28px));
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
+.upload-panel :deep(.el-form-item__label) {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.upload-panel :deep(.el-form-item__content) {
+  justify-content: center;
+}
+
+.upload-panel > :deep(.el-form) > .el-button {
+  width: 100%;
+}
+
+@media (max-width: 520px) {
+  .upload-panel {
+    padding: 22px 18px;
+    border-radius: var(--radius-lg);
+  }
+}
 </style>

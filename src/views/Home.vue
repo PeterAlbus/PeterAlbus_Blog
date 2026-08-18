@@ -4,29 +4,30 @@
       <div>
         <el-avatar :size="150" src="https://file.peteralbus.com/assets/blog/imgs/blog_avatar.png"></el-avatar>
         <h2>欢迎来到PeterAlbus的个人博客</h2>
-        <div @mouseout="showFrom=false" @mouseover="showFrom=true" style="height: 30px;color:#ccccd6;font-size: 0.8em;">
+        <div class="banner-quote" @mouseout="showFrom=false" @mouseover="showFrom=true">
           <p
               @click="copyQuotes"
               @contextmenu.prevent="getQuotes"
-              style='cursor: pointer'>「{{famousQuotes.hitokoto}}」</p>
-          <span v-show="showFrom">——{{famousQuotes.from}}</span>
-          <br>
+              >「{{famousQuotes.hitokoto}}」</p>
+          <span class="quote-source" v-show="showFrom">——{{famousQuotes.from}}</span>
         </div>
-        <el-tooltip class="item" effect="dark" content="发送电子邮件" placement="top">
-          <a href="mailto:wuhongdb@163.com">
-            <i class="fa fa-fw fa-envelope" style="font-size:37px"></i>
-          </a>
-        </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="github" placement="top">
-          <a href="https://github.com/PeterAlbus" target="_blank">
-            <i class="fa fa-fw fa-github" style="font-size:40px"></i>
-          </a>
-        </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="bilibili" placement="top">
-          <a href="https://space.bilibili.com/2003822" target="_blank">
-            <i class="iconfont icon-bilibili-line" style="font-size:40px"></i>
-          </a>
-        </el-tooltip>
+        <div class="social-links">
+          <el-tooltip class="item" effect="dark" content="发送电子邮件" placement="top">
+            <a href="mailto:wuhongdb@163.com" aria-label="发送电子邮件">
+              <i class="fa fa-fw fa-envelope"></i>
+            </a>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="github" placement="top">
+            <a href="https://github.com/PeterAlbus" target="_blank" aria-label="GitHub">
+              <i class="fa fa-fw fa-github"></i>
+            </a>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="bilibili" placement="top">
+            <a href="https://space.bilibili.com/2003822" target="_blank" aria-label="哔哩哔哩">
+              <i class="iconfont icon-bilibili-line"></i>
+            </a>
+          </el-tooltip>
+        </div>
       </div>
     </div>
   </div>
@@ -35,17 +36,17 @@
       <div class="module">
         <h2 class="title">置顶博文</h2>
         <el-card class="content" v-for="item in topBlogs" :key="item.blogId" shadow="hover" :body-style="{ padding: '0px' }">
-          <el-row style="height: 170px">
+          <el-row class="blog-card-row">
             <el-col :span="8">
               <el-image :src="item.blogImg" fit="cover" class="blog-cover"></el-image>
             </el-col>
             <el-col :span="16">
               <div class="blog-description">
                 <router-link :to="{ path: '/blog',query:{id:item.blogId}}">
-                  <h4>{{ item.blogTitle }}&emsp;<el-tag size="small">{{ getType(item.blogType) }}</el-tag>
+                  <h4 class="blog-title-row"><span class="blog-title-text">{{ item.blogTitle }}</span><el-tag class="blog-title-tag" size="small">{{ getType(item.blogType) }}</el-tag>
                   </h4>
                 </router-link>
-                <p style="height: 110px">{{ item.blogDescription }}</p>
+                <p class="blog-summary">{{ item.blogDescription }}</p>
                 <p class="info">
                   <span type="info"><el-icon style="vertical-align: -10%"><Avatar /></el-icon>{{ item.blogAuthor }}</span>
                   <span type="info"><el-icon style="vertical-align: -10%"><Clock /></el-icon>{{ item.blogTime }}</span>
@@ -60,18 +61,18 @@
       <div class="module">
         <h2 class="title">最新发布<span style="float:right;"><router-link to="/types">查看全部>></router-link></span></h2>
         <el-card class="content" v-for="item in recentBlogs" :key="item.blogId" shadow="hover" :body-style="{ padding: '0px' }">
-          <el-row style="height: 170px">
+          <el-row class="blog-card-row">
             <el-col :span="8">
               <el-image :src="item.blogImg" fit="cover" class="blog-cover"></el-image>
             </el-col>
             <el-col :span="16">
               <div class="blog-description">
                 <router-link :to="{ path: '/blog',query:{id:item.blogId}}">
-                  <h4 style="height: 40px"><span style="white-space: nowrap">{{ item.blogTitle }}&emsp;</span>
-                    <el-tag size="small">{{ getType(item.blogType) }}</el-tag>
+                  <h4 class="blog-title-row"><span class="blog-title-text">{{ item.blogTitle }}</span>
+                    <el-tag class="blog-title-tag" size="small">{{ getType(item.blogType) }}</el-tag>
                   </h4>
                 </router-link>
-                <p style="height: 90px;overflow: hidden">{{ item.blogDescription }}</p>
+                <p class="blog-summary">{{ item.blogDescription }}</p>
                 <p class="info">
                   <span type="info"><el-icon style="vertical-align: -10%"><Avatar /></el-icon>{{ item.blogAuthor }}</span>
                   <span type="info"><el-icon style="vertical-align: -10%"><Clock /></el-icon>{{ item.blogTime }}</span>
@@ -206,29 +207,126 @@ const getType = computed(function () {
   left: 0;
   right: 0;
   height: 100vh;
-
+  min-height: 620px;
+  overflow: hidden;
   text-align: center;
   color: #fff !important;
-  animation: header-effect 1s !important;
+  animation: header-effect 800ms !important;
+}
+
+.home-banner::before {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(8, 18, 12, 0.2) 0%, rgba(8, 18, 12, 0.1) 45%, rgba(8, 18, 12, 0.46) 100%),
+    radial-gradient(circle at center, transparent 10%, rgba(8, 18, 12, 0.18) 100%);
+  content: "";
 }
 
 .banner-container {
   position: absolute;
-  width: 100%;
-  padding-top: 20px;
-  margin-top: 33vh;
+  top: 50%;
+  left: 50%;
+  width: min(680px, calc(100% - 40px));
+  padding: 32px 28px 26px;
   line-height: 1.5;
-  color: #eee;
-  background: rgba(34, 44, 63, 0.5) !important;
-  box-shadow: 3px 3px 6px 3px rgba(0, 0, 0, .3);
+  color: rgba(255, 255, 255, 0.88);
+  background: rgba(23, 39, 29, 0.46) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 28px;
+  box-shadow: 0 22px 65px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(14px) saturate(1.12);
+  transform: translate(-50%, -46%);
 }
 
-.banner-container a {
-  color: white;
+.banner-container h2 {
+  margin: 15px 0 12px;
+  color: #fff;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
 }
 
-.banner-container a:hover {
-  color: black;
+.banner-container :deep(.el-avatar) {
+  border: 4px solid rgba(255, 255, 255, 0.82);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.25);
+}
+
+.banner-quote {
+  position: relative;
+  min-height: 44px;
+  color: rgba(231, 235, 238, 0.76);
+  font-size: 12px;
+}
+
+.banner-quote p {
+  margin: 0;
+  overflow: hidden;
+  cursor: pointer;
+  line-height: 22px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.quote-source {
+  display: block;
+  margin-top: 2px;
+  color: rgba(231, 235, 238, 0.62);
+  line-height: 18px;
+}
+
+.social-links {
+  display: flex;
+  min-height: 48px;
+  margin-top: 14px;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.social-links a {
+  display: flex;
+  width: 46px;
+  height: 46px;
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 50%;
+  transition: color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.social-links a:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-2px);
+}
+
+.social-links i {
+  display: flex !important;
+  width: 28px !important;
+  height: 28px;
+  margin: 0 !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 27px !important;
+  line-height: 1 !important;
+  vertical-align: 0 !important;
+}
+
+.social-links i::before {
+  line-height: 1;
+}
+
+.main-container > :deep(.el-col) {
+  min-width: 0;
+}
+
+.module .content + .content {
+  margin-top: 14px;
 }
 
 @keyframes header-effect {
@@ -241,6 +339,32 @@ const getType = computed(function () {
     opacity: 1;
     filter: none;
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 767px) {
+  .home-banner {
+    min-height: 580px;
+    height: calc(100vh - 64px);
+    background-attachment: scroll !important;
+  }
+
+  .banner-container {
+    width: calc(100% - 28px);
+    padding: 26px 18px 20px;
+    border-radius: 22px;
+    transform: translate(-50%, -50%);
+  }
+
+  .banner-container :deep(.el-avatar) {
+    width: 112px !important;
+    height: 112px !important;
+  }
+
+  .main-container > :deep(.el-col) {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
   }
 }
 </style>

@@ -143,9 +143,53 @@ const photoLeft = computed(() => {
 
 <style scoped>
 .photo {
-  padding: 0 0 5px 0;
-  background-color: white;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  padding: 0 0 10px;
+  background: rgba(255, 255, 255, 0.96);
+  margin: 0 0 16px;
+  border-radius: var(--radius-md);
+}
+
+.photo :deep(.el-image) {
+  display: block;
+  overflow: hidden;
+  min-height: 110px;
+  background: var(--color-primary-50);
+}
+
+.photo :deep(.el-image__inner) {
+  transition: transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1), filter var(--transition-normal);
+}
+
+.photo:hover :deep(.el-image__inner) {
+  filter: saturate(1.06);
+  transform: scale(1.035);
+}
+
+.photo .paragraph {
+  display: block;
+  padding: 10px 12px 0;
+  overflow: hidden;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-slot {
+  display: grid;
+  min-height: 120px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  place-items: center;
+}
+
+@media (max-width: 767px) {
+  .main-container :deep(.el-col.el-col-15),
+  .main-container > .el-row > :deep(.el-col) {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
 }
 </style>

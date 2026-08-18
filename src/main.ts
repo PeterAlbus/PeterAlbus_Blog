@@ -4,7 +4,6 @@ import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
 import "nprogress/nprogress.css";
-import "./assets/main.css";
 import "element-plus/dist/index.css"; // element plus样式
 import * as ElIcons from "@element-plus/icons-vue"; //element plus图标
 import 'font-awesome/css/font-awesome.min.css'
@@ -21,6 +20,7 @@ import Prism from 'prismjs';
 
 import PeterAlbusVue from 'vue3-social-share';
 import 'vue3-social-share/lib/index.css'
+import "./assets/main.css";
 
 //全局移动指令
 import dragMove from "./directives/dragMove";
