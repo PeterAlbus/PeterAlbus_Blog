@@ -477,16 +477,19 @@ const userIdentity = computed(() => {
 
 <style scoped>
 .user-box {
-  width: 80vw;
+  width: min(820px, calc(100vw - 48px));
   max-width: 800px;
-  background-color: white;
-  border-radius: 5px;
-  padding: 30px;
-  box-shadow: 0 3px 8px 6px rgba(7, 17, 27, 0.05);
+  background:
+    linear-gradient(180deg, rgba(232, 240, 229, 0.58), rgba(255, 255, 255, 0.98) 180px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 38px;
+  box-shadow: var(--shadow-md);
+  transition: box-shadow var(--transition-normal);
 }
 
 .user-box:hover {
-  box-shadow: 0 5px 12px 8px rgba(7, 17, 27, 0.1);
+  box-shadow: var(--shadow-lg);
 }
 
 .flex-box {
@@ -497,8 +500,36 @@ const userIdentity = computed(() => {
 }
 
 .user-center-info {
-  margin: 20px;
+  min-height: 48px;
+  margin: 10px 0;
+  padding: 8px 10px 8px 14px;
+  color: var(--color-text-secondary);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   line-height: 32px;
-  height: 32px;
+}
+
+.user-box :deep(.avatar-uploader .el-upload) {
+  border-radius: 50%;
+  box-shadow: 0 12px 30px rgba(30, 54, 36, 0.16);
+}
+
+.user-box :deep(.el-avatar) {
+  display: block;
+  border-width: 4px;
+}
+
+@media (max-width: 767px) {
+  .user-box {
+    width: calc(100vw - 28px);
+    padding: 28px 16px;
+    border-radius: var(--radius-lg);
+  }
+
+  .user-center-info {
+    height: auto;
+    text-align: left;
+  }
 }
 </style>

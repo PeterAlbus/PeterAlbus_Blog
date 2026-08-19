@@ -34,16 +34,17 @@ onMounted(()=>{
 .footer{
   width: 100%;
   overflow: hidden;
-  background: #373D41;
-  border-top: 10px solid #326139;
+  background: linear-gradient(135deg, #29342d 0%, #343c37 100%);
+  border-top: 4px solid #326139;
   position: relative;
   text-align: center;
 }
 
 .footer-text{
-  color: #73777a;
-  font-size: 14px;
-  margin-bottom: 5px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  margin-bottom: 4px;
+  letter-spacing: 0.025em;
 }
 
 .footer-text a:hover{
@@ -51,14 +52,14 @@ onMounted(()=>{
 }
 
 .footer-text a{
-  color: #73777a;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .footer-container {
-  width: 60%;
+  width: min(90%, 880px);
   margin: 0 auto;
   overflow: hidden;
-  padding: 30px 0;
+  padding: 32px 0 29px;
 }
 
 .music-container {
@@ -66,5 +67,15 @@ onMounted(()=>{
   width: 15%;
   right: 0;
   bottom: 120px;
+}
+
+@media (max-width: 767px) {
+  .footer-container {
+    padding: 25px 0 22px;
+  }
+
+  .music-container {
+    width: 44%;
+  }
 }
 </style>

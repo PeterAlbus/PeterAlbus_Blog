@@ -147,26 +147,58 @@ onMounted(()=>{
 
 <style scoped>
 .blog-content{
+  overflow: hidden;
   text-align: left;
   word-wrap:break-word;
   width: 90%;
-  margin: 0 auto;
+  margin: 0 auto 18px;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid var(--color-border);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  box-shadow: var(--shadow-md);
 }
 
 .blog-header{
-  background-color: #f7f7f7;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f4f8f2, #fff);
   width: 90%;
   margin: 0 auto;
+  padding: 22px 24px 18px;
+  border: 1px solid var(--color-border);
+  border-bottom: 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  text-align: left;
+}
+
+.blog-header::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 5px;
+  background: linear-gradient(180deg, var(--color-primary-400), var(--color-primary-700));
+  content: "";
+}
+
+.blog-header h1 {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.35;
 }
 
 .blog-header p{
-  font-size: 14px;
-  color: #245440;
+  margin: 8px 0 0;
+  padding: 0 !important;
+  font-size: 12px;
+  color: var(--color-text-secondary);
 }
 
 .anchor{
   text-align: left;
-  transition: transform 0.3s ease .1s;
+  border-radius: var(--radius-sm);
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
 }
 
 .anchors a:hover{
@@ -174,8 +206,8 @@ onMounted(()=>{
 }
 
 .anchor:hover{
-  transform: translateX(+5px);
-  background-color: #f1f1f1;
+  transform: translateX(3px);
+  background-color: var(--color-primary-50);
 }
 
 .fixed-buttons{
@@ -207,11 +239,11 @@ onMounted(()=>{
   }
 
   .anchors .title{
-    border-radius: 5px 5px 0 0;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
   }
 
   .anchors .content{
-    border-radius: 0 0 5px 5px;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
   }
 
   .anchors {
@@ -224,5 +256,19 @@ onMounted(()=>{
     box-shadow: 0 6px 16px 12px rgba(7,17,27,0.25);
   }
 
+  .main-container :deep(.el-col) {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+
+  .blog-header,
+  .blog-content {
+    width: calc(100% - 24px);
+  }
+
+  .blog-header {
+    padding: 18px 17px 15px;
+  }
 }
 </style>

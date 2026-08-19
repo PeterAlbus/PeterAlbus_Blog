@@ -2,44 +2,53 @@
   <Banner title="分类查看"/>
   <el-row class="main-container">
     <el-col :span="24">
-      <el-row>
-        <el-col :lg="{span:16,offset:4}">
-          <el-radio-group v-model="selectType" size="large" v-if="screenWidth>=500">
-            <el-radio-button :label="0">全部</el-radio-button>
-            <el-radio-button :label="1">学习笔记</el-radio-button>
-            <el-radio-button :label="2">生活</el-radio-button>
-            <el-radio-button :label="3">ACG</el-radio-button>
-            <el-radio-button :label="4">科技</el-radio-button>
-            <el-radio-button :label="5">随笔</el-radio-button>
-          </el-radio-group>
-          <el-radio-group v-model="selectType" size="small" v-if="screenWidth<500">
-            <el-radio-button :label="1">学习笔记</el-radio-button>
-            <el-radio-button :label="2">生活</el-radio-button>
-            <el-radio-button :label="3">ACG</el-radio-button>
-            <el-radio-button :label="4">科技</el-radio-button>
-            <el-radio-button :label="5">随笔</el-radio-button>
-          </el-radio-group>
-        </el-col>
-      </el-row>
+      <div class="category-filter-scroll">
+        <div class="category-filter" role="tablist" aria-label="文章分类">
+          <button
+            v-for="type in blogTypes"
+            :key="type.value"
+            type="button"
+            role="tab"
+            :aria-selected="selectType === type.value"
+            :class="['category-tab', { 'is-active': selectType === type.value }]"
+            @click="selectCategory(type.value)"
+          >
+            {{ type.label }}
+          </button>
+        </div>
+        <label class="mobile-category-select" for="mobile-blog-category">
+          <span>分类</span>
+          <span class="mobile-select-control">
+            <select
+              id="mobile-blog-category"
+              v-model.number="selectType"
+              aria-label="选择文章分类"
+              @change="handleCategoryChange"
+            >
+              <option v-for="type in blogTypes" :key="type.value" :value="type.value">
+                {{ type.label }}
+              </option>
+            </select>
+            <i aria-hidden="true" />
+          </span>
+        </label>
+      </div>
     </el-col>
     <el-col :lg="{span:11,offset:3}" :sm="15">
       <div class="module">
         <h2 class="title">博文列表</h2>
         <el-card v-for="item in currentPageBlogs" :key="item.blogId"
                  shadow="hover" :body-style="{ padding: '0px' }">
-          <el-row style="height: 170px">
+          <el-row class="blog-card-row">
             <el-col :span="8">
               <el-image :src="item.blogImg" fit="cover" class="blog-cover"></el-image>
             </el-col>
             <el-col :span="16">
               <div class="blog-description">
                 <router-link :to="{ path: '/blog',query:{id:item.blogId}}">
-                  <h4 style="height: 40px" class="blog-description-title">
-                    <span class="title-text">{{item.blogTitle}}&emsp;</span>
-                    <el-tag size="small">{{getType(item.blogType)}}</el-tag>
-                  </h4>
+                  <h4 class="blog-title-row"><span class="blog-title-text">{{item.blogTitle}}</span><el-tag class="blog-title-tag" size="small">{{getType(item.blogType)}}</el-tag></h4>
                 </router-link>
-                <p style="height: 90px;overflow: hidden">{{item.blogDescription}}</p>
+                <p class="blog-summary">{{item.blogDescription}}</p>
                 <p class="info">
                   <span type="info"><el-icon style="vertical-align: -10%"><Avatar /></el-icon>{{ item.blogAuthor }}</span>
                   <span type="info"><el-icon style="vertical-align: -10%"><Clock /></el-icon>{{ item.blogTime }}</span>
@@ -49,7 +58,7 @@
             </el-col>
           </el-row>
         </el-card>
-        <div style="background-color: white;display: flex;justify-content: center">
+        <div class="pagination-panel">
           <el-pagination v-if="screenWidth>=600"
               layout="total, sizes, prev, pager, next, jumper"
               :page-sizes="[5,10,20]"
@@ -92,6 +101,14 @@ const resize = () => {
 const selectType:Ref<number> = ref(1);
 const currentPage:Ref<number> = ref(1);
 const pageSize:Ref<number> = ref(10);
+const blogTypes = [
+  { value: 0, label: '全部' },
+  { value: 1, label: '学习笔记' },
+  { value: 2, label: '生活' },
+  { value: 3, label: 'ACG' },
+  { value: 4, label: '科技' },
+  { value: 5, label: '随笔' }
+];
 const blogList:Ref = ref([
   {
     blogId:1,
@@ -129,9 +146,18 @@ const currentPageBlogs = computed(() => {
   return selectedBlogs.value.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value);
 });
 
+const selectCategory = (type:number) => {
+  if (selectType.value === type) return;
+  selectType.value = type;
+  currentPage.value = 1;
+};
+
+const handleCategoryChange = () => {
+  currentPage.value = 1;
+};
+
 const getType = (type:number) => {
-  const types = ['学习笔记', '生活', 'ACG', '科技', '随笔'];
-  return types[type - 1];
+  return blogTypes.find((item) => item.value === type)?.label ?? '';
 };
 
 onMounted(() => {
@@ -141,4 +167,192 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.main-container > :deep(.el-col:first-child) {
+  margin-bottom: 24px;
+}
+
+.category-filter-scroll {
+  width: 100%;
+  padding: 0 24px 4px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.category-filter-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.mobile-category-select {
+  display: none;
+}
+
+.category-filter {
+  display: grid;
+  width: min(92%, 760px);
+  margin: 0 auto;
+  padding: 8px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 9px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 24px rgba(30, 54, 36, 0.07), 0 1px 2px rgba(30, 54, 36, 0.04);
+  backdrop-filter: blur(14px);
+}
+
+.category-tab {
+  position: relative;
+  min-width: 0;
+  height: 48px;
+  padding: 0 18px;
+  overflow: hidden;
+  color: var(--color-text-secondary);
+  background: rgba(250, 251, 249, 0.86);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-normal),
+    transform var(--transition-normal);
+}
+
+.category-tab::after {
+  position: absolute;
+  right: 18%;
+  bottom: 5px;
+  left: 18%;
+  height: 2px;
+  border-radius: 99px;
+  background: currentColor;
+  content: "";
+  opacity: 0;
+  transform: scaleX(0.45);
+  transition: opacity var(--transition-fast), transform var(--transition-normal);
+}
+
+.category-tab:hover:not(.is-active) {
+  color: var(--color-primary-700);
+  background: var(--color-primary-50);
+  border-color: var(--color-border-strong);
+  box-shadow: 0 5px 14px rgba(30, 54, 36, 0.07);
+  transform: translateY(-1px);
+}
+
+.category-tab:active {
+  transform: translateY(0) scale(0.985);
+}
+
+.category-tab:focus-visible {
+  outline: 3px solid rgba(99, 163, 92, 0.2);
+  outline-offset: 2px;
+}
+
+.category-tab.is-active {
+  color: #fff;
+  background: linear-gradient(145deg, var(--color-primary-600), var(--color-primary-700));
+  border-color: rgba(40, 80, 50, 0.55);
+  box-shadow: 0 9px 20px rgba(50, 97, 57, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+.category-tab.is-active::after {
+  opacity: 0.42;
+  transform: scaleX(1);
+}
+
+.pagination-panel {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 767px) {
+  .main-container > :deep(.el-col) {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+
+  .category-filter-scroll {
+    padding: 0 12px 4px;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
+  .category-filter {
+    display: none;
+  }
+
+  .mobile-category-select {
+    display: flex;
+    width: min(100%, 420px);
+    min-height: 58px;
+    margin: 0 auto;
+    padding: 8px 9px 8px 14px;
+    align-items: center;
+    gap: 12px;
+    color: var(--color-text-secondary);
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(30, 54, 36, 0.07), 0 1px 2px rgba(30, 54, 36, 0.04);
+    backdrop-filter: blur(14px);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .mobile-select-control {
+    position: relative;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .mobile-select-control select {
+    width: 100%;
+    height: 40px;
+    padding: 0 40px 0 14px;
+    color: var(--color-primary-700);
+    appearance: none;
+    background: var(--color-primary-50);
+    border: 1px solid var(--color-border-strong);
+    border-radius: 11px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 650;
+    outline: none;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+  }
+
+  .mobile-select-control select:focus {
+    background: #fff;
+    border-color: var(--color-primary-500);
+    box-shadow: 0 0 0 3px rgba(99, 163, 92, 0.12);
+  }
+
+  .mobile-select-control i {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid var(--color-primary-600);
+    border-bottom: 2px solid var(--color-primary-600);
+    pointer-events: none;
+    transform: translateY(-70%) rotate(45deg);
+  }
+}
 </style>

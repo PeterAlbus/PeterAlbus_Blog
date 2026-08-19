@@ -39,5 +39,40 @@ const {info} = toRefs(props);
 </script>
 
 <style scoped>
+.content {
+  padding: 24px 18px 20px;
+  background:
+    linear-gradient(180deg, rgba(232, 240, 229, 0.7) 0, rgba(255, 255, 255, 0.95) 72px);
+}
 
+.content h4 {
+  margin: 8px 0 4px;
+  font-size: 16px;
+}
+
+.content p {
+  margin: 0 0 12px;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+.content a {
+  display: inline-grid;
+  width: 36px;
+  height: 36px;
+  margin: 4px 2px 0;
+  color: var(--color-primary-700);
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+  place-items: center;
+  transition: color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.content a:hover {
+  color: var(--color-primary-500);
+  box-shadow: 0 7px 18px rgba(30, 54, 36, 0.12);
+  transform: translateY(-2px);
+}
 </style>

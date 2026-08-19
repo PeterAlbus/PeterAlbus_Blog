@@ -233,6 +233,39 @@ onMounted(() => {
 
 <style scoped>
 .blog-content {
+  padding: clamp(20px, 4vw, 38px);
   text-align: left;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
+.blog-content :deep(.el-form-item__label) {
+  color: var(--color-heading);
+}
+
+.blog-content :deep(.avatar) {
+  width: 200px;
+  height: 200px;
+  border-radius: var(--radius-md);
+}
+
+@media (max-width: 767px) {
+  .blog-content {
+    padding: 18px 14px;
+    border-radius: var(--radius-lg);
+  }
+
+  .blog-content :deep(.el-form-item) {
+    display: block;
+  }
+
+  .blog-content :deep(.el-form-item__label) {
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+    text-align: left;
+  }
 }
 </style>
