@@ -10,8 +10,8 @@
           />
         </router-link>
         <div class="user-info">
-          <h4 style="padding: 4px">{{ userStore.userUsername }}</h4>
-          <p style="padding: 4px">
+          <h4 class="user-info-name">{{ userStore.userUsername }}</h4>
+          <p class="user-info-identity">
             <el-tag
               :type="identityType"
               effect="dark"
@@ -344,6 +344,22 @@ onMounted(() => {
   transform: translate(-50%, -8px);
   transition: opacity var(--transition-normal), transform var(--transition-normal), visibility var(--transition-normal);
   z-index: 101;
+}
+
+.user-info-name {
+  margin: 28px 0 6px;
+  padding: 0;
+  overflow-wrap: anywhere;
+  font-size: 18px;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.user-info-identity {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  text-align: center;
 }
 
 .nav-links {
