@@ -31,6 +31,15 @@
       </div>
     </div>
   </div>
+  <router-link
+    v-if="isSiteOwner"
+    class="owner-create-fab"
+    to="/editBlog"
+    aria-label="新建文章"
+  >
+    <el-icon><EditPen /></el-icon>
+    <span>新建文章</span>
+  </router-link>
   <el-row class="main-container">
     <el-col :lg="{span:11,offset:3}" :sm="15">
       <div class="module">
@@ -59,7 +68,10 @@
       </div>
 
       <div class="module">
-        <h2 class="title">最新发布<span style="float:right;"><router-link to="/types">查看全部>></router-link></span></h2>
+        <h2 class="title">
+          最新发布
+          <span><router-link class="view-all-link" to="/types">查看全部&gt;&gt;</router-link></span>
+        </h2>
         <el-card class="content" v-for="item in recentBlogs" :key="item.blogId" shadow="hover" :body-style="{ padding: '0px' }">
           <el-row class="blog-card-row">
             <el-col :span="8">
@@ -103,6 +115,11 @@ import PersonalInfo from "@/components/PersonalInfo.vue"
 import { fetchBlogList } from "@/services/blogApi";
 import { fetchBackgroundList } from "@/services/backgroundApi";
 import type { HttpResult } from "@/services/httpConfig";
+import { EditPen } from "@element-plus/icons-vue";
+import { useUserStore } from "@/stores/user";
+
+const userStore = useUserStore();
+const isSiteOwner = computed(() => userStore.userIdentity === 0);
 
 const blogList = ref([
   {
@@ -353,6 +370,54 @@ const getType = computed(function () {
   margin-top: 14px;
 }
 
+.owner-create-fab {
+  position: fixed;
+  right: clamp(24px, 3vw, 48px);
+  bottom: 96px;
+  z-index: 30;
+  display: flex;
+  min-width: 128px;
+  height: 48px;
+  padding: 0 18px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 16px;
+  box-shadow: 0 14px 34px rgba(37, 79, 43, 0.24), 0 4px 10px rgba(37, 79, 43, 0.12);
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: 0.03em;
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.owner-create-fab::before {
+  position: absolute;
+  inset: 4px;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  content: "";
+}
+
+.owner-create-fab :deep(.el-icon) {
+  font-size: 17px;
+}
+
+.owner-create-fab:hover {
+  color: #fff;
+  box-shadow: 0 18px 40px rgba(37, 79, 43, 0.3), 0 6px 14px rgba(37, 79, 43, 0.16);
+  transform: translateY(-3px);
+}
+
+.view-all-link:hover {
+  color: var(--color-primary-700);
+  background: var(--color-primary-50);
+  border-color: rgba(71, 125, 75, 0.28);
+}
+
 @keyframes header-effect {
   0% {
     opacity: 0;
@@ -389,6 +454,13 @@ const getType = computed(function () {
     width: 100%;
     max-width: 100%;
     flex: 0 0 100%;
+  }
+
+}
+
+@media (max-width: 1023px) {
+  .owner-create-fab {
+    display: none;
   }
 }
 </style>

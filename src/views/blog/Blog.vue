@@ -4,8 +4,20 @@
     <el-row>
       <el-col :lg="{span:11,offset:3}" :sm="15">
         <div class="blog-header">
-          <h1 style="padding: 8px 20px 2px;">{{blog.blogTitle}}</h1>
-          <p style="padding: 0 5px 5px 5px"><i class="fa fa-user"></i> {{blog.blogAuthor}}&emsp;<i class="fa fa-calendar"></i> 发布于{{blog.blogTime}} <i class="fa fa-eye"></i> {{blog.blogViews}}次访问</p>
+          <div class="blog-heading-row">
+            <h1>{{blog.blogTitle}}</h1>
+            <el-button
+              v-if="isSiteOwner"
+              class="owner-content-action"
+              type="primary"
+              color="#63a35c"
+              :icon="EditPen"
+              @click="editCurrentBlog"
+            >
+              编辑文章
+            </el-button>
+          </div>
+          <p><i class="fa fa-user"></i> {{blog.blogAuthor}}&emsp;<i class="fa fa-calendar"></i> 发布于{{blog.blogTime}} <i class="fa fa-eye"></i> {{blog.blogViews}}次访问</p>
         </div>
         <div class="blog-content">
           <mavon-editor v-model="blog.blogContent" ref="mdRef"
@@ -59,20 +71,24 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref ,nextTick } from "vue";
-import {useRoute} from "vue-router";
-import {ArrowRight,Notebook,Share as shareIcon} from "@element-plus/icons-vue";
+import { computed, onMounted, ref ,nextTick } from "vue";
+import {useRoute, useRouter} from "vue-router";
+import {ArrowRight, EditPen, Notebook, Share as shareIcon} from "@element-plus/icons-vue";
 import PersonalInfo from '@/components/PersonalInfo.vue'
 import Comment from '@/components/Comment.vue'
 import Banner from "@/components/Banner.vue";
 import { fetchBlogById, getIpAddress, visitBlog } from "@/services/blogApi";
+import { useUserStore } from "@/stores/user";
 
 
 const route=useRoute()
+const router=useRouter()
+const userStore=useUserStore()
 const mdRef=ref<any>()
 const titleList:any=ref([])
 
 const hideCatalogue=ref(true)
+const isSiteOwner = computed(() => userStore.userIdentity === 0)
 
 const blog=ref({
   blogId:route.query.id,
@@ -145,6 +161,11 @@ const handleAnchorClick=(anchor:any)=>{
   })
 }
 
+const editCurrentBlog = () => {
+  if (typeof route.query.id !== "string") return;
+  router.push({ path: "/editBlog", query: { id: route.query.id } });
+}
+
 onMounted(()=>{
   getBlog()
 })
@@ -189,10 +210,28 @@ onMounted(()=>{
 }
 
 .blog-header h1 {
+  min-width: 0;
   margin: 0 !important;
   padding: 0 !important;
   font-size: clamp(24px, 3vw, 34px);
   line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.blog-heading-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.owner-content-action {
+  min-width: 108px;
+  min-height: 40px;
+  flex: 0 0 auto;
+  margin: 2px 0 0;
+  color: #fff;
+  border-radius: 12px;
 }
 
 .blog-header p{
@@ -276,6 +315,24 @@ onMounted(()=>{
 
   .blog-header {
     padding: 18px 17px 15px;
+  }
+
+  .blog-heading-row {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .owner-content-action {
+    min-width: 42px;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    font-size: 0;
+  }
+
+  .owner-content-action :deep(.el-icon) {
+    margin: 0;
+    font-size: 17px;
   }
 }
 </style>

@@ -168,12 +168,12 @@ onMounted(() => {
 
 <style scoped>
 .main-container > :deep(.el-col:first-child) {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .category-filter-scroll {
   width: 100%;
-  padding: 0 24px 4px;
+  padding: 0 20px 4px;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x proximity;
@@ -189,31 +189,31 @@ onMounted(() => {
 }
 
 .category-filter {
-  display: grid;
-  width: min(92%, 760px);
+  display: flex;
+  width: max-content;
+  max-width: calc(100% - 40px);
   margin: 0 auto;
-  padding: 8px;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 9px;
+  padding: 6px;
+  gap: 6px;
   background: rgba(255, 255, 255, 0.82);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 8px 24px rgba(30, 54, 36, 0.07), 0 1px 2px rgba(30, 54, 36, 0.04);
+  border-radius: 13px;
+  box-shadow: 0 6px 18px rgba(30, 54, 36, 0.06), 0 1px 2px rgba(30, 54, 36, 0.04);
   backdrop-filter: blur(14px);
 }
 
 .category-tab {
   position: relative;
-  min-width: 0;
-  height: 48px;
-  padding: 0 18px;
+  min-width: 70px;
+  height: 36px;
+  padding: 0 13px;
   overflow: hidden;
   color: var(--color-text-secondary);
   background: rgba(250, 251, 249, 0.86);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: 9px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.025em;
   white-space: nowrap;
@@ -228,7 +228,7 @@ onMounted(() => {
 .category-tab::after {
   position: absolute;
   right: 18%;
-  bottom: 5px;
+  bottom: 3px;
   left: 18%;
   height: 2px;
   border-radius: 99px;
@@ -243,7 +243,7 @@ onMounted(() => {
   color: var(--color-primary-700);
   background: var(--color-primary-50);
   border-color: var(--color-border-strong);
-  box-shadow: 0 5px 14px rgba(30, 54, 36, 0.07);
+  box-shadow: 0 4px 10px rgba(30, 54, 36, 0.06);
   transform: translateY(-1px);
 }
 
@@ -260,7 +260,7 @@ onMounted(() => {
   color: #fff;
   background: linear-gradient(145deg, var(--color-primary-600), var(--color-primary-700));
   border-color: rgba(40, 80, 50, 0.55);
-  box-shadow: 0 9px 20px rgba(50, 97, 57, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  box-shadow: 0 6px 14px rgba(50, 97, 57, 0.19), inset 0 1px 0 rgba(255, 255, 255, 0.18);
   transform: translateY(-1px);
 }
 
@@ -299,16 +299,16 @@ onMounted(() => {
   .mobile-category-select {
     display: flex;
     width: min(100%, 420px);
-    min-height: 58px;
+    min-height: 48px;
     margin: 0 auto;
-    padding: 8px 9px 8px 14px;
+    padding: 6px 7px 6px 12px;
     align-items: center;
     gap: 12px;
     color: var(--color-text-secondary);
     background: rgba(255, 255, 255, 0.9);
     border: 1px solid var(--color-border);
-    border-radius: 16px;
-    box-shadow: 0 8px 22px rgba(30, 54, 36, 0.07), 0 1px 2px rgba(30, 54, 36, 0.04);
+    border-radius: 13px;
+    box-shadow: 0 6px 18px rgba(30, 54, 36, 0.06), 0 1px 2px rgba(30, 54, 36, 0.04);
     backdrop-filter: blur(14px);
     font-size: 12px;
     font-weight: 600;
@@ -323,15 +323,15 @@ onMounted(() => {
 
   .mobile-select-control select {
     width: 100%;
-    height: 40px;
-    padding: 0 40px 0 14px;
+    height: 34px;
+    padding: 0 34px 0 12px;
     color: var(--color-primary-700);
     appearance: none;
     background: var(--color-primary-50);
     border: 1px solid var(--color-border-strong);
-    border-radius: 11px;
+    border-radius: 9px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 650;
     outline: none;
     transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
@@ -346,9 +346,9 @@ onMounted(() => {
   .mobile-select-control i {
     position: absolute;
     top: 50%;
-    right: 16px;
-    width: 8px;
-    height: 8px;
+    right: 13px;
+    width: 7px;
+    height: 7px;
     border-right: 2px solid var(--color-primary-600);
     border-bottom: 2px solid var(--color-primary-600);
     pointer-events: none;
