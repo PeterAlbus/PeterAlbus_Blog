@@ -63,19 +63,13 @@ onMounted(()=>{
 }
 
 .music-container {
-  position: fixed;
-  width: 15%;
-  right: 0;
-  bottom: 120px;
+  position: relative;
+  z-index: 98;
 }
 
 @media (max-width: 767px) {
   .footer-container {
     padding: 25px 0 22px;
-  }
-
-  .music-container {
-    width: 44%;
   }
 }
 </style>

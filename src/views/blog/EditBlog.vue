@@ -75,10 +75,9 @@ import type {
 import { ElMessage } from "element-plus";
 import Banner from "@/components/Banner.vue";
 import { addBlog, fetchBlogById, updateBlog } from "@/services/blogApi";
-import { blogUrl } from "@/services/urlConfig";
+import { BASE_URL, blogUrl } from "@/services/urlConfig";
 import { deletePhotoByUrl, uploadOriginPhoto } from "@/services/photoApi";
 
-const BASE_URL = 'https://www.peteralbus.com:8089';
 const blogForm = ref<FormInstance>();
 const route = useRoute();
 const router = useRouter();

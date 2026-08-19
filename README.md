@@ -25,7 +25,7 @@
 ## Development  Standard / 开发规范
 
 + 页面SFC存放于views文件夹内，组件存放于components。
-+ 接口url及请求相关方法放置于services文件夹内。不同环境通过VITE_APP_ENV识别。
++ 接口url及请求相关方法放置于services文件夹内。不同环境通过VITE_APP_ENV识别；开发环境的 `/api` 请求由 Vite 代理到远端后端。
 
 ## Recommended IDE Setup / 推荐IDE及插件
 
@@ -83,4 +83,3 @@ or pnpm run test:unit
 npm run lint
 or pnpm run lint
 ```
-

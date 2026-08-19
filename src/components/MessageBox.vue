@@ -168,21 +168,24 @@ watch(() => props.modelValue, (visible) => {
 .message-center-layer {
   position: fixed;
   inset: 0;
+  display: grid;
   z-index: 998;
   background: rgba(12, 25, 16, 0.3);
   backdrop-filter: blur(5px);
   animation: layer-in 180ms ease-out;
+  place-items: center;
 }
 
 .message-box {
-  position: fixed;
-  top: max(82px, calc((100vh - 700px) / 2));
-  left: max(20px, calc((100vw - 920px) / 2));
+  position: relative;
+  top: 0;
+  left: 0;
   display: grid;
-  width: min(920px, calc(100vw - 40px));
+  width: calc(100vw - 40px);
+  max-width: 920px;
   height: calc(100vh - 112px);
   max-height: 700px;
-  min-height: 460px;
+  min-height: 0;
   overflow: hidden;
   grid-template-rows: auto auto minmax(0, 1fr) auto;
   color: var(--color-text);
@@ -543,10 +546,12 @@ watch(() => props.modelValue, (visible) => {
   }
 
   .message-box {
-    top: 12px;
-    left: 12px;
+    top: 0;
+    left: 0;
     width: calc(100vw - 24px);
+    max-width: none;
     height: calc(100dvh - 24px);
+    max-height: none;
     min-height: 0;
     border-radius: 20px;
   }

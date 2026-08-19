@@ -77,15 +77,15 @@
 
 ### 上传
 
-封面、头像和照片上传由 `<el-upload>` 直接执行 multipart POST，不走统一 Axios 封装。上传地址目前分别硬编码在对应页面中，且照片上传使用 `/api` 代理形式；详情和已知偏差见 [`backend-contract.md`](backend-contract.md)。
+封面、头像和照片上传由 `<el-upload>` 直接执行 multipart POST，不走统一 Axios 封装，但统一使用 `src/services/urlConfig.ts` 导出的 `BASE_URL` 与领域路径拼接请求地址；详情见 [`backend-contract.md`](backend-contract.md)。
 
 ## 构建与环境
 
 - `.nvmrc` 固定本项目使用的 Node.js `24.19.0`；该版本应通过 NVM 管理，进入仓库后执行 `nvm use`。
 - `package.json#packageManager` 固定 pnpm `8.15.9`，与当前 `pnpm-lock.yaml` 的 lockfile v6 匹配；不要用新版 pnpm 强制重写锁文件。
 - `.env.development`、`.env.test`、`.env.production` 只设置 `VITE_APP_ENV`。
-- `src/services/urlConfig.ts` 根据该值选择后端基地址；当前 dev/prod 相同，test 是占位地址。
-- Vite 开发端口为 `8080`，监听 `0.0.0.0`，未启用本地代理。
+- `src/services/urlConfig.ts` 根据该值选择后端基地址：development 使用本地 `/api`，production 使用 `https://www.peteralbus.com/api`，test 使用占位地址。
+- Vite 开发端口为 `8080`，监听 `0.0.0.0`。开发服务器将 `/api/*` 去掉 `/api` 前缀后代理到 `https://www.peteralbus.com:8089/*`，浏览器不再直接跨域访问远端后端；上游证书校验只在该开发代理中关闭，以适配当前远端 `:8089` 证书状态。
 - `base: './'` 使生产资源使用相对路径，适合静态目录部署。
 - `pnpm run build` 并行执行 Vue 类型检查和 Vite 构建；构建产物默认位于 `dist/`。
 

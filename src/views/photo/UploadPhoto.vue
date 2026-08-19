@@ -9,7 +9,7 @@
         <el-form-item label="上传图片">
           <el-upload
             class="avatar-uploader"
-            action="https://www.peteralbus.com/api/photo/upload"
+            :action="BASE_URL + photoUrl.addPhoto"
             ref="uploadRef"
             :headers="headerObj"
             :data="upData"
@@ -39,6 +39,7 @@ import type { ElUpload, UploadFile, UploadRawFile } from "element-plus";
 import { ElMessage } from "element-plus";
 import Banner from "@/components/Banner.vue";
 import { useRouter } from "vue-router";
+import { BASE_URL, photoUrl } from "@/services/urlConfig";
 
 const router = useRouter();
 const uploadRef = ref<InstanceType<typeof ElUpload>>();

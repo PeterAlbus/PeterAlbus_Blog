@@ -80,7 +80,7 @@ interface Result<T> {
 | `addFriendLink` | POST form `/friendLink/addFriendLink` | `linkName`, `linkUrl` | 创建后的 `FriendLink` |
 | `fetchMusicList` | GET `/music/queryAll` | 无 | APlayer 直接消费的 `Music[]` |
 | `fetchPhotoList` | GET `/photo/queryAll` | 无 | `Photo[]` |
-| `UploadPhoto.vue` 上传 | multipart POST `/api/photo/upload` | `file`, `imgName`, token header | 成功后跳转；依赖部署层 `/api` 代理 |
+| `UploadPhoto.vue` 上传 | multipart POST `/photo/upload` | `file`, `imgName`, token header | 成功后跳转；开发环境由 Vite 的本地 `/api` 前缀代理到该路径 |
 
 `FriendLink` 字段为 `linkId`, `linkName`, `linkUrl`；`Music` 字段为 `musicId`, `name`, `artist`, `url`, `cover`, `lrc`；`Photo` 字段为 `imgId`, `imgName`, `imgSrc`, `imgThumb`。
 
@@ -90,9 +90,7 @@ interface Result<T> {
 
 - `/user/applyResetPasswordVerifyCode`、`/user/resetPassword`；
 - `/comment/getCommentByUserId`、`/comment/getCommentById`、`/comment/updateComment`；
-- `/music/add`、`/music/delete`；
-- `photoUrl.addPhoto` 指向 `/photo/upload`，但上传页没有使用该配置；
-- `blogUrl.uploadCover` 声明为 `/blog/uploadCover`，但上传页直接调用另一路径。
+- `/music/add`、`/music/delete`。
 
 ## 权限语义
 
@@ -111,10 +109,8 @@ interface Result<T> {
 
 1. `UserController.setPhone/setMail` 接收参数名 `userID`，而 `UserCenter.vue` 发送 `userId`；当前字段名不一致。
 2. 重置密码验证码接口检查 `verifyCode_reset:<account>`，却把验证码写入 `verifyCode:<account>`；随后重置接口只读取前一种 key。
-3. `blogUrl.uploadCover` 配置为 `/blog/uploadCover`，实际后端和 `EditBlog.vue` 使用 `/blog/upload`。
-4. 照片上传页使用 `https://www.peteralbus.com/api/photo/upload`，其余 API 基地址是 `https://www.peteralbus.com:8089/`；本地 Vite 配置没有 `/api` 代理。
-5. 后端 `/comment/getCommentByUserId` 的实现按 `comment_target_id` 过滤，而不是按 `comment_user_id`；当前前端未调用它。
-6. 多个写操作使用 GET 或不限制 HTTP 方法；这是现有 controller 与调用方的实际契约，不应由单端“规范化”。
-7. 后端仓库提供的 `SmsUtil.java.example` 在成功时返回 `smsSendSuccess`，而验证码 controller 判断的是 `sendSmsSuccess`；照模板原样创建短信实现时，手机验证码调用会被判为失败。
+3. 后端 `/comment/getCommentByUserId` 的实现按 `comment_target_id` 过滤，而不是按 `comment_user_id`；当前前端未调用它。
+4. 多个写操作使用 GET 或不限制 HTTP 方法；这是现有 controller 与调用方的实际契约，不应由单端“规范化”。
+5. 后端仓库提供的 `SmsUtil.java.example` 在成功时返回 `smsSendSuccess`，而验证码 controller 判断的是 `sendSmsSuccess`；照模板原样创建短信实现时，手机验证码调用会被判为失败。
 
 修复任一偏差时，应选择唯一的新契约，直接同时修改前后端及文档，不增加双字段、双路径或旧行为兜底。

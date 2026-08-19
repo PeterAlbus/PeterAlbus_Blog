@@ -4,7 +4,7 @@
     <div class="user-box">
       <el-upload
         class="avatar-uploader"
-        action="https://www.peteralbus.com:8089/user/uploadAvatar"
+        :action="BASE_URL + userUrl.uploadAvatar"
         ref="uploadRef"
         :headers="headerObj"
         :data="upData"
@@ -167,6 +167,7 @@ import {
   logoutUser
 } from "@/services/userApi";
 import { useRouter } from "vue-router";
+import { BASE_URL, userUrl } from "@/services/urlConfig";
 
 const router = useRouter();
 const userStore = useUserStore();

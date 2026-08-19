@@ -91,20 +91,14 @@ export default defineConfig({
     port: 8080,
     /* 自动打开浏览器 */
     open: false,
-    /* 跨域代理 */
-    // proxy: {
-    //   "/api": {
-    //     /* 目标代理服务器地址 */
-    //     target: "", //
-    //     // target: "", //
-    //     /* 允许跨域 */
-    //     changeOrigin: true,
-    //     ws: true,
-    //     pathRewrite: {
-    //       "^/api": ""
-    //     }
-    //   }
-    // }
+    proxy: {
+      "/api": {
+        target: "https://www.peteralbus.com:8089",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, "")
+      }
+    }
   },
   // 开发或生产环境服务的公共基础路径。合法的值包括以下几种：
   // 绝对 URL 路径名，例如 /foo/

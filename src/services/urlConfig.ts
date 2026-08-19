@@ -1,10 +1,10 @@
-const env:string=import.meta.env.VITE_APP_ENV
+const env = import.meta.env.VITE_APP_ENV as "dev" | "prod" | "test";
 
-export const BASE_URL:string|undefined = {
-    dev: "https://www.peteralbus.com/api/",
-    prod: "https://www.peteralbus.com/api/",
+export const BASE_URL: string = {
+    dev: "/api",
+    prod: "https://www.peteralbus.com/api",
     test: "https://api.testserver.com/base/url",
-}[env]
+}[env];
 
 // const FILE_BASE_URL:string|undefined = {
 //     dev: "https://file.devserver.com/templete/",

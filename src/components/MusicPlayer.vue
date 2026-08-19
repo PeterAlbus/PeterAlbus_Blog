@@ -104,7 +104,7 @@ const props = defineProps({
   // 列表最大高度
   listMaxHeight: {
     type: String,
-    default: '100px'
+    default: '198px'
   },
   // 存储播放器设置的 localStorage key
   storageName: {
@@ -148,9 +148,3 @@ onBeforeUnmount(() => {
   instance.destroy()
 })
 </script>
-
-<style scoped>
-.customAPlayer{
-  bottom: 120px!important;
-}
-</style>
