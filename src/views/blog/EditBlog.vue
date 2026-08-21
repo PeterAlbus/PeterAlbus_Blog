@@ -154,6 +154,10 @@ import Banner from "@/components/Banner.vue";
 import { addBlog, fetchBlogById, updateBlog } from "@/services/blogApi";
 import { BASE_URL, blogUrl } from "@/services/urlConfig";
 import { deletePhotoByUrl, uploadOriginPhoto } from "@/services/photoApi";
+import VueMavonEditor from "mavon-editor";
+import "mavon-editor/dist/css/index.css";
+
+const MavonEditor = VueMavonEditor.mavonEditor;
 
 const blogForm = ref<FormInstance>();
 const route = useRoute();

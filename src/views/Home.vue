@@ -115,7 +115,7 @@ import PersonalInfo from "@/components/PersonalInfo.vue"
 import { fetchBlogList } from "@/services/blogApi";
 import { fetchBackgroundList } from "@/services/backgroundApi";
 import type { HttpResult } from "@/services/httpConfig";
-import { EditPen } from "@element-plus/icons-vue";
+import { Avatar, Clock, EditPen, StarFilled } from "@element-plus/icons-vue";
 import { useUserStore } from "@/stores/user";
 
 const userStore = useUserStore();

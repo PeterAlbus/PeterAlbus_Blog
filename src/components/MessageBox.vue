@@ -102,7 +102,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import { Bell, Message as SentIcon, MessageBox as InboxIcon, User } from "@element-plus/icons-vue";
+import { Bell, Close, Message as SentIcon, MessageBox as InboxIcon, User } from "@element-plus/icons-vue";
 import { fetchInBoxMessage, fetchOutBoxMessage, readMessageById } from "@/services/messageApi";
 
 const props = defineProps(["modelValue"]);

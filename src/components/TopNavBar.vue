@@ -67,7 +67,7 @@
       <div class="nav-item" v-for="item in navItems" :key="item.name">
         <router-link :to="item.indexPath" active-class="active-top-item">
           <el-icon style="vertical-align: -10%">
-            <component :is="item.iconName" />
+            <component :is="item.icon" />
           </el-icon>
           {{ item.name }}
         </router-link>
@@ -82,7 +82,7 @@
         <router-link :to="item.indexPath" active-class="active-item">
           <p>
             <el-icon>
-              <component :is="item.iconName" />
+              <component :is="item.icon" />
             </el-icon>
           </p>
           <span class="navbar-bottom-text">{{ item.name }}</span>
@@ -112,6 +112,18 @@ import { useRouter } from "vue-router";
 import { logoutUser } from "@/services/userApi";
 import MessageBox from "@/components/MessageBox.vue";
 import { unreadMessageCount } from "@/services/messageApi";
+import {
+  Avatar,
+  Close,
+  HomeFilled,
+  Lollipop,
+  Menu,
+  Message,
+  PictureFilled,
+  Setting,
+  Tickets,
+  UserFilled,
+} from "@element-plus/icons-vue";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -125,10 +137,10 @@ router.beforeEach((to, from, next) => {
 });
 
 const screenWidth = ref(document.body.clientWidth);
-const navItems = [{ name: "主页", indexPath: "/", iconName: "HomeFilled" },
-  { name: "分类", indexPath: "/types", iconName: "Menu" },
-  { name: "关于我", indexPath: "/about", iconName: "UserFilled" },
-  { name: "照片墙", indexPath: "/photo", iconName: "PictureFilled" }];
+const navItems = [{ name: "主页", indexPath: "/", icon: HomeFilled },
+  { name: "分类", indexPath: "/types", icon: Menu },
+  { name: "关于我", indexPath: "/about", icon: UserFilled },
+  { name: "照片墙", indexPath: "/photo", icon: PictureFilled }];
 
 const resize = function() {
   screenWidth.value = document.body.clientWidth;

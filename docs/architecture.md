@@ -18,7 +18,7 @@
 ## 启动与渲染链路
 
 1. `index.html` 提供 `#app` 挂载点。
-2. `src/main.ts` 创建 Vue 应用，安装 Pinia、Router、拖拽指令、Markdown 编辑/预览与社交分享插件，并全局注册 Element Plus 图标。
+2. `src/main.ts` 创建 Vue 应用，安装 Pinia、Router 与拖拽指令并加载全局样式；Element Plus 图标由使用它们的组件显式导入，Markdown 编辑器和社交分享组件由文章相关页面按需加载。
 3. `src/App.vue` 固定渲染顶部导航、当前 `RouterView` 和页脚。
 4. `src/router/index.ts` 使用 `createWebHashHistory()` 懒加载页面；全局守卫更新进度条、标题与 SEO meta，并尝试用本地 token 恢复用户状态。
 5. 页面或组件通过 `src/services/` 请求后端。HTTP 和接口细节见 [`backend-contract.md`](backend-contract.md)。

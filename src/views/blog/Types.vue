@@ -91,6 +91,7 @@ import PersonalInfo from "@/components/PersonalInfo.vue"
 import Banner from "@/components/Banner.vue";
 import { computed, onMounted, Ref, ref } from "vue";
 import { fetchBlogList } from "@/services/blogApi";
+import { Avatar, Clock, StarFilled } from "@element-plus/icons-vue";
 
 const screenWidth:Ref<number> = ref(document.body.clientWidth);
 

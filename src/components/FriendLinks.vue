@@ -11,6 +11,7 @@
 
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
+import { Link } from "@element-plus/icons-vue";
 import {fetchFriendLinkList} from "@/services/friendLinkApi";
 
 const friendLinkList=ref([

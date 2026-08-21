@@ -65,6 +65,12 @@ import PersonalInfo from '@/components/PersonalInfo.vue'
 import Comment from '@/components/Comment.vue'
 import Banner from "@/components/Banner.vue";
 import { fetchBlogById, getIpAddress, visitBlog } from "@/services/blogApi";
+import VueMavonEditor from "mavon-editor";
+import "mavon-editor/dist/css/index.css";
+import { Share } from "vue3-social-share";
+import "vue3-social-share/lib/index.css";
+
+const MavonEditor = VueMavonEditor.mavonEditor;
 
 const mdRef=ref<any>()
 const titleList:any=ref([])

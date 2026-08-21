@@ -47,9 +47,9 @@
             </div>
           </div>
           <Comment :blogId="blog.blogId as string"></Comment>
-          <div class="module">
+          <div class="module share-module">
             <h2 class="title"><el-icon style="vertical-align: -10%"><share-icon /></el-icon> 分享本页面</h2>
-            <div class="content paragraph">
+            <div class="content paragraph share-panel">
               <Share
                   :url="'https://www.peteralbus.com/#/blog?id='+blog.blogId"
                   :title="blog.blogTitle"
@@ -79,7 +79,12 @@ import Comment from '@/components/Comment.vue'
 import Banner from "@/components/Banner.vue";
 import { fetchBlogById, getIpAddress, visitBlog } from "@/services/blogApi";
 import { useUserStore } from "@/stores/user";
+import VueMavonEditor from "mavon-editor";
+import "mavon-editor/dist/css/index.css";
+import { Share } from "vue3-social-share";
+import "vue3-social-share/lib/index.css";
 
+const MavonEditor = VueMavonEditor.mavonEditor;
 
 const route=useRoute()
 const router=useRouter()
@@ -254,6 +259,25 @@ onMounted(()=>{
 .anchor:hover{
   transform: translateX(3px);
   background-color: var(--color-primary-50);
+}
+
+.share-module {
+  z-index: 5;
+}
+
+.share-panel {
+  overflow: visible;
+}
+
+.share-panel :deep(.wechat-qrcode) {
+  z-index: 20;
+  border-color: var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(30, 54, 36, 0.18);
+}
+
+.share-panel :deep(.wechat-qrcode h4) {
+  border-radius: 11px 11px 0 0;
 }
 
 .fixed-buttons{
